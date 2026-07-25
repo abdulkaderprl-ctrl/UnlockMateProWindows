@@ -1,0 +1,34 @@
+<Window x:Class="AdbEasyInstaller.Views.SplashScreenWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Unlock Mate Pro" Height="320" Width="520"
+        WindowStartupLocation="CenterScreen" WindowStyle="None"
+        AllowsTransparency="True" Background="Transparent">
+
+    <Border Background="#1A1A1A" BorderBrush="#333333" BorderThickness="1" CornerRadius="12" Padding="32">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- Brand Header -->
+            <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Path Data="{StaticResource IconApkInstall}" Fill="{StaticResource AccentBrush}"
+                      Width="56" Height="56" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,16" />
+                <TextBlock Text="Unlock Mate Pro" FontSize="28" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" />
+                <TextBlock Text="Professional Android Device Management Platform" FontSize="14" Foreground="#999999" HorizontalAlignment="Center" Margin="0,4,0,0" />
+            </StackPanel>
+
+            <!-- Status & Progress -->
+            <StackPanel Grid.Row="1" Margin="0,20,0,0">
+                <TextBlock Text="Verifying authentication session &amp; tools..." FontSize="12" Foreground="#888888" HorizontalAlignment="Center" Margin="0,0,0,8" />
+                <ProgressBar IsIndeterminate="True" Height="4" Style="{StaticResource FluentProgressBar}" />
+            </StackPanel>
+
+            <!-- Footer -->
+            <TextBlock Grid.Row="2" Text="v1.0.0 • .NET 8 WPF MVVM" FontSize="11" Foreground="#555555" HorizontalAlignment="Center" Margin="0,16,0,0" />
+        </Grid>
+    </Border>
+</Window>

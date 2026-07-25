@@ -1,0 +1,88 @@
+<UserControl x:Class="AdbEasyInstaller.Views.BackupRestoreView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="Smart Switch Backup &amp; Restore Center" Style="{StaticResource HeaderTextBlock}" />
+
+            <!-- Storage Destination Location Card -->
+            <Border Style="{StaticResource FluentCard}">
+                <StackPanel>
+                    <TextBlock Text="📁 Default Backup Storage Location" Style="{StaticResource SubHeaderTextBlock}" />
+                    <Grid Margin="0,4,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding DefaultBackupFolder, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FluentTextBox}" Margin="0,0,8,0" />
+                        <Button Grid.Column="1" Style="{StaticResource FluentButton}" Command="{Binding SelectBackupFolderCommand}">
+                            <TextBlock Text="Browse Folder..." />
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- Items to Backup Selection Grid -->
+            <Border Style="{StaticResource FluentCard}">
+                <StackPanel>
+                    <TextBlock Text="📦 Select Data Categories to Include in Backup" Style="{StaticResource SubHeaderTextBlock}" />
+
+                    <UniformGrid Columns="2" Rows="3" Margin="0,8,0,12">
+                        <CheckBox Content="📇 Contacts (VCF, CSV, JSON formats)" IsChecked="{Binding IncludeContacts}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,12" />
+                        <CheckBox Content="💬 SMS Messages (XML, JSON formats)" IsChecked="{Binding IncludeSms}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,12" />
+                        <CheckBox Content="📞 Call Logs &amp; History (CSV, JSON formats)" IsChecked="{Binding IncludeCallLogs}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,12" />
+                        <CheckBox Content="📂 Storage Files &amp; Media (/sdcard items)" IsChecked="{Binding IncludeFiles}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,12" />
+                        <CheckBox Content="📱 Installed Apps &amp; Package Archives (.apk)" IsChecked="{Binding IncludeApps}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,12" />
+                        <CheckBox Content="🗜️ Compress Complete Backup into single ZIP Archive" IsChecked="{Binding CompressToZip}" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" Margin="0,0,0,12" />
+                    </UniformGrid>
+
+                    <!-- One Click Action Buttons -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding FullRestoreCommand}" Margin="0,0,12,0" Padding="20,10">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconRefresh}" Fill="{DynamicResource PrimaryTextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" />
+                                <TextBlock Text="One-Click Full Restore (Folder or ZIP)..." />
+                            </StackPanel>
+                        </Button>
+
+                        <Button Style="{StaticResource PrimaryButton}" Command="{Binding FullBackupCommand}" Padding="24,10">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconLogs}" Fill="White" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" />
+                                <TextBlock Text="One-Click Full Backup Now" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Progress Meter & Diagnostics Card -->
+            <Border Style="{StaticResource FluentCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="📊 Backup &amp; Restore Real-Time Progress Meter" Style="{StaticResource SubHeaderTextBlock}" />
+
+                        <Grid Margin="0,4,0,4">
+                            <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="13" FontWeight="Bold" HorizontalAlignment="Left" />
+                            <TextBlock Text="{Binding RemainingTimeText}" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="11" HorizontalAlignment="Right" />
+                        </Grid>
+                        <TextBlock Text="{Binding CurrentItemName}" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,0,0,8" />
+
+                        <ProgressBar Value="{Binding OverallProgress}" Style="{StaticResource FluentProgressBar}" IsIndeterminate="{Binding IsProcessing}" Height="8" Margin="0,0,0,8" />
+                        <TextBlock Text="{Binding TransferSpeedText}" Foreground="{DynamicResource AccentBrush}" FontSize="11" />
+                    </StackPanel>
+
+                    <Button Grid.Column="1" Style="{StaticResource FluentButton}" Command="{Binding CancelBackupCommand}"
+                            Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
+                            VerticalAlignment="Center" Padding="14,8" Margin="16,0,0,0">
+                        <TextBlock Text="Cancel Backup" Foreground="{DynamicResource ErrorBrush}" FontSize="12" />
+                    </Button>
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

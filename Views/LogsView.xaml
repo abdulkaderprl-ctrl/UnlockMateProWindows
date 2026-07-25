@@ -1,0 +1,49 @@
+<UserControl x:Class="AdbEasyInstaller.Views.LogsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Text="ADB System Logs &amp; Live Logcat Reader" Style="{StaticResource HeaderTextBlock}" />
+
+        <!-- Logcat Controls Toolbar -->
+        <Border Grid.Row="1" Style="{StaticResource FluentCard}" Padding="10" Margin="0,0,0,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="220" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Text="Log Level Filter:" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                <ComboBox Grid.Column="1" ItemsSource="{Binding LogLevels}" SelectedItem="{Binding LogLevelFilter}" Padding="8,4" Margin="0,0,12,0" />
+
+                <TextBox Grid.Column="2" Text="{Binding SearchFilter, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FluentTextBox}" Tag="Search logcat output..." Margin="0,0,12,0" />
+
+                <StackPanel Grid.Column="3" Orientation="Horizontal">
+                    <Button Style="{StaticResource FluentButton}" Command="{Binding ClearLogCommand}" Margin="0,0,6,0" Padding="10,4">
+                        <TextBlock Text="Clear Logs" FontSize="12" />
+                    </Button>
+                    <Button Style="{StaticResource FluentButton}" Command="{Binding CopyLogCommand}" Margin="0,0,6,0" Padding="10,4">
+                        <TextBlock Text="Copy Logs" FontSize="12" />
+                    </Button>
+                    <Button Style="{StaticResource PrimaryButton}" Command="{Binding SaveLogCommand}" Padding="12,4">
+                        <TextBlock Text="Save Log File..." FontSize="12" />
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Log Stream Output Window -->
+        <Border Grid.Row="2" Style="{StaticResource FluentCard}" Background="{DynamicResource ConsoleBackgroundBrush}" Padding="8">
+            <TextBox Text="{Binding LogOutput}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap"
+                     FontFamily="Consolas" FontSize="11" Foreground="{DynamicResource ConsoleForegroundBrush}"
+                     Background="Transparent" BorderThickness="0" VerticalScrollBarVisibility="Auto" />
+        </Border>
+    </Grid>
+</UserControl>

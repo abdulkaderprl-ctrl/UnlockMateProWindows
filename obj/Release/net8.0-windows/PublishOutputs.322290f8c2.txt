@@ -1,0 +1,5 @@
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\AdbEasyInstaller.exe
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\AdbEasyInstaller.dll
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\AdbEasyInstaller.deps.json
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\AdbEasyInstaller.runtimeconfig.json
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\AdbEasyInstaller.pdb

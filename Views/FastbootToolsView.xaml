@@ -1,0 +1,105 @@
+<UserControl x:Class="AdbEasyInstaller.Views.FastbootToolsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="Fastboot Flashing &amp; Bootloader Suite" Style="{StaticResource HeaderTextBlock}" />
+
+            <!-- Device Detection & Status Bar -->
+            <Border Style="{StaticResource FluentCard}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Fastboot Devices: " Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,8,0" />
+                        <ComboBox Width="200" ItemsSource="{Binding FastbootDevices}" SelectedItem="{Binding SelectedDevice}" DisplayMemberPath="DisplayName" Padding="6,4" />
+                        <Border Background="#260078D4" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" CornerRadius="10" Padding="8,4" Margin="16,0,0,0">
+                            <TextBlock Text="{Binding FrpStatusText, StringFormat='FRP Status: {0}'}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" />
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding CheckFrpCommand}" Margin="0,0,8,0" Padding="10,4">
+                            <TextBlock Text="Check FRP" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding GetVarAllCommand}" Margin="0,0,8,0" Padding="10,4">
+                            <TextBlock Text="GetVar All" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding RefreshDevicesCommand}" Padding="10,4">
+                            <TextBlock Text="Scan Devices" FontSize="12" />
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Image Flasher Card -->
+            <Border Style="{StaticResource FluentCard}">
+                <StackPanel>
+                    <TextBlock Text="⚡ Partition Image Flashing &amp; Boot Control" Style="{StaticResource SubHeaderTextBlock}" />
+
+                    <Grid Margin="0,4,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Partition Selector -->
+                        <ComboBox Grid.Column="0" ItemsSource="{Binding PartitionList}" SelectedItem="{Binding SelectedPartition}" Padding="8,6" Margin="0,0,8,0" />
+
+                        <!-- Image File Path Input -->
+                        <TextBox Grid.Column="1" Text="{Binding ImagePath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FluentTextBox}" Tag="Select image file (.img, .bin)..." Margin="0,0,8,0" />
+
+                        <Button Grid.Column="2" Style="{StaticResource FluentButton}" Command="{Binding BrowseImageCommand}">
+                            <TextBlock Text="Browse Image..." />
+                        </Button>
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding ErasePartitionCommand}" Margin="0,0,8,0" Padding="14,6">
+                            <TextBlock Text="Erase Partition" Foreground="{DynamicResource ErrorBrush}" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding BootImageCommand}" Margin="0,0,8,0" Padding="14,6">
+                            <TextBlock Text="Boot Image (Temp)" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource PrimaryButton}" Command="{Binding FlashImageCommand}" Padding="20,6">
+                            <TextBlock Text="Flash Image to Partition" FontSize="12" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Bootloader OEM Lock/Unlock & Power Controls -->
+            <Border Style="{StaticResource FluentCard}">
+                <StackPanel>
+                    <TextBlock Text="🔒 Bootloader OEM Safety Controls &amp; Reboot Modes" Style="{StaticResource SubHeaderTextBlock}" />
+
+                    <WrapPanel Margin="0,8,0,0">
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding UnlockBootloaderCommand}" Margin="0,0,10,8" Padding="14,6">
+                            <TextBlock Text="OEM Unlock (Flashing Unlock)" Foreground="{DynamicResource WarningBrush}" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding LockBootloaderCommand}" Margin="0,0,10,8" Padding="14,6">
+                            <TextBlock Text="OEM Lock (Flashing Lock)" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding RebootBootloaderCommand}" Margin="0,0,10,8" Padding="14,6">
+                            <TextBlock Text="Reboot Bootloader" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource PrimaryButton}" Command="{Binding RebootSystemCommand}" Margin="0,0,0,8" Padding="16,6">
+                            <TextBlock Text="Reboot System" FontSize="12" />
+                        </Button>
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Output Log Console -->
+            <Border Style="{StaticResource FluentCard}" Background="{DynamicResource ConsoleBackgroundBrush}" Padding="8">
+                <TextBox Text="{Binding FastbootOutput}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Height="140"
+                         FontFamily="Consolas" FontSize="11" Foreground="{DynamicResource ConsoleForegroundBrush}"
+                         Background="Transparent" BorderThickness="0" VerticalScrollBarVisibility="Auto" />
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

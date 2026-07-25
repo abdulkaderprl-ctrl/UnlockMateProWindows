@@ -1,0 +1,106 @@
+<UserControl x:Class="AdbEasyInstaller.Views.DashboardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="System Dashboard &amp; Hardware Metrics" Style="{StaticResource HeaderTextBlock}" />
+
+            <!-- Metrics Grid -->
+            <UniformGrid Columns="2" Rows="2">
+
+                <!-- ADB Status Card -->
+                <Border Style="{StaticResource FluentCard}" Margin="0,0,10,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="#260078D4" Margin="0,0,16,0" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconTools}" Fill="{DynamicResource AccentBrush}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="ADB Status" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" />
+                            <TextBlock Text="{Binding AdbStatus}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,4,0,0" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Connected Device Card -->
+                <Border Style="{StaticResource FluentCard}" Margin="10,0,0,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="#26107C41" Margin="0,0,16,0" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconDevice}" Fill="{DynamicResource SuccessBrush}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Connected Device" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" />
+                            <TextBlock Text="{Binding DeviceStatus}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,4,0,0" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Android Version Card -->
+                <Border Style="{StaticResource FluentCard}" Margin="0,0,10,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="#26D83B01" Margin="0,0,16,0" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconApps}" Fill="{DynamicResource WarningBrush}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Android OS Version" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" />
+                            <TextBlock Text="{Binding AndroidVersion}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,4,0,0" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Battery Percentage Card -->
+                <Border Style="{StaticResource FluentCard}" Margin="10,0,0,12">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="#260078D4" Margin="0,0,16,0" VerticalAlignment="Center">
+                            <Path Data="{StaticResource IconBattery}" Fill="{DynamicResource AccentBrush}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Battery Level" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" />
+                            <TextBlock Text="{Binding BatteryLevelText}" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,4,0,0" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+            </UniformGrid>
+
+            <!-- RAM & Storage Gauges Card -->
+            <Border Style="{StaticResource FluentCard}">
+                <StackPanel>
+                    <TextBlock Text="📊 RAM &amp; Storage Usage Gauges" Style="{StaticResource SubHeaderTextBlock}" />
+
+                    <TextBlock Text="System RAM Usage" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,4,0,4" />
+                    <ProgressBar Value="65" Height="8" Style="{StaticResource FluentProgressBar}" Margin="0,0,0,12" />
+
+                    <TextBlock Text="Internal Storage Usage (/sdcard)" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,0,0,4" />
+                    <ProgressBar Value="42" Height="8" Style="{StaticResource FluentProgressBar}" />
+                </StackPanel>
+            </Border>
+
+            <!-- Device Information Overview Card -->
+            <Border Style="{StaticResource FluentCard}">
+                <StackPanel>
+                    <TextBlock Text="📱 Device Diagnostics &amp; System Information" Style="{StaticResource SubHeaderTextBlock}" />
+                    <TextBlock Text="Model: Samsung Galaxy / Pixel Device" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" Margin="0,2,0,2" />
+                    <TextBlock Text="Security Patch: 2026-01-05" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" Margin="0,2,0,2" />
+                    <TextBlock Text="Root Access: Checking Superuser binary..." Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" Margin="0,2,0,2" />
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
