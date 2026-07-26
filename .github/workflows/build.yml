@@ -1,0 +1,38 @@
+name: Build Unlock Mate Pro
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build & Publish Release Artifacts
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore Dependencies
+        run: dotnet restore AdbEasyInstaller.csproj
+
+      - name: Build Solution (Release)
+        run: dotnet build AdbEasyInstaller.csproj -c Release --no-restore
+
+      - name: Publish Self-Contained Single File (win-x64)
+        run: dotnet publish AdbEasyInstaller.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o ./publish
+
+      - name: Upload Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: UnlockMatePro-win-x64-Release
+          path: ./publish/*
+          if-no-files-found: error

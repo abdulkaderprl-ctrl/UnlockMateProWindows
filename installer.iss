@@ -26,8 +26,8 @@ Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs creat
 
 [Icons]
 Name: "{group}\Unlock Mate Pro"; Filename: "{app}\AdbEasyInstaller.exe"
-Name: "{group}\{cm:UninstallProgram,Unlock Mate Pro}"; Filename: "{uninsexe}"
-Name: "{autodesktop}\Unlock Mate Pro"; Filename: "{app}\AdbEasyInstaller.exe"; Tasks: desktopicon
+Name: "{group}\{cm:UninstallProgram,Unlock Mate Pro}"; Filename: "{uninstallexe}"
+Name: "{autodesktop}\Unlock Mate Pro"; Filename: "{app}\AdbEasyInstaller.exe"
 
 [Run]
 Filename: "{app}\AdbEasyInstaller.exe"; Description: "{cm:LaunchProgram,Unlock Mate Pro}"; Flags: nowait postinstall skipifsilent
