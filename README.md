@@ -2,13 +2,14 @@
 
 # ⚡ Unlock Mate Pro
 
+[![Build Unlock Mate Pro](https://github.com/abdulkaderprl-ctrl/UnlockMateProWindows/actions/workflows/build.yml/badge.svg)](https://github.com/abdulkaderprl-ctrl/UnlockMateProWindows/actions/workflows/build.yml)
+
 ### Professional Universal Android Utility, Flashing & Management Suite
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![NET 8.0](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 [![Platform: Windows](https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6?logo=windows&logoColor=white)](https://microsoft.com/windows)
-[![GitHub Stars](https://img.shields.io/github/stars/unlockmatepro/app?style=social)](https://github.com/unlockmatepro/app)
-
+[![GitHub Stars](https://img.shields.io/github/stars/abdulkaderprl-ctrl/UnlockMateProWindows?style=social)](https://github.com/abdulkaderprl-ctrl/UnlockMateProWindows)
 ---
 
 **Unlock Mate Pro** is a modern, production-ready Windows application built with **.NET 8 WPF** and supported by an **ASP.NET Core 8 Web API** backend platform. It provides a complete suite of Android management, universal package installation (`.apk`, `.apks`, `.xapk`, `.apkm`), real-time file exploration with symlink resolution, Smart Switch backup & restore, fastboot flashing, and interactive ADB console tools.
@@ -100,7 +101,7 @@
 ## 📥 Installation
 
 ### Option 1: Setup Installer (Recommended)
-1. Download `UnlockMatePro-Setup.exe` from the latest [GitHub Release](https://github.com/unlockmatepro/app/releases).
+1. Download `UnlockMatePro-Setup.exe` from the latest [GitHub Release](https://github.com/abdulkaderprl-ctrl/UnlockMateProWindows/releases/latest).
 2. Run the installer and follow the setup wizard.
 3. Launch **Unlock Mate Pro** from your Desktop or Start Menu.
 
@@ -121,8 +122,9 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/unlockmatepro/app.git
-cd app
+git clone https://github.com/abdulkaderprl-ctrl/UnlockMateProWindows.git
+cd UnlockMateProWindows
+```
 
 # 2. Restore dependencies
 dotnet restore
