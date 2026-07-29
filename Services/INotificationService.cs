@@ -1,6 +1,6 @@
 using System;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public enum NotificationType
     {
@@ -25,3 +25,4 @@ namespace AdbEasyInstaller.Services
         void ShowError(string title, string message);
     }
 }
+

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
-using AdbEasyInstaller.Models;
-using AdbEasyInstaller.Services;
+using Microsoft.Win32;
+using UnlockMatePro.Models;
+using UnlockMatePro.Services;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
@@ -42,6 +43,7 @@ namespace AdbEasyInstaller.ViewModels
         public FastbootToolsViewModel FastbootToolsVM { get; }
         public ScrcpyViewModel ScrcpyVM { get; }
         public FileExplorerViewModel FileExplorerVM { get; }
+        public PhoneCloneViewModel PhoneCloneVM { get; }
         public BackupRestoreViewModel BackupRestoreVM { get; }
         public TerminalViewModel TerminalVM { get; }
         public ScreenshotGalleryViewModel ScreenshotGalleryVM { get; }
@@ -158,7 +160,10 @@ namespace AdbEasyInstaller.ViewModels
             FastbootToolsVM = new FastbootToolsViewModel(_fastbootService, _logger, _notificationService);
             ScrcpyVM = new ScrcpyViewModel(_scrcpyService, _settingsService, _logger, _notificationService);
             FileExplorerVM = new FileExplorerViewModel(_adbService, _logger, _notificationService);
-            BackupRestoreVM = new BackupRestoreViewModel(_adbService, _logger, _notificationService);
+            var smartSwitchBackupService = new SmartSwitchBackupService(_adbService, _logger);
+            var phoneCloneService = new PhoneCloneService(_adbService, smartSwitchBackupService, _logger);
+            PhoneCloneVM = new PhoneCloneViewModel(_adbService, phoneCloneService, _notificationService, _logger, async () => await RefreshDevicesAsync());
+            BackupRestoreVM = new BackupRestoreViewModel(_adbService, _logger, _notificationService, smartSwitchBackupService);
             TerminalVM = new TerminalViewModel(_adbService, _logger);
             ScreenshotGalleryVM = new ScreenshotGalleryViewModel(_adbService, _logger, _notificationService);
             ApkToolsVM = new ApkToolsViewModel(_adbService, _logger, _notificationService);
@@ -234,6 +239,7 @@ namespace AdbEasyInstaller.ViewModels
                 "DeviceDetection" => DeviceDetectionVM,
                 "ApkInstall" => ApkInstallVM,
                 "FileExplorer" => FileExplorerVM,
+                "PhoneClone" => PhoneCloneVM,
                 "BackupRestore" => BackupRestoreVM,
                 "Terminal" => TerminalVM,
                 "ScreenshotGallery" => ScreenshotGalleryVM,
@@ -308,6 +314,7 @@ namespace AdbEasyInstaller.ViewModels
             }
 
             DeviceDetectionVM.UpdateDevices(ConnectedDevices, SelectedDevice);
+            PhoneCloneVM.UpdateDevices(ConnectedDevices);
             UpdateActiveDeviceState();
         }
 
@@ -342,6 +349,26 @@ namespace AdbEasyInstaller.ViewModels
         {
             try
             {
+                if (string.IsNullOrEmpty(theme) || theme.Equals("Auto", StringComparison.OrdinalIgnoreCase) || theme.Equals("System", StringComparison.OrdinalIgnoreCase))
+                {
+                    theme = "Dark"; // Fallback default
+                    try
+                    {
+                        using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
+                        {
+                            if (key != null)
+                            {
+                                var val = key.GetValue("AppsUseLightTheme");
+                                if (val != null && (int)val == 1)
+                                {
+                                    theme = "Light";
+                                }
+                            }
+                        }
+                    }
+                    catch { }
+                }
+
                 var appResources = System.Windows.Application.Current.Resources;
                 var existingTheme = appResources.MergedDictionaries
                     .FirstOrDefault(d => d.Source != null && (d.Source.OriginalString.Contains("DarkTheme") || d.Source.OriginalString.Contains("LightTheme")));
@@ -377,3 +404,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

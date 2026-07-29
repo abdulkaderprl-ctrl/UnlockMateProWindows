@@ -1,6 +1,6 @@
 using System;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class NavigationService : INavigationService
     {
@@ -17,3 +17,4 @@ namespace AdbEasyInstaller.Services
         }
     }
 }
+

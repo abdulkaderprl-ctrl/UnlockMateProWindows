@@ -1,4 +1,4 @@
-<UserControl x:Class="AdbEasyInstaller.Views.LogsView"
+<UserControl x:Class="UnlockMatePro.Views.LogsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
@@ -47,3 +47,4 @@
         </Border>
     </Grid>
 </UserControl>
+

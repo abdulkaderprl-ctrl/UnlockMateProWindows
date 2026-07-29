@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public interface IToolDownloaderService
     {
@@ -9,3 +9,4 @@ namespace AdbEasyInstaller.Services
         Task<bool> DownloadScrcpyAsync(IProgress<double>? progress = null);
     }
 }
+

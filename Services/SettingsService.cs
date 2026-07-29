@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class SettingsService : ISettingsService
     {
@@ -22,7 +22,7 @@ namespace AdbEasyInstaller.Services
             else
             {
                 string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                string folder = Path.Combine(appData, "AdbEasyInstaller");
+                string folder = Path.Combine(appData, "UnlockMatePro");
                 Directory.CreateDirectory(folder);
                 _settingsFilePath = Path.Combine(folder, "settings.json");
             }
@@ -60,7 +60,7 @@ namespace AdbEasyInstaller.Services
                 else
                 {
                     string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                    string folder = Path.Combine(appData, "AdbEasyInstaller");
+                    string folder = Path.Combine(appData, "UnlockMatePro");
                     Directory.CreateDirectory(folder);
                     _settingsFilePath = Path.Combine(folder, "settings.json");
                 }
@@ -79,3 +79,4 @@ namespace AdbEasyInstaller.Services
         }
     }
 }
+

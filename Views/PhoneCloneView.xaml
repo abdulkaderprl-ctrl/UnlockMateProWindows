@@ -1,0 +1,338 @@
+<UserControl x:Class="UnlockMatePro.Views.PhoneCloneView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1000"
+             Background="{DynamicResource BackgroundBrush}">
+
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Header Title -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16,12" Margin="0,0,0,16">
+            <Grid>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="📲" FontSize="22" Margin="0,0,10,0" VerticalAlignment="Center" />
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="Phone-to-Phone Smart Switch Clone" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" />
+                        <TextBlock Text="Clone all contacts, SMS, call logs, apps, and internal storage files seamlessly between two Android phones." FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2,0,0" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Wizard Step Bar -->
+        <Border Grid.Row="1" Background="{DynamicResource HeaderBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16,10" Margin="0,0,0,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Step 1 Indicator -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Border Width="24" Height="24" CornerRadius="12" Background="{DynamicResource AccentBrush}" Margin="0,0,8,0">
+                        <TextBlock Text="1" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                    </Border>
+                    <TextBlock Text="1. Devices" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Step 2 Indicator -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Border Width="24" Height="24" CornerRadius="12" Background="{DynamicResource AccentBrush}" Margin="0,0,8,0">
+                        <TextBlock Text="2" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                    </Border>
+                    <TextBlock Text="2. Select Content" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Step 3 Indicator -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Border Width="24" Height="24" CornerRadius="12" Background="{DynamicResource AccentBrush}" Margin="0,0,8,0">
+                        <TextBlock Text="3" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                    </Border>
+                    <TextBlock Text="3. Transferring" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
+                </StackPanel>
+
+                <!-- Step 4 Indicator -->
+                <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Border Width="24" Height="24" CornerRadius="12" Background="{DynamicResource AccentBrush}" Margin="0,0,8,0">
+                        <TextBlock Text="4" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                    </Border>
+                    <TextBlock Text="4. Complete" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Body Content (Step Views) -->
+        <Grid Grid.Row="2">
+
+            <!-- STEP 1: Select Source & Target Phones -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="0,10">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentStep}" Value="1">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+
+                    <!-- Warning Message -->
+                    <Border Background="#33FF9900" BorderBrush="#FFFF9900" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,16">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ConnectionWarningMessage}" Value="">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="⚠️" FontSize="16" Margin="0,0,8,0"/>
+                            <TextBlock Text="{Binding ConnectionWarningMessage}" Foreground="#FFFF9900" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Grid Margin="0,10,0,20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left: Source Device Card -->
+                        <Border Grid.Column="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="2" CornerRadius="12" Padding="20">
+                            <StackPanel>
+                                <TextBlock Text="📤 SOURCE PHONE (Copy From)" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource AccentBrush}" Margin="0,0,0,12" />
+
+                                <TextBlock Text="Select Source Device:" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,0,0,4" />
+                                <ComboBox ItemsSource="{Binding ConnectedDevices}" SelectedItem="{Binding SourceDevice}" DisplayMemberPath="DisplayName" Height="36" Margin="0,0,0,16" Padding="8,4"/>
+
+                                <Border Background="{DynamicResource HeaderBackgroundBrush}" CornerRadius="8" Padding="12" Margin="0,0,0,10">
+                                    <StackPanel>
+                                        <TextBlock Text="Device Details:" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,6" />
+                                        <TextBlock Text="{Binding SourceDevice.Model, StringFormat='Model: {0}', FallbackValue='Model: Not Selected'}" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2" />
+                                        <TextBlock Text="{Binding SourceDevice.SerialNumber, StringFormat='Serial: {0}', FallbackValue='Serial: -'}" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2" />
+                                        <TextBlock Text="{Binding SourceDevice.AndroidVersion, StringFormat='Android Version: {0}', FallbackValue='Android: -'}" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2" />
+                                        <TextBlock Text="{Binding SourceDevice.BatteryLevel, StringFormat='Battery: {0}%', FallbackValue='Battery: -'}" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Middle: Transfer Arrow & Refresh -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <TextBlock Text="➔" FontSize="36" FontWeight="Bold" Foreground="{DynamicResource AccentBrush}" HorizontalAlignment="Center" />
+                            <Button Command="{Binding RefreshDevicesCommand}" Style="{StaticResource FluentButton}" Width="40" Height="40" Margin="0,10,0,0" ToolTip="Refresh Connected Devices">
+                                <TextBlock Text="🔄" FontSize="16" />
+                            </Button>
+                        </StackPanel>
+
+                        <!-- Right: Target Device Card -->
+                        <Border Grid.Column="2" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="2" CornerRadius="12" Padding="20">
+                            <StackPanel>
+                                <TextBlock Text="📥 TARGET PHONE (Restore To)" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource SuccessBrush}" Margin="0,0,0,12" />
+
+                                <TextBlock Text="Select Target Device:" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,0,0,4" />
+                                <ComboBox ItemsSource="{Binding ConnectedDevices}" SelectedItem="{Binding TargetDevice}" DisplayMemberPath="DisplayName" Height="36" Margin="0,0,0,16" Padding="8,4"/>
+
+                                <Border Background="{DynamicResource HeaderBackgroundBrush}" CornerRadius="8" Padding="12" Margin="0,0,0,10">
+                                    <StackPanel>
+                                        <TextBlock Text="Device Details:" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,6" />
+                                        <TextBlock Text="{Binding TargetDevice.Model, StringFormat='Model: {0}', FallbackValue='Model: Not Selected'}" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2" />
+                                        <TextBlock Text="{Binding TargetDevice.SerialNumber, StringFormat='Serial: {0}', FallbackValue='Serial: -'}" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2" />
+                                        <TextBlock Text="{Binding TargetDevice.AndroidVersion, StringFormat='Android Version: {0}', FallbackValue='Android: -'}" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2" />
+                                        <TextBlock Text="{Binding TargetDevice.BatteryLevel, StringFormat='Battery: {0}%', FallbackValue='Battery: -'}" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- STEP 2: Content Selection -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="0,10">
+                    <StackPanel.Style>
+                        <Style TargetType="StackPanel">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CurrentStep}" Value="2">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Style>
+
+                    <TextBlock Text="Select Content to Clone from Source to Target:" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,12" />
+
+                    <!-- Checklist Cards -->
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,10">
+                        <CheckBox IsChecked="{Binding IncludeContacts}" Content="📇 Contacts (Names, Phone Numbers, Emails)" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalContentAlignment="Center"/>
+                    </Border>
+
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,10">
+                        <CheckBox IsChecked="{Binding IncludeSms}" Content="💬 SMS Messages &amp; Inbox" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalContentAlignment="Center"/>
+                    </Border>
+
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,10">
+                        <CheckBox IsChecked="{Binding IncludeCallLogs}" Content="📞 Call Logs &amp; Call History" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalContentAlignment="Center"/>
+                    </Border>
+
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,10">
+                        <CheckBox IsChecked="{Binding IncludeApps}" Content="📱 Installed User Applications &amp; APKs (Auto-installs on Target)" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalContentAlignment="Center"/>
+                    </Border>
+
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,10">
+                        <CheckBox IsChecked="{Binding IncludeFiles}" Content="📁 Complete Internal Storage (/sdcard - Photos, Videos, Music, Documents, Downloads, WhatsApp, Telegram, Screenshots, etc.)" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalContentAlignment="Center"/>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- STEP 3: Transferring / Progress -->
+            <Grid Margin="0,10">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentStep}" Value="3">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- Status Progress Card -->
+                <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="20" Margin="0,0,0,12">
+                    <StackPanel>
+                        <TextBlock Text="{Binding StatusText}" FontSize="15" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,8" />
+                        <ProgressBar Value="{Binding OverallProgress}" Height="20" Margin="0,0,0,8" Foreground="{DynamicResource AccentBrush}" />
+                        <Grid>
+                            <TextBlock Text="{Binding CurrentFileText}" FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis" MaxWidth="500"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="{Binding TransferSpeedText}" FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,0,12,0"/>
+                                <TextBlock Text="{Binding EtaText}" FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Live Log Console -->
+                <Border Grid.Row="1" Background="#1E1E1E" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="12">
+                    <ListBox ItemsSource="{Binding LogConsole}" Background="Transparent" BorderThickness="0" Foreground="#00FF66" FontFamily="Consolas" FontSize="12">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="2"/>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </Border>
+            </Grid>
+
+            <!-- STEP 4: Completion Summary -->
+            <Grid Margin="0,10">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CurrentStep}" Value="4">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Background="#152619" BorderBrush="{DynamicResource SuccessBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="🎉 " FontSize="20" />
+                        <TextBlock Text="Phone-to-Phone Clone Completed Successfully!" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource SuccessBrush}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+
+                <TextBox Grid.Row="1" Text="{Binding CloneSummaryReport}" IsReadOnly="True" Background="#1E1E1E" Foreground="#FFFFFF" FontFamily="Consolas" FontSize="13" Padding="12" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+            </Grid>
+        </Grid>
+
+        <!-- Bottom Action Bar -->
+        <Border Grid.Row="3" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="0,1,0,0" Padding="0,12,0,0" Margin="0,12,0,0">
+            <Grid>
+                <!-- Back Button -->
+                <Button Style="{StaticResource FluentButton}" Command="{Binding PreviousStepCommand}" Content="◀ Back" Width="100" HorizontalAlignment="Left" Padding="12,6"/>
+
+                <!-- Right Action Buttons -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                    <!-- Next / Clone Button -->
+                    <Button Command="{Binding NextStepCommand}" Content="Next ➔" Width="120" Padding="12,6" Margin="0,0,8,0">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentStep}" Value="2">
+                                        <Setter Property="Content" Value="🚀 Start Clone" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- Cancel Button -->
+                    <Button Command="{Binding CancelCloneCommand}" Content="⛔ Cancel" Width="110" Padding="12,6">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource DangerButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsCloning}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+
+                    <!-- Reset / Done Button -->
+                    <Button Command="{Binding ResetWizardCommand}" Content="🔄 Clone Another Phone" Padding="12,6">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource FluentButton}">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentStep}" Value="4">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
+

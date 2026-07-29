@@ -1,4 +1,4 @@
-<UserControl x:Class="AdbEasyInstaller.Views.TerminalView"
+<UserControl x:Class="UnlockMatePro.Views.TerminalView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
@@ -66,3 +66,4 @@
         </Grid>
     </Grid>
 </UserControl>
+

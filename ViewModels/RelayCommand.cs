@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class RelayCommand : ICommand
     {
@@ -144,3 +144,4 @@ namespace AdbEasyInstaller.ViewModels
         public void RaiseCanExecuteChanged() => CommandManager.InvalidateRequerySuggested();
     }
 }
+

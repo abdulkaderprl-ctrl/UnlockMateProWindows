@@ -5,9 +5,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AdbEasyInstaller.Services;
+using UnlockMatePro.Services;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class ScreenshotGalleryViewModel : ViewModelBase
     {
@@ -93,3 +93,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

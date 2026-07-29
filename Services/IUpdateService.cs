@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class UpdateInfo
     {
@@ -15,3 +15,4 @@ namespace AdbEasyInstaller.Services
         Task<UpdateInfo> CheckForUpdatesAsync();
     }
 }
+

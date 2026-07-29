@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
@@ -21,3 +21,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

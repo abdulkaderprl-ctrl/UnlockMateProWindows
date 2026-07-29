@@ -4,9 +4,9 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class LoggerService : ILoggerService
     {
@@ -17,7 +17,7 @@ namespace AdbEasyInstaller.Services
         public LoggerService()
         {
             string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            _logFolderPath = Path.Combine(appData, "AdbEasyInstaller", "logs");
+            _logFolderPath = Path.Combine(appData, "UnlockMatePro", "logs");
             Directory.CreateDirectory(_logFolderPath);
 
             LogInfo("Application logger initialized.");
@@ -97,3 +97,4 @@ namespace AdbEasyInstaller.Services
         }
     }
 }
+

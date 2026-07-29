@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <Title>Unlock Mate Pro</Title>
+    <Product>Unlock Mate Pro</Product>
+    <AssemblyName>UnlockMatePro</AssemblyName>
+    <AssemblyTitle>UnlockMatePro</AssemblyTitle>
+    <Company>Unlock Mate Pro Technologies</Company>
+    <Description>Professional Android Device Management, ADB/Fastboot Suite &amp; Screen Control Platform</Description>
+    
+    <!-- Version Info -->
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Version>1.0.0</Version>
+    <Authors>Unlock Mate Pro Team</Authors>
+    <Copyright>Copyright © 2026 Unlock Mate Pro Technologies</Copyright>
+  </PropertyGroup>
+
+</Project>

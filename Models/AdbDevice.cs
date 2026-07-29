@@ -1,4 +1,4 @@
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class AdbDevice
     {
@@ -25,3 +25,4 @@ namespace AdbEasyInstaller.Models
         public override string ToString() => DisplayName;
     }
 }
+

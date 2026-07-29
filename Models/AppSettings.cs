@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class AppSettings
     {
@@ -37,3 +37,4 @@ namespace AdbEasyInstaller.Models
         public List<string> RecentDeviceSerials { get; set; } = new List<string>();
     }
 }
+

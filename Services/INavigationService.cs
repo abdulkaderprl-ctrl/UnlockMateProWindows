@@ -1,6 +1,6 @@
 using System;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public interface INavigationService
     {
@@ -9,3 +9,4 @@ namespace AdbEasyInstaller.Services
         void NavigateTo(string viewName);
     }
 }
+

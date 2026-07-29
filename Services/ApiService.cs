@@ -4,9 +4,9 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class ApiService : IApiService
     {
@@ -145,3 +145,4 @@ namespace AdbEasyInstaller.Services
         };
     }
 }
+

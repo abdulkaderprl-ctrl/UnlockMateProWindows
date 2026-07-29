@@ -1,6 +1,6 @@
 using System.Windows.Controls;
 
-namespace AdbEasyInstaller.Views
+namespace UnlockMatePro.Views
 {
     public partial class ApkManagementView : UserControl
     {
@@ -10,3 +10,4 @@ namespace AdbEasyInstaller.Views
         }
     }
 }
+

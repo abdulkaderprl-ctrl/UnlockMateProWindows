@@ -25,9 +25,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\Unlock Mate Pro"; Filename: "{app}\AdbEasyInstaller.exe"
+Name: "{group}\Unlock Mate Pro"; Filename: "{app}\UnlockMatePro.exe"
 Name: "{group}\{cm:UninstallProgram,Unlock Mate Pro}"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\Unlock Mate Pro"; Filename: "{app}\AdbEasyInstaller.exe"
+Name: "{autodesktop}\Unlock Mate Pro"; Filename: "{app}\UnlockMatePro.exe"
 
 [Run]
-Filename: "{app}\AdbEasyInstaller.exe"; Description: "{cm:LaunchProgram,Unlock Mate Pro}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\UnlockMatePro.exe"; Description: "{cm:LaunchProgram,Unlock Mate Pro}"; Flags: nowait postinstall skipifsilent

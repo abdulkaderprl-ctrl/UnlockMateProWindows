@@ -4,7 +4,7 @@ using System.IO.Compression;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class ToolDownloaderService : IToolDownloaderService
     {
@@ -131,3 +131,4 @@ namespace AdbEasyInstaller.Services
         }
     }
 }
+

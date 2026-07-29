@@ -2,10 +2,10 @@ using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Win32;
-using AdbEasyInstaller.Models;
-using AdbEasyInstaller.Services;
+using UnlockMatePro.Models;
+using UnlockMatePro.Services;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class SettingsViewModel : ViewModelBase
     {
@@ -266,3 +266,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

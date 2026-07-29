@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
@@ -216,3 +216,4 @@ namespace AdbEasyInstaller.Services
         }
     }
 }
+

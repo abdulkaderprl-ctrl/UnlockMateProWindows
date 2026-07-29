@@ -1,8 +1,8 @@
-<Window x:Class="AdbEasyInstaller.MainWindow"
+<Window x:Class="UnlockMatePro.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:AdbEasyInstaller.ViewModels"
-        xmlns:views="clr-namespace:AdbEasyInstaller.Views"
+        xmlns:vm="clr-namespace:UnlockMatePro.ViewModels"
+        xmlns:views="clr-namespace:UnlockMatePro.Views"
         Title="Unlock Mate Pro - Professional Android Device Manager" Height="780" Width="1180"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource BackgroundBrush}">
@@ -30,6 +30,9 @@
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:FileExplorerViewModel}">
             <views:FileExplorerView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:PhoneCloneViewModel}">
+            <views:PhoneCloneView />
         </DataTemplate>
         <DataTemplate DataType="{x:Type vm:BackupRestoreViewModel}">
             <views:BackupRestoreView />
@@ -174,6 +177,13 @@
                             </StackPanel>
                         </Button>
 
+                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="PhoneClone">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconDevice}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
+                                <TextBlock Text="📲 Phone Clone (Smart Switch)" />
+                            </StackPanel>
+                        </Button>
+
                         <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="BackupRestore">
                             <StackPanel Orientation="Horizontal">
                                 <Path Data="{StaticResource IconLogs}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
@@ -275,3 +285,4 @@
         </Grid>
     </Grid>
 </Window>
+

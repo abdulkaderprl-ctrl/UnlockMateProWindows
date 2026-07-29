@@ -1,7 +1,7 @@
-using AdbEasyInstaller.Models;
-using AdbEasyInstaller.Services;
+using UnlockMatePro.Models;
+using UnlockMatePro.Services;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class DashboardViewModel : ViewModelBase
     {
@@ -120,3 +120,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

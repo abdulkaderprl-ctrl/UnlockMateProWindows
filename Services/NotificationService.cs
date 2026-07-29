@@ -1,6 +1,6 @@
 using System;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class NotificationService : INotificationService
     {
@@ -20,3 +20,4 @@ namespace AdbEasyInstaller.Services
         public void ShowError(string title, string message) => ShowNotification(title, message, NotificationType.Error);
     }
 }
+

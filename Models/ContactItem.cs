@@ -1,4 +1,4 @@
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class ContactItem
     {
@@ -35,3 +35,4 @@ namespace AdbEasyInstaller.Models
         };
     }
 }
+

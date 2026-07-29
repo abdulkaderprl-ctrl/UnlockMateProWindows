@@ -1,6 +1,6 @@
 using System;
 
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public enum LogLevel
     {
@@ -22,3 +22,4 @@ namespace AdbEasyInstaller.Models
         public string Header => $"[{FormattedTimestamp}] [{Level.ToString().ToUpper()}] {Message}";
     }
 }
+

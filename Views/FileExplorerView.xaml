@@ -1,7 +1,8 @@
-<UserControl x:Class="AdbEasyInstaller.Views.FileExplorerView"
+<UserControl x:Class="UnlockMatePro.Views.FileExplorerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             AllowDrop="True" Drop="UserControl_Drop" DragOver="UserControl_DragOver">
+             AllowDrop="True" Drop="UserControl_Drop" DragOver="UserControl_DragOver"
+             PreviewKeyDown="UserControl_PreviewKeyDown" Focusable="True">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -10,95 +11,190 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Header Title -->
-        <TextBlock Grid.Row="0" Text="Android Device File Explorer" Style="{StaticResource HeaderTextBlock}" />
-
-        <!-- Toolbar & Address Breadcrumb Bar -->
-        <Border Grid.Row="1" Style="{StaticResource FluentCard}" Padding="12" Margin="0,0,0,12">
+        <!-- Top Row: Device Storage Information Banner -->
+        <Border Grid.Row="0" Style="{StaticResource FluentCard}" Padding="12" Margin="0,0,0,10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="220" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <!-- Navigation Controls (Back, Up, Refresh) -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,12,0">
-                    <Button Style="{StaticResource FluentButton}" Command="{Binding NavigateBackCommand}" Width="36" Height="34" Padding="0" ToolTip="Back Directory">
-                        <TextBlock Text="⬅" FontSize="14" />
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,16,0">
+                    <TextBlock Text="📱 Internal Storage" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,16,0">
+                    <Grid Margin="0,0,0,4">
+                        <TextBlock Text="{Binding StorageInfo.SummaryText, Mode=OneWay}" FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Left" />
+                    </Grid>
+                    <ProgressBar Value="{Binding StorageInfo.PercentageUsed, Mode=OneWay}" Style="{StaticResource FluentProgressBar}" Height="6" Background="#30808080" />
+                </StackPanel>
+
+                <CheckBox Grid.Column="2" Content="☑ Show Hidden Files" IsChecked="{Binding ShowHiddenFiles}" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center" FontSize="12" />
+            </Grid>
+        </Border>
+
+        <!-- Second Row: Toolbar & Interactive Breadcrumb Address Bar -->
+        <Border Grid.Row="1" Style="{StaticResource FluentCard}" Padding="10" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="180" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Navigation Buttons -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="0,0,10,0">
+                    <Button Style="{StaticResource FluentButton}" Command="{Binding NavigateBackCommand}" Width="34" Height="32" Padding="0" ToolTip="Back">
+                        <TextBlock Text="⬅" FontSize="13" />
                     </Button>
-                    <Button Style="{StaticResource FluentButton}" Command="{Binding NavigateUpCommand}" Width="36" Height="34" Padding="0" Margin="6,0,0,0" ToolTip="Parent Directory (Up)">
-                        <TextBlock Text="⬆" FontSize="14" />
+                    <Button Style="{StaticResource FluentButton}" Command="{Binding NavigateUpCommand}" Width="34" Height="32" Padding="0" Margin="4,0,0,0" ToolTip="Up to Parent Directory">
+                        <TextBlock Text="⬆" FontSize="13" />
                     </Button>
-                    <Button Style="{StaticResource FluentButton}" Command="{Binding RefreshCommand}" Width="36" Height="34" Padding="0" Margin="6,0,0,0" ToolTip="Refresh Directory">
-                        <Path Data="{StaticResource IconRefresh}" Fill="{DynamicResource PrimaryTextBrush}" Width="14" Height="14" Stretch="Uniform" />
+                    <Button Style="{StaticResource FluentButton}" Command="{Binding RefreshCommand}" Width="34" Height="32" Padding="0" Margin="4,0,0,0" ToolTip="Refresh Directory">
+                        <Path Data="{StaticResource IconRefresh}" Fill="{DynamicResource PrimaryTextBrush}" Width="13" Height="13" Stretch="Uniform" />
                     </Button>
                 </StackPanel>
 
-                <!-- Address Bar -->
-                <Grid Grid.Column="1" Margin="0,0,12,0">
-                    <TextBox Text="{Binding CurrentPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FluentTextBox}" Height="34" VerticalContentAlignment="Center">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding GoToPathCommand}" />
-                        </TextBox.InputBindings>
-                    </TextBox>
+                <!-- Interactive Breadcrumbs / Path -->
+                <Border Grid.Column="1" Background="{DynamicResource TextBoxBackgroundBrush}" CornerRadius="4" BorderBrush="{DynamicResource ControlBorderBrush}" BorderThickness="1" Height="32" Margin="0,0,10,0" Padding="6,0">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" VerticalAlignment="Center">
+                        <ItemsControl ItemsSource="{Binding Breadcrumbs}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <Button Style="{StaticResource FluentButton}" Padding="4,2" Height="24"
+                                                Command="{Binding DataContext.NavigateBreadcrumbCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding FullPath}">
+                                            <TextBlock Text="{Binding Name}" FontSize="12" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="SemiBold" />
+                                        </Button>
+                                        <TextBlock Text=" › " FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" Margin="2,0"
+                                                   Visibility="{Binding IsLast, Converter={StaticResource InverseBooleanToVisibilityConverter}}" VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- Live Search Box -->
+                <Grid Grid.Column="2" Margin="0,0,10,0">
+                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FluentTextBox}" Height="32" VerticalContentAlignment="Center" Tag="Search files..." FontSize="12" />
                 </Grid>
 
-                <!-- Search Input -->
-                <Grid Grid.Column="2" Margin="0,0,12,0">
-                    <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FluentTextBox}" Height="34" VerticalContentAlignment="Center" Tag="Search files..." />
-                </Grid>
-
-                <!-- Quick Action Buttons -->
+                <!-- Top Quick Action Buttons -->
                 <StackPanel Grid.Column="3" Orientation="Horizontal">
-                    <Button Style="{StaticResource FluentButton}" Command="{Binding NewFolderCommand}" Margin="0,0,6,0" Padding="12,6">
-                        <TextBlock Text="+ New Folder" FontSize="12" />
+                    <Button Style="{StaticResource FluentButton}" Command="{Binding NewFolderCommand}" Margin="0,0,4,0" Padding="10,4" Height="32">
+                        <TextBlock Text="+ Folder" FontSize="12" />
                     </Button>
-                    <Button Style="{StaticResource PrimaryButton}" Command="{Binding UploadToDeviceCommand}" Padding="14,6">
-                        <TextBlock Text="Upload File" FontSize="12" />
+                    <Button Style="{StaticResource PrimaryButton}" Command="{Binding UploadToDeviceCommand}" Padding="12,4" Height="32">
+                        <TextBlock Text="Upload" FontSize="12" />
                     </Button>
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- Main Directory DataGrid -->
-        <Border Grid.Row="2" Style="{StaticResource FluentCard}" Padding="0" Margin="0,0,0,12">
-            <DataGrid ItemsSource="{Binding DirectoryItems}" SelectedItem="{Binding SelectedItem}"
-                      AutoGenerateColumns="False" IsReadOnly="True" RowHeight="36" HeadersVisibility="Column"
-                      MouseDoubleClick="DataGrid_MouseDoubleClick">
-                <DataGrid.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="📁 Open Folder / Download File" Command="{Binding OpenSelectedItemCommand}" />
-                        <Separator />
-                        <MenuItem Header="📋 Copy Item Path" Command="{Binding CopyItemCommand}" />
-                        <MenuItem Header="✂️ Cut Item" Command="{Binding CutItemCommand}" />
-                        <MenuItem Header="📌 Paste Clipboard Item" Command="{Binding PasteItemCommand}" />
-                        <Separator />
-                        <MenuItem Header="📥 Download to PC" Command="{Binding CopyToPcCommand}" />
-                        <MenuItem Header="📤 Upload to Device" Command="{Binding UploadToDeviceCommand}" />
-                        <Separator />
-                        <MenuItem Header="✏️ Rename" Command="{Binding RenameItemCommand}" />
-                        <MenuItem Header="🗑️ Delete" Command="{Binding DeleteItemCommand}" />
-                        <Separator />
-                        <MenuItem Header="+ New Folder" Command="{Binding NewFolderCommand}" />
-                        <MenuItem Header="🔄 Refresh" Command="{Binding RefreshCommand}" />
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
+        <!-- Main Body: Quick Access Favorites Sidebar + Virtualized File DataGrid -->
+        <Grid Grid.Row="2" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header=" " Binding="{Binding IconBadge}" Width="36" />
-                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*" />
-                    <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="110" />
-                    <DataGridTextColumn Header="Size" Binding="{Binding FormattedSize}" Width="100" />
-                    <DataGridTextColumn Header="Permissions" Binding="{Binding Permissions}" Width="110" />
-                    <DataGridTextColumn Header="Last Modified" Binding="{Binding FormattedDate}" Width="140" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Border>
+            <!-- Sidebar Favorites -->
+            <Border Grid.Column="0" Style="{StaticResource FluentCard}" Padding="8" Margin="0,0,10,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <TextBlock Text="FAVORITES" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource SecondaryTextBrush}" Margin="6,4,0,8" />
 
-        <!-- Download Location & Active Transfer Status Bar -->
-        <Border Grid.Row="3" Style="{StaticResource FluentCard}" Padding="12">
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding JumpToDownloadsCommand}" HorizontalContentAlignment="Left" Padding="8,6" Margin="0,1">
+                            <TextBlock Text="📥 Download" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding JumpToDcimCommand}" HorizontalContentAlignment="Left" Padding="8,6" Margin="0,1">
+                            <TextBlock Text="📷 DCIM" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding JumpToPicturesCommand}" HorizontalContentAlignment="Left" Padding="8,6" Margin="0,1">
+                            <TextBlock Text="🖼️ Pictures" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding JumpToMoviesCommand}" HorizontalContentAlignment="Left" Padding="8,6" Margin="0,1">
+                            <TextBlock Text="🎬 Movies" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding JumpToMusicCommand}" HorizontalContentAlignment="Left" Padding="8,6" Margin="0,1">
+                            <TextBlock Text="🎵 Music" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding JumpToDocumentsCommand}" HorizontalContentAlignment="Left" Padding="8,6" Margin="0,1">
+                            <TextBlock Text="📝 Documents" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding JumpToWhatsAppCommand}" HorizontalContentAlignment="Left" Padding="8,6" Margin="0,1">
+                            <TextBlock Text="💬 WhatsApp" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding JumpToTelegramCommand}" HorizontalContentAlignment="Left" Padding="8,6" Margin="0,1">
+                            <TextBlock Text="✈️ Telegram" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding JumpToAndroidCommand}" HorizontalContentAlignment="Left" Padding="8,6" Margin="0,1">
+                            <TextBlock Text="🤖 Android" FontSize="12" />
+                        </Button>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <!-- Virtualized DataGrid -->
+            <Border Grid.Column="1" Style="{StaticResource FluentCard}" Padding="0">
+                <DataGrid x:Name="FileDataGrid" ItemsSource="{Binding DirectoryItems}"
+                          SelectedItem="{Binding SelectedItem}" SelectionMode="Extended"
+                          AutoGenerateColumns="False" IsReadOnly="True" RowHeight="36" HeadersVisibility="Column"
+                          VirtualizingStackPanel.IsVirtualizing="True"
+                          VirtualizingStackPanel.VirtualizationMode="Recycling"
+                          EnableRowVirtualization="True" EnableColumnVirtualization="True"
+                          ScrollViewer.CanContentScroll="True"
+                          MouseDoubleClick="DataGrid_MouseDoubleClick"
+                          SelectionChanged="DataGrid_SelectionChanged"
+                          PreviewMouseLeftButtonDown="DataGrid_PreviewMouseLeftButtonDown"
+                          PreviewMouseMove="DataGrid_PreviewMouseMove">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu x:Name="ExplorerContextMenu">
+                            <MenuItem Header="📁 Open Folder / File" Command="{Binding OpenSelectedItemCommand}" />
+                            <MenuItem Header="📱 Install APK Package" Command="{Binding InstallApkCommand}" />
+                            <Separator />
+                            <MenuItem Header="📥 Download to PC" Command="{Binding DownloadSelectedCommand}" />
+                            <MenuItem Header="🗜️ Download as ZIP Archive" Command="{Binding DownloadAsZipCommand}" />
+                            <MenuItem Header="📤 Upload Files Here" Command="{Binding UploadToDeviceCommand}" />
+                            <Separator />
+                            <MenuItem Header="📋 Copy (Ctrl+C)" Command="{Binding CopyItemsCommand}" />
+                            <MenuItem Header="✂️ Cut (Ctrl+X)" Command="{Binding CutItemsCommand}" />
+                            <MenuItem Header="📌 Paste (Ctrl+V)" Command="{Binding PasteItemsCommand}" />
+                            <Separator />
+                            <MenuItem Header="✏️ Rename (F2)" Command="{Binding RenameSingleItemCommand}" />
+                            <MenuItem Header="🗑️ Delete (Del)" Command="{Binding DeleteSelectedCommand}" />
+                            <Separator />
+                            <MenuItem Header="+ New Folder" Command="{Binding NewFolderCommand}" />
+                            <MenuItem Header="🔄 Refresh" Command="{Binding RefreshCommand}" />
+                            <Separator />
+                            <MenuItem Header="ℹ️ Properties" Click="PropertiesMenuItem_Click" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
+
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header=" " Binding="{Binding IconBadge}" Width="36" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="2*" SortMemberPath="Name" />
+                        <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="120" SortMemberPath="Type" />
+                        <DataGridTextColumn Header="Size" Binding="{Binding FormattedSize}" Width="100" SortMemberPath="SizeBytes" />
+                        <DataGridTextColumn Header="Permissions" Binding="{Binding Permissions}" Width="110" SortMemberPath="Permissions" />
+                        <DataGridTextColumn Header="Last Modified" Binding="{Binding FormattedDate}" Width="140" SortMemberPath="LastModified" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Grid>
+
+        <!-- Bottom Row: Download Location & Real-Time Transfer Status Overlay -->
+        <Border Grid.Row="3" Style="{StaticResource FluentCard}" Padding="10">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -106,10 +202,10 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,4">
-                        <TextBlock Text="Default PC Download Path: " Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" />
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
+                        <TextBlock Text="PC Download Location: " Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" />
                         <TextBlock Text="{Binding DefaultDownloadFolder}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" FontWeight="SemiBold" />
-                        <Button Style="{StaticResource FluentButton}" Command="{Binding SelectDownloadFolderCommand}" Margin="10,0,0,0" Padding="6,2" Content="Change Folder" FontSize="11" />
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding SelectDownloadFolderCommand}" Margin="10,0,0,0" Padding="6,2" Content="Change" FontSize="11" />
                     </StackPanel>
 
                     <StackPanel Visibility="{Binding IsTransferring, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,6,0,0">
@@ -117,8 +213,11 @@
                             <TextBlock Text="{Binding TransferStatusText}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" FontWeight="Bold" HorizontalAlignment="Left" />
                             <TextBlock Text="{Binding RemainingTimeText}" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="11" HorizontalAlignment="Right" />
                         </Grid>
-                        <ProgressBar Value="{Binding TransferProgress}" Style="{StaticResource FluentProgressBar}" Margin="0,0,0,4" />
-                        <TextBlock Text="{Binding TransferSpeedText}" Foreground="{DynamicResource AccentBrush}" FontSize="11" />
+                        <ProgressBar Value="{Binding TransferProgress}" Style="{StaticResource FluentProgressBar}" Height="6" Margin="0,0,0,4" />
+                        <Grid>
+                            <TextBlock Text="{Binding CurrentItemName}" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="11" HorizontalAlignment="Left" />
+                            <TextBlock Text="{Binding TransferSpeedText}" Foreground="{DynamicResource AccentBrush}" FontSize="11" FontWeight="SemiBold" HorizontalAlignment="Right" />
+                        </Grid>
                     </StackPanel>
                 </StackPanel>
 
@@ -131,3 +230,4 @@
         </Border>
     </Grid>
 </UserControl>
+

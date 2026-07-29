@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace AdbEasyInstaller.Converters
+namespace UnlockMatePro.Converters
 {
     public class InverseBooleanConverter : IValueConverter
     {
@@ -17,3 +17,4 @@ namespace AdbEasyInstaller.Converters
         }
     }
 }
+

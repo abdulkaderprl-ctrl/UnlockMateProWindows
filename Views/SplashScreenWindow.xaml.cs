@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace AdbEasyInstaller.Views
+namespace UnlockMatePro.Views
 {
     public partial class SplashScreenWindow : Window
     {
@@ -10,3 +10,4 @@ namespace AdbEasyInstaller.Views
         }
     }
 }
+

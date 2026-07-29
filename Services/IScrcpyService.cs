@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public interface IScrcpyService
     {
@@ -13,3 +13,4 @@ namespace AdbEasyInstaller.Services
         void StopMirroring();
     }
 }
+

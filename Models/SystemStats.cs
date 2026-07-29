@@ -1,4 +1,4 @@
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class SystemStats
     {
@@ -22,3 +22,4 @@ namespace AdbEasyInstaller.Models
         public int SensorCount { get; set; } = 18;
     }
 }
+

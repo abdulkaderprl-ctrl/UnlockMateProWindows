@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public interface ISettingsService
     {
@@ -11,3 +11,4 @@ namespace AdbEasyInstaller.Services
         void UpdateSettings(AppSettings settings);
     }
 }
+

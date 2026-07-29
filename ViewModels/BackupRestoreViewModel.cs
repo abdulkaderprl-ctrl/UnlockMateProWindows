@@ -1,26 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Win32;
-using AdbEasyInstaller.Models;
-using AdbEasyInstaller.Services;
+using UnlockMatePro.Services;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class BackupRestoreViewModel : ViewModelBase
     {
         private readonly IAdbService _adbService;
         private readonly ILoggerService _logger;
         private readonly INotificationService _notificationService;
+        private readonly ISmartSwitchBackupService _smartSwitchService;
 
         private string? _targetSerialNumber;
         private string _defaultBackupFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "UnlockMatePro_Backups");
@@ -34,7 +28,7 @@ namespace AdbEasyInstaller.ViewModels
         private bool _isProcessing = false;
         private double _overallProgress = 0;
         private string _currentItemName = string.Empty;
-        private string _statusText = "Ready to perform Full Backup or Full Restore.";
+        private string _statusText = "Ready to perform Smart Switch Backup or Restore.";
         private string _transferSpeedText = string.Empty;
         private string _remainingTimeText = string.Empty;
 
@@ -132,11 +126,13 @@ namespace AdbEasyInstaller.ViewModels
         public BackupRestoreViewModel(
             IAdbService adbService,
             ILoggerService logger,
-            INotificationService notificationService)
+            INotificationService notificationService,
+            ISmartSwitchBackupService? smartSwitchService = null)
         {
             _adbService = adbService;
             _logger = logger;
             _notificationService = notificationService;
+            _smartSwitchService = smartSwitchService ?? new SmartSwitchBackupService(adbService, logger);
 
             SelectBackupFolderCommand = new RelayCommand(SelectBackupFolder);
             FullBackupCommand = new AsyncRelayCommand(StartFullBackupAsync, () => !IsProcessing);
@@ -145,7 +141,7 @@ namespace AdbEasyInstaller.ViewModels
 
             if (!Directory.Exists(_defaultBackupFolder))
             {
-                Directory.CreateDirectory(_defaultBackupFolder);
+                try { Directory.CreateDirectory(_defaultBackupFolder); } catch { }
             }
         }
 
@@ -166,224 +162,48 @@ namespace AdbEasyInstaller.ViewModels
         {
             IsProcessing = true;
             _backupCts = new CancellationTokenSource();
-            OverallProgress = 5;
+            OverallProgress = 2;
             StatusText = "Initializing Smart Switch Backup Engine...";
-            RemainingTimeText = "Estimating time...";
+            RemainingTimeText = "Estimating metrics...";
+            TransferSpeedText = string.Empty;
+            CurrentItemName = string.Empty;
 
-            var reportBuilder = new StringBuilder();
-            reportBuilder.AppendLine($"=== UNLOCK MATE PRO BACKUP REPORT ===");
-            reportBuilder.AppendLine($"Date: {DateTime.Now:yyyy-MM-dd HH:mm:ss}");
+            var progress = new Progress<BackupProgressInfo>(p =>
+            {
+                if (!string.IsNullOrWhiteSpace(p.StatusText)) StatusText = p.StatusText;
+                if (!string.IsNullOrWhiteSpace(p.CurrentItemName)) CurrentItemName = p.CurrentItemName;
+                OverallProgress = p.OverallProgress;
+                TransferSpeedText = p.TransferSpeedText;
+                RemainingTimeText = p.RemainingTimeText;
+            });
 
             try
             {
-                var device = await _adbService.GetDeviceDetailsAsync(TargetSerialNumber ?? string.Empty);
-                string devName = (device?.Model ?? "AndroidDevice").Replace(" ", "_");
-                string folderName = $"{devName}_{DateTime.Now:yyyy-MM-dd_HH-mm-ss}";
-                string backupDir = Path.Combine(DefaultBackupFolder, folderName);
-                Directory.CreateDirectory(backupDir);
+                bool success = await _smartSwitchService.PerformFullBackupAsync(
+                    TargetSerialNumber,
+                    DefaultBackupFolder,
+                    IncludeContacts,
+                    IncludeSms,
+                    IncludeCallLogs,
+                    IncludeFiles,
+                    IncludeApps,
+                    CompressToZip,
+                    progress,
+                    _backupCts.Token);
 
-                reportBuilder.AppendLine($"Device: {device?.Model ?? "Unknown"} ({TargetSerialNumber})");
-                reportBuilder.AppendLine($"Backup Folder: {backupDir}\n");
-
-                var manifest = new BackupManifest
+                if (success)
                 {
-                    DeviceName = device?.Model ?? "Android Device",
-                    DeviceSerial = TargetSerialNumber ?? "UnknownSerial",
-                    AndroidVersion = device?.AndroidVersion ?? "14",
-                    ApiLevel = device?.ApiLevel ?? "34",
-                    IncludesContacts = IncludeContacts,
-                    IncludesSms = IncludeSms,
-                    IncludesCallLogs = IncludeCallLogs,
-                    IncludesFiles = IncludeFiles,
-                    IncludesApps = IncludeApps
-                };
-
-                // 1. Contacts
-                if (IncludeContacts && !_backupCts.IsCancellationRequested)
-                {
-                    try
-                    {
-                        CurrentItemName = "Backing up Contacts (VCF / CSV / JSON)...";
-                        StatusText = "Exporting Contacts...";
-                        OverallProgress = 20;
-
-                        var contacts = await _adbService.ExportContactsAsync(TargetSerialNumber);
-                        manifest.ContactCount = contacts.Count;
-
-                        string contactsDir = Path.Combine(backupDir, "Contacts");
-                        Directory.CreateDirectory(contactsDir);
-
-                        // JSON
-                        string json = JsonSerializer.Serialize(contacts, new JsonSerializerOptions { WriteIndented = true });
-                        await File.WriteAllTextAsync(Path.Combine(contactsDir, "contacts.json"), json);
-
-                        // CSV
-                        var csvBuilder = new StringBuilder("Id,DisplayName,PhoneNumber,Email\n");
-                        foreach (var c in contacts) csvBuilder.AppendLine($"\"{c.Id}\",\"{c.DisplayName}\",\"{c.PhoneNumber}\",\"{c.Email}\"");
-                        await File.WriteAllTextAsync(Path.Combine(contactsDir, "contacts.csv"), csvBuilder.ToString());
-
-                        // VCF
-                        var vcfBuilder = new StringBuilder();
-                        foreach (var c in contacts)
-                        {
-                            vcfBuilder.AppendLine("BEGIN:VCARD\nVERSION:3.0");
-                            vcfBuilder.AppendLine($"FN:{c.DisplayName}");
-                            vcfBuilder.AppendLine($"TEL:{c.PhoneNumber}");
-                            vcfBuilder.AppendLine("END:VCARD");
-                        }
-                        await File.WriteAllTextAsync(Path.Combine(contactsDir, "contacts.vcf"), vcfBuilder.ToString());
-
-                        reportBuilder.AppendLine($"[SUCCESS] Contacts: {contacts.Count} records saved.");
-                    }
-                    catch (Exception ex)
-                    {
-                        reportBuilder.AppendLine($"[ERROR] Contacts Backup Failed: {ex.Message}");
-                    }
+                    _notificationService.ShowSuccess("Smart Switch Backup Complete", "Full backup completed successfully!");
                 }
-
-                // 2. SMS
-                if (IncludeSms && !_backupCts.IsCancellationRequested)
+                else
                 {
-                    try
-                    {
-                        CurrentItemName = "Backing up SMS Messages (XML / JSON)...";
-                        StatusText = "Exporting SMS Messages...";
-                        OverallProgress = 40;
-
-                        var smsList = await _adbService.ExportSmsAsync(TargetSerialNumber);
-                        manifest.SmsCount = smsList.Count;
-
-                        string smsDir = Path.Combine(backupDir, "SMS");
-                        Directory.CreateDirectory(smsDir);
-
-                        // JSON
-                        string json = JsonSerializer.Serialize(smsList, new JsonSerializerOptions { WriteIndented = true });
-                        await File.WriteAllTextAsync(Path.Combine(smsDir, "sms.json"), json);
-
-                        // XML
-                        var xmlBuilder = new StringBuilder("<smses>\n");
-                        foreach (var s in smsList) xmlBuilder.AppendLine($"  <sms address=\"{s.Address}\" body=\"{s.Body}\" date=\"{s.Date}\" type=\"{s.Type}\" />");
-                        xmlBuilder.AppendLine("</smses>");
-                        await File.WriteAllTextAsync(Path.Combine(smsDir, "sms.xml"), xmlBuilder.ToString());
-
-                        reportBuilder.AppendLine($"[SUCCESS] SMS: {smsList.Count} messages saved.");
-                    }
-                    catch (Exception ex)
-                    {
-                        reportBuilder.AppendLine($"[ERROR] SMS Backup Failed: {ex.Message}");
-                    }
+                    _notificationService.ShowError("Backup Failed", "Smart Switch backup encountered errors. Check BackupReport.txt.");
                 }
-
-                // 3. Call Logs
-                if (IncludeCallLogs && !_backupCts.IsCancellationRequested)
-                {
-                    try
-                    {
-                        CurrentItemName = "Backing up Call Logs (CSV / JSON)...";
-                        StatusText = "Exporting Call Logs...";
-                        OverallProgress = 55;
-
-                        var callLogs = await _adbService.ExportCallLogsAsync(TargetSerialNumber);
-                        manifest.CallLogCount = callLogs.Count;
-
-                        string clDir = Path.Combine(backupDir, "CallLogs");
-                        Directory.CreateDirectory(clDir);
-
-                        // JSON
-                        string json = JsonSerializer.Serialize(callLogs, new JsonSerializerOptions { WriteIndented = true });
-                        await File.WriteAllTextAsync(Path.Combine(clDir, "calllogs.json"), json);
-
-                        // CSV
-                        var csvBuilder = new StringBuilder("Number,Date,Duration,Type\n");
-                        foreach (var cl in callLogs) csvBuilder.AppendLine($"\"{cl.Number}\",\"{cl.Date}\",\"{cl.DurationSeconds}\",\"{cl.Type}\"");
-                        await File.WriteAllTextAsync(Path.Combine(clDir, "calllogs.csv"), csvBuilder.ToString());
-
-                        reportBuilder.AppendLine($"[SUCCESS] Call Logs: {callLogs.Count} records saved.");
-                    }
-                    catch (Exception ex)
-                    {
-                        reportBuilder.AppendLine($"[ERROR] Call Logs Backup Failed: {ex.Message}");
-                    }
-                }
-
-                // 4. Installed Apps
-                if (IncludeApps && !_backupCts.IsCancellationRequested)
-                {
-                    try
-                    {
-                        CurrentItemName = "Backing up Installed Application Packages (.apk)...";
-                        StatusText = "Exporting Applications...";
-                        OverallProgress = 75;
-
-                        string appsDir = Path.Combine(backupDir, "InstalledApps");
-                        Directory.CreateDirectory(appsDir);
-
-                        var apps = await _adbService.GetInstalledAppsAsync(TargetSerialNumber, false);
-                        manifest.AppCount = apps.Count;
-
-                        string pkgJson = JsonSerializer.Serialize(apps, new JsonSerializerOptions { WriteIndented = true });
-                        await File.WriteAllTextAsync(Path.Combine(appsDir, "packages.json"), pkgJson);
-
-                        int backedUpApps = 0;
-                        foreach (var app in apps.Take(15))
-                        {
-                            if (_backupCts.IsCancellationRequested) break;
-                            var (success, _) = await _adbService.BackupApkAsync(app.PackageName, appsDir, TargetSerialNumber);
-                            if (success) backedUpApps++;
-                        }
-
-                        reportBuilder.AppendLine($"[SUCCESS] Installed Apps: {backedUpApps} APK package(s) saved.");
-                    }
-                    catch (Exception ex)
-                    {
-                        reportBuilder.AppendLine($"[ERROR] App Backup Failed: {ex.Message}");
-                    }
-                }
-
-                // 5. Storage Files (/sdcard)
-                if (IncludeFiles && !_backupCts.IsCancellationRequested)
-                {
-                    try
-                    {
-                        CurrentItemName = "Backing up Storage Files (/sdcard)...";
-                        StatusText = "Exporting User Files...";
-                        OverallProgress = 85;
-
-                        string filesDir = Path.Combine(backupDir, "Files");
-                        Directory.CreateDirectory(filesDir);
-
-                        await _adbService.PullFileAsync("/sdcard/Download", Path.Combine(filesDir, "Download"), TargetSerialNumber);
-                        reportBuilder.AppendLine($"[SUCCESS] Files: /sdcard storage pulled.");
-                    }
-                    catch (Exception ex)
-                    {
-                        reportBuilder.AppendLine($"[ERROR] File Backup Failed: {ex.Message}");
-                    }
-                }
-
-                // Save Manifest & Report
-                string manifestJson = JsonSerializer.Serialize(manifest, new JsonSerializerOptions { WriteIndented = true });
-                await File.WriteAllTextAsync(Path.Combine(backupDir, "BackupInfo.json"), manifestJson);
-                await File.WriteAllTextAsync(Path.Combine(backupDir, "BackupReport.txt"), reportBuilder.ToString());
-
-                // Optional ZIP Compression
-                if (CompressToZip && !_backupCts.IsCancellationRequested)
-                {
-                    CurrentItemName = "Compressing Backup to ZIP archive...";
-                    StatusText = "Creating ZIP Archive...";
-                    OverallProgress = 95;
-
-                    string zipFile = $"{backupDir}.zip";
-                    ZipFile.CreateFromDirectory(backupDir, zipFile);
-                    Directory.Delete(backupDir, true);
-                    backupDir = zipFile;
-                }
-
-                OverallProgress = 100;
-                StatusText = "Full Backup Completed!";
-                CurrentItemName = $"Saved: {backupDir}";
-                RemainingTimeText = "Process Complete";
-                _notificationService.ShowSuccess("Smart Switch Backup Complete", $"Backup saved to:\n{backupDir}");
+            }
+            catch (OperationCanceledException)
+            {
+                StatusText = "Backup operation cancelled by user.";
+                _notificationService.ShowNotification("Cancelled", "Backup operation cancelled.", NotificationType.Warning);
             }
             catch (Exception ex)
             {
@@ -421,93 +241,40 @@ namespace AdbEasyInstaller.ViewModels
 
             IsProcessing = true;
             _backupCts = new CancellationTokenSource();
-            OverallProgress = 10;
+            OverallProgress = 5;
             StatusText = "Parsing Backup Bundle...";
             RemainingTimeText = "Restoring data...";
 
-            string workDir = selectedPath;
-            bool isTempExtracted = false;
+            var progress = new Progress<BackupProgressInfo>(p =>
+            {
+                if (!string.IsNullOrWhiteSpace(p.StatusText)) StatusText = p.StatusText;
+                if (!string.IsNullOrWhiteSpace(p.CurrentItemName)) CurrentItemName = p.CurrentItemName;
+                OverallProgress = p.OverallProgress;
+                TransferSpeedText = p.TransferSpeedText;
+                RemainingTimeText = p.RemainingTimeText;
+            });
 
             try
             {
-                if (selectedPath.EndsWith(".zip", StringComparison.OrdinalIgnoreCase))
+                bool success = await _smartSwitchService.PerformFullRestoreAsync(
+                    TargetSerialNumber,
+                    selectedPath,
+                    progress,
+                    _backupCts.Token);
+
+                if (success)
                 {
-                    StatusText = "Extracting ZIP Archive...";
-                    workDir = Path.Combine(Path.GetTempPath(), "UnlockMatePro_Restore", Guid.NewGuid().ToString("N"));
-                    Directory.CreateDirectory(workDir);
-                    ZipFile.ExtractToDirectory(selectedPath, workDir);
-                    isTempExtracted = true;
+                    _notificationService.ShowSuccess("Full Restore Success", "Data restored successfully!");
                 }
-
-                // Restore Contacts
-                string contactsJson = Path.Combine(workDir, "Contacts", "contacts.json");
-                if (File.Exists(contactsJson))
+                else
                 {
-                    CurrentItemName = "Restoring Contacts to Device...";
-                    StatusText = "Injecting Contacts...";
-                    OverallProgress = 30;
-
-                    string text = await File.ReadAllTextAsync(contactsJson);
-                    var contacts = JsonSerializer.Deserialize<List<ContactItem>>(text);
-                    if (contacts != null && contacts.Any())
-                    {
-                        await _adbService.RestoreContactsAsync(contacts, TargetSerialNumber);
-                    }
+                    _notificationService.ShowError("Restore Failed", "Smart Switch restore encountered errors.");
                 }
-
-                // Restore SMS
-                string smsJson = Path.Combine(workDir, "SMS", "sms.json");
-                if (File.Exists(smsJson))
-                {
-                    CurrentItemName = "Restoring SMS Messages to Device...";
-                    StatusText = "Injecting Messages...";
-                    OverallProgress = 50;
-
-                    string text = await File.ReadAllTextAsync(smsJson);
-                    var smsList = JsonSerializer.Deserialize<List<SmsItem>>(text);
-                    if (smsList != null && smsList.Any())
-                    {
-                        await _adbService.RestoreSmsAsync(smsList, TargetSerialNumber);
-                    }
-                }
-
-                // Restore Call Logs
-                string callLogsJson = Path.Combine(workDir, "CallLogs", "calllogs.json");
-                if (File.Exists(callLogsJson))
-                {
-                    CurrentItemName = "Restoring Call Logs to Device...";
-                    StatusText = "Injecting Call History...";
-                    OverallProgress = 70;
-
-                    string text = await File.ReadAllTextAsync(callLogsJson);
-                    var callLogs = JsonSerializer.Deserialize<List<CallLogItem>>(text);
-                    if (callLogs != null && callLogs.Any())
-                    {
-                        await _adbService.RestoreCallLogsAsync(callLogs, TargetSerialNumber);
-                    }
-                }
-
-                // Restore Apps
-                string appsDir = Path.Combine(workDir, "InstalledApps");
-                if (Directory.Exists(appsDir))
-                {
-                    CurrentItemName = "Restoring Application Packages (.apk)...";
-                    StatusText = "Installing Applications...";
-                    OverallProgress = 90;
-
-                    var apks = Directory.GetFiles(appsDir, "*.apk");
-                    foreach (var apk in apks)
-                    {
-                        if (_backupCts.IsCancellationRequested) break;
-                        await _adbService.InstallApkAsync(apk, TargetSerialNumber, true, true, false);
-                    }
-                }
-
-                OverallProgress = 100;
-                StatusText = "Full Restore Completed!";
-                CurrentItemName = "All backup contents restored successfully.";
-                RemainingTimeText = "Restore Complete";
-                _notificationService.ShowSuccess("Full Restore Success", "Data restored successfully!");
+            }
+            catch (OperationCanceledException)
+            {
+                StatusText = "Restore operation cancelled by user.";
+                _notificationService.ShowNotification("Cancelled", "Restore operation cancelled.", NotificationType.Warning);
             }
             catch (Exception ex)
             {
@@ -516,10 +283,6 @@ namespace AdbEasyInstaller.ViewModels
             finally
             {
                 IsProcessing = false;
-                if (isTempExtracted && Directory.Exists(workDir))
-                {
-                    try { Directory.Delete(workDir, true); } catch { }
-                }
             }
         }
 
@@ -532,3 +295,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

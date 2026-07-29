@@ -1,6 +1,6 @@
 using System;
 
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class UserProfile
     {
@@ -17,3 +17,4 @@ namespace AdbEasyInstaller.Models
         public string InitialLetter => string.IsNullOrWhiteSpace(FullName) ? "U" : FullName[0].ToString().ToUpper();
     }
 }
+

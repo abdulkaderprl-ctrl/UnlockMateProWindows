@@ -1,6 +1,6 @@
 using System;
 
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class BackupManifest
     {
@@ -25,3 +25,4 @@ namespace AdbEasyInstaller.Models
         public string AppVersion { get; set; } = "Unlock Mate Pro v2.0";
     }
 }
+

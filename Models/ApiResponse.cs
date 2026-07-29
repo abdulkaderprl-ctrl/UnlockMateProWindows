@@ -1,4 +1,4 @@
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class ApiResponse<T>
     {
@@ -9,3 +9,4 @@ namespace AdbEasyInstaller.Models
         public UserProfile? User { get; set; }
     }
 }
+

@@ -63,3 +63,8 @@ C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyIn
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Debug\net8.0-windows\ref\AdbEasyInstaller.dll
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Debug\net8.0-windows\Styles\Themes\DarkTheme.baml
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Debug\net8.0-windows\Styles\Themes\LightTheme.baml
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Debug\net8.0-windows\AdbEasyInstaller.sourcelink.json
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Debug\net8.0-windows\Views\FilePropertiesWindow.baml
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Debug\net8.0-windows\Views\FilePropertiesWindow.g.cs
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Debug\net8.0-windows\Views\PhoneCloneView.baml
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Debug\net8.0-windows\Views\PhoneCloneView.g.cs

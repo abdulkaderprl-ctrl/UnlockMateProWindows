@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AdbEasyInstaller.Services;
+using UnlockMatePro.Services;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class AboutViewModel : ViewModelBase
     {
@@ -49,7 +49,7 @@ namespace AdbEasyInstaller.ViewModels
             _logger = logger;
 
             CheckUpdatesCommand = new AsyncRelayCommand(CheckUpdatesAsync);
-            OpenGitHubCommand = new RelayCommand(() => OpenUrl("https://github.com/adbeasyinstaller/adb-easy-installer"));
+            OpenGitHubCommand = new RelayCommand(() => OpenUrl("https://github.com/UnlockMatePro/adb-easy-installer"));
         }
 
         private async Task CheckUpdatesAsync()
@@ -86,3 +86,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

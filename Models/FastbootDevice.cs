@@ -1,4 +1,4 @@
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class FastbootDevice
     {
@@ -10,3 +10,4 @@ namespace AdbEasyInstaller.Models
         public override string ToString() => DisplayName;
     }
 }
+

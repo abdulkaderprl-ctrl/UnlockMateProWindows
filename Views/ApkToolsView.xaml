@@ -1,4 +1,4 @@
-<UserControl x:Class="AdbEasyInstaller.Views.ApkToolsView"
+<UserControl x:Class="UnlockMatePro.Views.ApkToolsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -72,3 +72,4 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+

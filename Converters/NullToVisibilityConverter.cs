@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace AdbEasyInstaller.Converters
+namespace UnlockMatePro.Converters
 {
     public class NullToVisibilityConverter : IValueConverter
     {
@@ -23,3 +23,4 @@ namespace AdbEasyInstaller.Converters
         }
     }
 }
+

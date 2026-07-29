@@ -3,11 +3,11 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class UpdateService : IUpdateService
     {
-        private const string GITHUB_RELEASES_URL = "https://api.github.com/repos/adbeasyinstaller/adb-easy-installer/releases/latest";
+        private const string GITHUB_RELEASES_URL = "https://api.github.com/repos/UnlockMatePro/adb-easy-installer/releases/latest";
         private readonly string _currentVersion = "1.0.0";
         private readonly ILoggerService _logger;
 
@@ -23,7 +23,7 @@ namespace AdbEasyInstaller.Services
             try
             {
                 using var client = new HttpClient();
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("AdbEasyInstallerApp/1.0");
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("UnlockMateProApp/1.0");
 
                 var response = await client.GetAsync(GITHUB_RELEASES_URL);
                 if (response.IsSuccessStatusCode)
@@ -79,3 +79,4 @@ namespace AdbEasyInstaller.Services
         }
     }
 }
+

@@ -1,9 +1,9 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public interface ILoggerService
     {
@@ -20,3 +20,4 @@ namespace AdbEasyInstaller.Services
         void ClearLogs();
     }
 }
+

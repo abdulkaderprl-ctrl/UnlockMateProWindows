@@ -1,8 +1,8 @@
 using System.Windows;
 using System.Windows.Controls;
-using AdbEasyInstaller.ViewModels;
+using UnlockMatePro.ViewModels;
 
-namespace AdbEasyInstaller.Views
+namespace UnlockMatePro.Views
 {
     public partial class ApkInstallView : UserControl
     {
@@ -37,3 +37,4 @@ namespace AdbEasyInstaller.Views
         }
     }
 }
+

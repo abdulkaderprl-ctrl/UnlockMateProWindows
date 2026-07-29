@@ -3,9 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class ScrcpyService : IScrcpyService
     {
@@ -184,3 +184,4 @@ namespace AdbEasyInstaller.Services
         }
     }
 }
+

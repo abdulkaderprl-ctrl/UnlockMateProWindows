@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class AppInfo
     {
@@ -16,3 +16,4 @@ namespace AdbEasyInstaller.Models
         public List<string> RequestedPermissions { get; set; } = new List<string>();
     }
 }
+

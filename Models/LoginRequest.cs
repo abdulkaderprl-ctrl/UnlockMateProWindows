@@ -1,4 +1,4 @@
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class LoginRequest
     {
@@ -26,3 +26,4 @@ namespace AdbEasyInstaller.Models
         public string VerificationCode { get; set; } = string.Empty;
     }
 }
+

@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AdbEasyInstaller.Models;
-using AdbEasyInstaller.Services;
+using UnlockMatePro.Models;
+using UnlockMatePro.Services;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class UserProfileViewModel : ViewModelBase
     {
@@ -36,3 +36,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

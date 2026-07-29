@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AdbEasyInstaller.Services;
+using UnlockMatePro.Services;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class AdbToolsViewModel : ViewModelBase
     {
@@ -178,3 +178,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

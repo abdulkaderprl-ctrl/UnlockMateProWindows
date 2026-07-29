@@ -8,9 +8,9 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class AdbService : IAdbService
     {
@@ -708,15 +708,484 @@ namespace AdbEasyInstaller.Services
 
         public async Task<(bool Success, string Message)> RenameFileAsync(string oldPath, string newPath, string? serialNumber)
         {
-            _logger.LogInfo($"Renaming remote path from {oldPath} to {newPath}...");
-            var (success, output) = await ExecuteCommandAsync($"shell mv \"{oldPath}\" \"{newPath}\"", serialNumber);
-            return (success, output);
+            try
+            {
+                if (string.IsNullOrWhiteSpace(oldPath) || string.IsNullOrWhiteSpace(newPath))
+                {
+                    _logger.LogError("Rename failed: Source or destination path is empty.");
+                    return (false, "Invalid file or folder path.");
+                }
+
+                _logger.LogInfo($"Renaming remote path from '{oldPath}' to '{newPath}'...");
+
+                // Check if destination already exists on remote device
+                var (checkSuccess, checkOutput) = await ExecuteCommandAsync($"shell test -e \"{newPath}\" && echo EXISTS", serialNumber);
+                if (checkSuccess && checkOutput.Contains("EXISTS"))
+                {
+                    _logger.LogWarning($"Rename failed: Destination path '{newPath}' already exists.");
+                    return (false, "A file or folder with that name already exists in this location.");
+                }
+
+                var (success, output) = await ExecuteCommandAsync($"shell mv \"{oldPath}\" \"{newPath}\"", serialNumber);
+                if (!success || (!string.IsNullOrWhiteSpace(output) && (output.Contains("failed") || output.Contains("Error") || output.Contains("Permission denied"))))
+                {
+                    string errReason = string.IsNullOrWhiteSpace(output) ? "Failed to rename remote item." : output.Trim();
+                    _logger.LogError($"Rename failed for '{oldPath}' -> '{newPath}': {errReason}");
+                    return (false, errReason);
+                }
+
+                _logger.LogInfo($"Successfully renamed '{oldPath}' to '{newPath}'.");
+                return (true, "Success");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Exception during RenameFileAsync: {ex.Message}");
+                return (false, $"Error during rename operation: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> CheckRemotePathExistsAsync(string remotePath, string? serialNumber)
+        {
+            if (string.IsNullOrWhiteSpace(remotePath)) return false;
+            _logger.LogInfo($"[CheckRemotePathExistsAsync] Checking remote existence of '{remotePath}'...");
+
+            var (lsSuccess, lsOutput) = await ExecuteCommandAsync($"shell ls -d \"{remotePath}\"", serialNumber);
+            bool exists = lsSuccess && !string.IsNullOrWhiteSpace(lsOutput) && !lsOutput.Contains("No such file") && !lsOutput.Contains("not found");
+            _logger.LogInfo($"[CheckRemotePathExistsAsync] Path '{remotePath}' exists: {exists}");
+            return exists;
+        }
+
+        public async Task<(bool Success, string Message)> CopyRemoteItemAsync(
+            string sourcePath,
+            string destPath,
+            string? serialNumber,
+            IProgress<BackupProgressInfo>? progress = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(sourcePath) || string.IsNullOrWhiteSpace(destPath))
+                {
+                    _logger.LogError("[CopyRemoteItemAsync] Failed: Invalid source or destination path.");
+                    return (false, "Source or destination path is invalid.");
+                }
+
+                _logger.LogInfo($"[CopyRemoteItemAsync] Copying remote path: '{sourcePath}' -> '{destPath}'...");
+
+                // Attempt adb shell cp -r "sourcePath" "destPath"
+                var (success, output) = await ExecuteCommandAsync($"shell cp -r \"{sourcePath}\" \"{destPath}\"", serialNumber);
+                _logger.LogInfo($"[CopyRemoteItemAsync] adb shell cp command output: '{output}' (Success={success})");
+
+                if (success && (string.IsNullOrWhiteSpace(output) || (!output.Contains("cp:") && !output.Contains("not found") && !output.Contains("Error") && !output.Contains("Permission denied"))))
+                {
+                    _logger.LogInfo($"[CopyRemoteItemAsync] adb shell cp succeeded for '{sourcePath}' -> '{destPath}'.");
+                    return (true, "Copy successful.");
+                }
+
+                _logger.LogWarning($"[CopyRemoteItemAsync] adb shell cp failed ({output}). Falling back to adb pull -> adb push...");
+
+                // Fallback: Pull to temp local dir, then Push to destination
+                string tempLocalDir = Path.Combine(Path.GetTempPath(), "UnlockMateCopy_" + Guid.NewGuid().ToString("N"));
+                Directory.CreateDirectory(tempLocalDir);
+
+                try
+                {
+                    _logger.LogInfo($"[CopyRemoteItemAsync] Pulling '{sourcePath}' to temporary directory '{tempLocalDir}'...");
+                    var pullRes = await PullFileAsync(sourcePath, tempLocalDir, serialNumber);
+                    if (!pullRes.Success)
+                    {
+                        _logger.LogError($"[CopyRemoteItemAsync] Fallback copy failed on adb pull: {pullRes.Message}");
+                        return (false, $"Copy failed during pull: {pullRes.Message}");
+                    }
+
+                    string downloadedName = Path.GetFileName(sourcePath.TrimEnd('/'));
+                    string localItemPath = Path.Combine(tempLocalDir, downloadedName);
+
+                    if (!File.Exists(localItemPath) && !Directory.Exists(localItemPath))
+                    {
+                        var entries = Directory.GetFileSystemEntries(tempLocalDir);
+                        if (entries.Length > 0) localItemPath = entries[0];
+                    }
+
+                    string destParentDir = Path.GetDirectoryName(destPath.TrimEnd('/'))?.Replace('\\', '/') ?? "/sdcard";
+                    _logger.LogInfo($"[CopyRemoteItemAsync] Pushing local item '{localItemPath}' to destination parent '{destParentDir}'...");
+
+                    var pushRes = await PushFilesAndFoldersAsync(new[] { localItemPath }, destParentDir, serialNumber, progress, cancellationToken);
+                    if (!pushRes.Success)
+                    {
+                        _logger.LogError($"[CopyRemoteItemAsync] Fallback copy failed on adb push: {pushRes.Message}");
+                        return (false, $"Copy failed during push: {pushRes.Message}");
+                    }
+
+                    _logger.LogInfo($"[CopyRemoteItemAsync] Fallback adb pull/push copy completed successfully for '{sourcePath}'.");
+                    return (true, "Copy successful via fallback.");
+                }
+                finally
+                {
+                    try
+                    {
+                        if (Directory.Exists(tempLocalDir))
+                            Directory.Delete(tempLocalDir, recursive: true);
+                    }
+                    catch { }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[CopyRemoteItemAsync] Exception: {ex.Message}");
+                return (false, $"Copy error: {ex.Message}");
+            }
+        }
+
+        public async Task<(bool Success, string Message)> MoveRemoteItemAsync(
+            string sourcePath,
+            string destPath,
+            string? serialNumber,
+            IProgress<BackupProgressInfo>? progress = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(sourcePath) || string.IsNullOrWhiteSpace(destPath))
+                {
+                    _logger.LogError("[MoveRemoteItemAsync] Failed: Invalid source or destination path.");
+                    return (false, "Source or destination path is invalid.");
+                }
+
+                _logger.LogInfo($"[MoveRemoteItemAsync] Moving remote item: '{sourcePath}' -> '{destPath}'...");
+
+                var (success, output) = await ExecuteCommandAsync($"shell mv \"{sourcePath}\" \"{destPath}\"", serialNumber);
+                _logger.LogInfo($"[MoveRemoteItemAsync] adb shell mv command output: '{output}' (Success={success})");
+
+                if (success && (string.IsNullOrWhiteSpace(output) || (!output.Contains("failed") && !output.Contains("Error") && !output.Contains("Permission denied"))))
+                {
+                    _logger.LogInfo($"[MoveRemoteItemAsync] adb shell mv succeeded for '{sourcePath}' -> '{destPath}'.");
+                    return (true, "Move successful.");
+                }
+
+                _logger.LogWarning($"[MoveRemoteItemAsync] adb shell mv failed ({output}). Falling back to Copy + Delete...");
+                var copyRes = await CopyRemoteItemAsync(sourcePath, destPath, serialNumber, progress, cancellationToken);
+                if (copyRes.Success)
+                {
+                    _logger.LogInfo($"[MoveRemoteItemAsync] Fallback copy succeeded. Deleting original source '{sourcePath}'...");
+                    await DeleteFileAsync(sourcePath, serialNumber);
+                    return (true, "Move successful via fallback copy/delete.");
+                }
+
+                return copyRes;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[MoveRemoteItemAsync] Exception: {ex.Message}");
+                return (false, $"Move error: {ex.Message}");
+            }
         }
 
         public async Task<(bool Success, string Message)> CreateDirectoryAsync(string remotePath, string? serialNumber)
         {
             var (success, output) = await ExecuteCommandAsync($"shell mkdir -p \"{remotePath}\"", serialNumber);
             return (success, output);
+        }
+
+        public async Task<List<string>> EnumerateRemoteStoragePathsAsync(string remoteBasePath, string? serialNumber)
+        {
+            var paths = new List<string>();
+            string targetPath = string.IsNullOrWhiteSpace(remoteBasePath) ? "/sdcard" : remoteBasePath.TrimEnd('/');
+            _logger.LogInfo($"Enumerating device internal storage at: {targetPath}...");
+
+            var (success, output) = await ExecuteCommandAsync($"shell find \"{targetPath}\"", serialNumber);
+            if (success && !string.IsNullOrWhiteSpace(output))
+            {
+                var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var line in lines)
+                {
+                    string trimmed = line.Trim();
+                    if (string.IsNullOrWhiteSpace(trimmed)) continue;
+                    if (trimmed.StartsWith("find:", StringComparison.OrdinalIgnoreCase)) continue;
+                    paths.Add(trimmed);
+                }
+            }
+
+            return paths;
+        }
+
+        public async Task<long> GetRemoteStorageSizeBytesAsync(string remoteBasePath, string? serialNumber)
+        {
+            string targetPath = string.IsNullOrWhiteSpace(remoteBasePath) ? "/sdcard" : remoteBasePath.TrimEnd('/');
+
+            // Try du -sb first
+            var (duSuccess, duOutput) = await ExecuteCommandAsync($"shell du -sb \"{targetPath}\"", serialNumber);
+            if (duSuccess && !string.IsNullOrWhiteSpace(duOutput))
+            {
+                var match = Regex.Match(duOutput, @"^(\d+)\s+");
+                if (match.Success && long.TryParse(match.Groups[1].Value, out long bytes) && bytes > 0)
+                {
+                    return bytes;
+                }
+            }
+
+            // Fallback: df -k /sdcard
+            var (dfSuccess, dfOutput) = await ExecuteCommandAsync($"shell df -k \"{targetPath}\"", serialNumber);
+            if (dfSuccess && !string.IsNullOrWhiteSpace(dfOutput))
+            {
+                var lines = dfOutput.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                if (lines.Length > 1)
+                {
+                    var tokens = Regex.Split(lines[1].Trim(), @"\s+");
+                    if (tokens.Length >= 3 && long.TryParse(tokens[2], out long usedKb) && usedKb > 0)
+                    {
+                        return usedKb * 1024;
+                    }
+                }
+            }
+
+            return 0;
+        }
+
+        public async Task<StorageInfo> GetStorageInfoAsync(string? serialNumber)
+        {
+            var info = new StorageInfo();
+            string[] cmdCandidates = new[] { "shell df -k /sdcard", "shell df /sdcard", "shell df -k /storage/emulated/0" };
+
+            foreach (var cmd in cmdCandidates)
+            {
+                var (success, output) = await ExecuteCommandAsync(cmd, serialNumber);
+                if (success && !string.IsNullOrWhiteSpace(output))
+                {
+                    var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (var line in lines)
+                    {
+                        if (line.StartsWith("Filesystem", StringComparison.OrdinalIgnoreCase) ||
+                            line.StartsWith("1K-blocks", StringComparison.OrdinalIgnoreCase)) continue;
+
+                        var tokens = Regex.Split(line.Trim(), @"\s+");
+                        if (tokens.Length >= 4)
+                        {
+                            for (int i = 1; i < tokens.Length - 2; i++)
+                            {
+                                if (long.TryParse(tokens[i], out long totalKb) &&
+                                    long.TryParse(tokens[i + 1], out long usedKb) &&
+                                    long.TryParse(tokens[i + 2], out long freeKb) &&
+                                    totalKb > 1024)
+                                {
+                                    info.TotalBytes = totalKb * 1024;
+                                    info.UsedBytes = usedKb * 1024;
+                                    info.FreeBytes = freeKb * 1024;
+                                    return info;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return info;
+        }
+
+        public async Task<(bool Success, string Message)> PushFilesAndFoldersAsync(
+            string[] localPaths,
+            string remoteDestinationDir,
+            string? serialNumber,
+            IProgress<BackupProgressInfo>? progress = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            if (localPaths == null || localPaths.Length == 0) return (true, "No files specified.");
+
+            var progressInfo = new BackupProgressInfo
+            {
+                StatusText = "Preparing file upload..."
+            };
+
+            var allFiles = new List<string>();
+            long totalBytes = 0;
+
+            foreach (var path in localPaths)
+            {
+                if (File.Exists(path))
+                {
+                    allFiles.Add(path);
+                    totalBytes += new FileInfo(path).Length;
+                }
+                else if (Directory.Exists(path))
+                {
+                    var files = Directory.GetFiles(path, "*", SearchOption.AllDirectories);
+                    allFiles.AddRange(files);
+                    totalBytes += files.Sum(f => new FileInfo(f).Length);
+                }
+            }
+
+            progressInfo.TotalFiles = Math.Max(1, allFiles.Count);
+            progressInfo.TotalBytes = totalBytes;
+            progress?.Report(progressInfo);
+
+            int processedFiles = 0;
+            long transferredBytes = 0;
+            var sw = Stopwatch.StartNew();
+
+            string remoteDirClean = remoteDestinationDir.TrimEnd('/');
+
+            foreach (var localPath in localPaths)
+            {
+                if (cancellationToken.IsCancellationRequested) break;
+
+                string name = Path.GetFileName(localPath);
+                string remoteTarget = $"{remoteDirClean}/{name}";
+
+                progressInfo.CurrentItemName = $"Uploading: {name}";
+                progressInfo.StatusText = $"Uploading [{processedFiles + 1}/{allFiles.Count}]: {name}...";
+                progress?.Report(progressInfo);
+
+                var (success, msg) = await PushFileAsync(localPath, remoteTarget, serialNumber);
+                if (!success)
+                {
+                    _logger.LogWarning($"Push warning for {name}: {msg}");
+                }
+
+                if (File.Exists(localPath))
+                {
+                    processedFiles++;
+                    transferredBytes += new FileInfo(localPath).Length;
+                }
+                else if (Directory.Exists(localPath))
+                {
+                    var subFiles = Directory.GetFiles(localPath, "*", SearchOption.AllDirectories);
+                    processedFiles += subFiles.Length;
+                    transferredBytes += subFiles.Sum(f => new FileInfo(f).Length);
+                }
+
+                double elapsed = Math.Max(0.1, sw.Elapsed.TotalSeconds);
+                double speed = transferredBytes / elapsed;
+                progressInfo.TransferredFiles = processedFiles;
+                progressInfo.TransferredBytes = transferredBytes;
+                progressInfo.BytesPerSecond = speed;
+
+                if (speed > 1024 * 1024)
+                    progressInfo.TransferSpeedText = $"{speed / (1024.0 * 1024.0):F1} MB/s";
+                else
+                    progressInfo.TransferSpeedText = $"{speed / 1024.0:F1} KB/s";
+
+                double remainingBytes = Math.Max(0, totalBytes - transferredBytes);
+                double etaSec = speed > 0 ? remainingBytes / speed : 0;
+                var eta = TimeSpan.FromSeconds(etaSec);
+                progressInfo.RemainingTimeText = $"ETA: {eta:mm\\:ss}";
+                progressInfo.OverallProgress = ((double)processedFiles / Math.Max(1, allFiles.Count)) * 100.0;
+
+                progress?.Report(progressInfo);
+            }
+
+            return (true, $"Uploaded {processedFiles} file(s) successfully.");
+        }
+
+        public async Task<(bool Success, string Message)> PullFilesAndFoldersAsync(
+            List<FileItem> remoteItems,
+            string localDestinationDir,
+            string? serialNumber,
+            IProgress<BackupProgressInfo>? progress = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            if (remoteItems == null || remoteItems.Count == 0) return (true, "No items selected.");
+
+            if (!Directory.Exists(localDestinationDir))
+            {
+                Directory.CreateDirectory(localDestinationDir);
+            }
+
+            var progressInfo = new BackupProgressInfo
+            {
+                StatusText = "Preparing file download..."
+            };
+
+            long estimatedTotalBytes = remoteItems.Sum(i => i.SizeBytes);
+            progressInfo.TotalFiles = remoteItems.Count;
+            progressInfo.TotalBytes = estimatedTotalBytes;
+            progress?.Report(progressInfo);
+
+            int processedFiles = 0;
+            long transferredBytes = 0;
+            var sw = Stopwatch.StartNew();
+
+            foreach (var item in remoteItems)
+            {
+                if (cancellationToken.IsCancellationRequested) break;
+
+                string localTargetPath = Path.Combine(localDestinationDir, item.Name);
+                progressInfo.CurrentItemName = $"Downloading: {item.Name}";
+                progressInfo.StatusText = $"Downloading [{processedFiles + 1}/{remoteItems.Count}]: {item.Name}...";
+                progress?.Report(progressInfo);
+
+                var (success, msg) = await PullFileAsync(item.FullPath, localTargetPath, serialNumber);
+                if (!success)
+                {
+                    _logger.LogWarning($"Pull warning for {item.Name}: {msg}");
+                }
+
+                processedFiles++;
+                if (File.Exists(localTargetPath))
+                {
+                    transferredBytes += new FileInfo(localTargetPath).Length;
+                    // Preserve timestamp
+                    try { File.SetLastWriteTime(localTargetPath, item.LastModified); } catch { }
+                }
+                else if (Directory.Exists(localTargetPath))
+                {
+                    var files = Directory.GetFiles(localTargetPath, "*", SearchOption.AllDirectories);
+                    transferredBytes += files.Sum(f => new FileInfo(f).Length);
+                }
+
+                double elapsed = Math.Max(0.1, sw.Elapsed.TotalSeconds);
+                double speed = transferredBytes / elapsed;
+                progressInfo.TransferredFiles = processedFiles;
+                progressInfo.TransferredBytes = transferredBytes;
+                progressInfo.BytesPerSecond = speed;
+
+                if (speed > 1024 * 1024)
+                    progressInfo.TransferSpeedText = $"{speed / (1024.0 * 1024.0):F1} MB/s";
+                else
+                    progressInfo.TransferSpeedText = $"{speed / 1024.0:F1} KB/s";
+
+                double remainingBytes = Math.Max(0, estimatedTotalBytes - transferredBytes);
+                double etaSec = speed > 0 ? remainingBytes / speed : 0;
+                var eta = TimeSpan.FromSeconds(etaSec);
+                progressInfo.RemainingTimeText = $"ETA: {eta:mm\\:ss}";
+                progressInfo.OverallProgress = ((double)processedFiles / Math.Max(1, remoteItems.Count)) * 100.0;
+
+                progress?.Report(progressInfo);
+            }
+
+            return (true, $"Downloaded {processedFiles} item(s) to {localDestinationDir}.");
+        }
+
+        public async Task<(bool Success, string Message)> DownloadAsZipAsync(
+            List<FileItem> remoteItems,
+            string localZipFilePath,
+            string? serialNumber,
+            IProgress<BackupProgressInfo>? progress = null,
+            System.Threading.CancellationToken cancellationToken = default)
+        {
+            string tempFolder = Path.Combine(Path.GetTempPath(), "UnlockMatePro_ZipDownload", Guid.NewGuid().ToString("N"));
+            Directory.CreateDirectory(tempFolder);
+
+            try
+            {
+                var (pullSuccess, pullMsg) = await PullFilesAndFoldersAsync(remoteItems, tempFolder, serialNumber, progress, cancellationToken);
+                if (!pullSuccess) return (false, pullMsg);
+
+                if (File.Exists(localZipFilePath))
+                {
+                    File.Delete(localZipFilePath);
+                }
+
+                ZipFile.CreateFromDirectory(tempFolder, localZipFilePath);
+                return (true, $"Archive created successfully at {localZipFilePath}");
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+            finally
+            {
+                try { if (Directory.Exists(tempFolder)) Directory.Delete(tempFolder, true); } catch { }
+            }
         }
 
         // Backup & Restore Content Data
@@ -942,3 +1411,4 @@ namespace AdbEasyInstaller.Services
         }
     }
 }
+

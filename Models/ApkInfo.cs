@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class ApkInfo
     {
@@ -30,3 +30,4 @@ namespace AdbEasyInstaller.Models
         public string ExtensionBadge => Path.GetExtension(FilePath).ToUpperInvariant().TrimStart('.');
     }
 }
+

@@ -1,6 +1,6 @@
 using System;
 
-namespace AdbEasyInstaller.Models
+namespace UnlockMatePro.Models
 {
     public class AuthTokens
     {
@@ -11,3 +11,4 @@ namespace AdbEasyInstaller.Models
         public bool IsExpired => DateTime.Now >= ExpiresAt;
     }
 }
+

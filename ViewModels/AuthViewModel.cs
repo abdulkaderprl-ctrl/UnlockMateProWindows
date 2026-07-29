@@ -1,10 +1,10 @@
 using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using AdbEasyInstaller.Models;
-using AdbEasyInstaller.Services;
+using UnlockMatePro.Models;
+using UnlockMatePro.Services;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class AuthViewModel : ViewModelBase
     {
@@ -218,3 +218,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

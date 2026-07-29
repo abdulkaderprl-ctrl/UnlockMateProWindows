@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public interface IAdbService
     {
@@ -48,6 +48,15 @@ namespace AdbEasyInstaller.Services
         Task<(bool Success, string Message)> DeleteFileAsync(string remotePath, string? serialNumber);
         Task<(bool Success, string Message)> RenameFileAsync(string oldPath, string newPath, string? serialNumber);
         Task<(bool Success, string Message)> CreateDirectoryAsync(string remotePath, string? serialNumber);
+        Task<bool> CheckRemotePathExistsAsync(string remotePath, string? serialNumber);
+        Task<(bool Success, string Message)> CopyRemoteItemAsync(string sourcePath, string destPath, string? serialNumber, IProgress<BackupProgressInfo>? progress = null, System.Threading.CancellationToken cancellationToken = default);
+        Task<(bool Success, string Message)> MoveRemoteItemAsync(string sourcePath, string destPath, string? serialNumber, IProgress<BackupProgressInfo>? progress = null, System.Threading.CancellationToken cancellationToken = default);
+        Task<List<string>> EnumerateRemoteStoragePathsAsync(string remoteBasePath, string? serialNumber);
+        Task<long> GetRemoteStorageSizeBytesAsync(string remoteBasePath, string? serialNumber);
+        Task<StorageInfo> GetStorageInfoAsync(string? serialNumber);
+        Task<(bool Success, string Message)> DownloadAsZipAsync(List<FileItem> remoteItems, string localZipFilePath, string? serialNumber, IProgress<BackupProgressInfo>? progress = null, System.Threading.CancellationToken cancellationToken = default);
+        Task<(bool Success, string Message)> PushFilesAndFoldersAsync(string[] localPaths, string remoteDestinationDir, string? serialNumber, IProgress<BackupProgressInfo>? progress = null, System.Threading.CancellationToken cancellationToken = default);
+        Task<(bool Success, string Message)> PullFilesAndFoldersAsync(List<FileItem> remoteItems, string localDestinationDir, string? serialNumber, IProgress<BackupProgressInfo>? progress = null, System.Threading.CancellationToken cancellationToken = default);
 
         // Backup & Restore Data
         Task<List<ContactItem>> ExportContactsAsync(string? serialNumber);
@@ -72,3 +81,4 @@ namespace AdbEasyInstaller.Services
         Task<(bool Success, string Message)> OpenDeviceStorageAsync(string? serialNumber);
     }
 }
+

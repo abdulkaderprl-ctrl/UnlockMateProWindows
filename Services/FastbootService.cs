@@ -5,9 +5,9 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public class FastbootService : IFastbootService
     {
@@ -253,3 +253,4 @@ namespace AdbEasyInstaller.Services
         }
     }
 }
+

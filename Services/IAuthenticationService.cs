@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public interface IAuthenticationService
     {
@@ -20,3 +20,4 @@ namespace AdbEasyInstaller.Services
         Task LogoutAsync();
     }
 }
+

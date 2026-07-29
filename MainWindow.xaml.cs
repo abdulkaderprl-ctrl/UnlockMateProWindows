@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace AdbEasyInstaller
+namespace UnlockMatePro
 {
     public partial class MainWindow : Window
     {
@@ -10,3 +10,4 @@ namespace AdbEasyInstaller
         }
     }
 }
+

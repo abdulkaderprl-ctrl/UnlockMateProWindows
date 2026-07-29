@@ -1,4 +1,4 @@
-<Window x:Class="AdbEasyInstaller.Views.SplashScreenWindow"
+<Window x:Class="UnlockMatePro.Views.SplashScreenWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Unlock Mate Pro" Height="320" Width="520"
@@ -32,3 +32,4 @@
         </Grid>
     </Border>
 </Window>
+

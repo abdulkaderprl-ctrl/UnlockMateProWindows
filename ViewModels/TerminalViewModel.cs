@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
-using AdbEasyInstaller.Services;
+using UnlockMatePro.Services;
 
-namespace AdbEasyInstaller.ViewModels
+namespace UnlockMatePro.ViewModels
 {
     public class TerminalViewModel : ViewModelBase
     {
@@ -155,3 +155,4 @@ namespace AdbEasyInstaller.ViewModels
         }
     }
 }
+

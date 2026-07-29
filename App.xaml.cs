@@ -3,11 +3,11 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
-using AdbEasyInstaller.Services;
-using AdbEasyInstaller.ViewModels;
-using AdbEasyInstaller.Views;
+using UnlockMatePro.Services;
+using UnlockMatePro.ViewModels;
+using UnlockMatePro.Views;
 
-namespace AdbEasyInstaller
+namespace UnlockMatePro
 {
     public partial class App : Application
     {
@@ -86,11 +86,23 @@ namespace AdbEasyInstaller
             catch { }
         }
 
+        private bool _isShowingCrashDialog = false;
+
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-            LogCrash(e.Exception);
-            MessageBox.Show($"Unlock Mate Pro encountered an unexpected exception:\n{e.Exception.Message}\n\nA diagnostic crash dump has been saved to %APPDATA%\\UnlockMatePro\\Logs.", "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
+            if (_isShowingCrashDialog) return;
+
+            try
+            {
+                _isShowingCrashDialog = true;
+                LogCrash(e.Exception);
+                MessageBox.Show($"Unlock Mate Pro encountered an unexpected exception:\n{e.Exception.Message}\n\nA diagnostic crash dump has been saved to %APPDATA%\\UnlockMatePro\\Logs.", "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                _isShowingCrashDialog = false;
+            }
         }
 
         private void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -115,3 +127,4 @@ namespace AdbEasyInstaller
         }
     }
 }
+

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using AdbEasyInstaller.Models;
+using UnlockMatePro.Models;
 
-namespace AdbEasyInstaller.Services
+namespace UnlockMatePro.Services
 {
     public interface IFastbootService
     {
@@ -22,3 +22,4 @@ namespace AdbEasyInstaller.Services
         Task<(bool Success, string Status)> GetFrpStatusAsync(string? serialNumber);
     }
 }
+
