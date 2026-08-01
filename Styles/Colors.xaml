@@ -20,7 +20,8 @@
     <SolidColorBrush x:Key="MutedTextBrush" Color="#666666" />
     
     <!-- Interactive Brushes -->
-    <SolidColorBrush x:Key="AccentBrush" Color="#0078D4" />
+    <Color x:Key="AccentColor">#0078D4</Color>
+    <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource AccentColor}" />
     <SolidColorBrush x:Key="AccentHoverBrush" Color="#1086E8" />
     <SolidColorBrush x:Key="AccentPressedBrush" Color="#005A9E" />
     <SolidColorBrush x:Key="ControlHoverBrush" Color="#333333" />

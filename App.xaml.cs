@@ -121,7 +121,7 @@ namespace UnlockMatePro
                 if (!Directory.Exists(logDir)) Directory.CreateDirectory(logDir);
 
                 string crashFile = Path.Combine(logDir, $"crash_{DateTime.Now:yyyyMMdd_HHmmss}.txt");
-                File.WriteAllText(crashFile, $"CRASH TIME: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nMESSAGE: {ex.Message}\nSTACK TRACE:\n{ex.StackTrace}\n");
+                File.WriteAllText(crashFile, $"CRASH TIME: {DateTime.Now:yyyy-MM-dd HH:mm:ss}\nEXCEPTION DETAILS:\n{ex.ToString()}\n");
             }
             catch { }
         }

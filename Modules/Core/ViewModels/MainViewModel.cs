@@ -381,6 +381,7 @@ namespace UnlockMatePro.ViewModels
             {
                 if (string.IsNullOrEmpty(hexColor)) hexColor = "#0078D4";
                 var color = (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(hexColor);
+                System.Windows.Application.Current.Resources["AccentColor"] = color;
                 System.Windows.Application.Current.Resources["AccentBrush"] = new System.Windows.Media.SolidColorBrush(color);
                 
                 // Adjust hover/pressed brushes automatically

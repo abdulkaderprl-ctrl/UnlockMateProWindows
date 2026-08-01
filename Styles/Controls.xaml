@@ -135,7 +135,7 @@
                             <!-- Accent Glow -->
                             <Setter TargetName="border" Property="Effect">
                                 <Setter.Value>
-                                    <DropShadowEffect Color="{Binding Color, Source={DynamicResource AccentBrush}}" BlurRadius="10" ShadowDepth="0" Opacity="0.5" />
+                                    <DropShadowEffect Color="{DynamicResource AccentColor}" BlurRadius="10" ShadowDepth="0" Opacity="0.5" />
                                 </Setter.Value>
                             </Setter>
                         </Trigger>
