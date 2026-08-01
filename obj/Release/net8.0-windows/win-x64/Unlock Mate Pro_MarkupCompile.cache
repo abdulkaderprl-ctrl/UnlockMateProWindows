@@ -1,0 +1,20 @@
+﻿Unlock Mate Pro
+1.0.0.0
+
+winexe
+C#
+.cs
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\
+UnlockMatePro
+none
+false
+TRACE;RELEASE;NET;NET8_0;NETCOREAPP
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\App.xaml
+28-1881027526
+
+962018713228
+198-1551921639
+MainWindow.xaml;Modules\ADB\Views\AdbToolsView.xaml;Modules\ADB\Views\LogsView.xaml;Modules\ADB\Views\ScrcpyView.xaml;Modules\ADB\Views\ScreenshotGalleryView.xaml;Modules\ADB\Views\TerminalView.xaml;Modules\APK\Views\ApkInstallView.xaml;Modules\APK\Views\ApkManagementView.xaml;Modules\APK\Views\ApkToolsView.xaml;Modules\Backup\Views\BackupRestoreView.xaml;Modules\Core\Views\BrandPlaceholderView.xaml;Modules\Dashboard\Views\DashboardView.xaml;Modules\Dashboard\Views\DeviceDetectionView.xaml;Modules\Fastboot\Views\AdvancedToolsView.xaml;Modules\Fastboot\Views\FastbootToolsView.xaml;Modules\FileExplorer\Views\FileExplorerView.xaml;Modules\FileExplorer\Views\FilePropertiesWindow.xaml;Modules\PhoneClone\Views\PhoneCloneView.xaml;Modules\Settings\Views\AboutView.xaml;Modules\Settings\Views\AuthView.xaml;Modules\Settings\Views\SettingsView.xaml;Modules\Settings\Views\SplashScreenWindow.xaml;Modules\Settings\Views\UserProfileView.xaml;Styles\Colors.xaml;Styles\Controls.xaml;Styles\Icons.xaml;Styles\Themes\DarkTheme.xaml;Styles\Themes\LightTheme.xaml;
+
+False
+

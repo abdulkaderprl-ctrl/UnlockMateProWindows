@@ -3,20 +3,14 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:UnlockMatePro.ViewModels"
         xmlns:views="clr-namespace:UnlockMatePro.Views"
+        xmlns:conv="clr-namespace:UnlockMatePro.Converters"
         Title="Unlock Mate Pro - Professional Android Device Manager" Height="780" Width="1180"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource BackgroundBrush}">
 
-    <!-- Keyboard Shortcuts Input Bindings -->
     <Window.InputBindings>
-        <KeyBinding Key="R" Modifiers="Control" Command="{Binding RefreshDevicesCommand}" />
-        <KeyBinding Key="I" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="ApkInstall" />
-        <KeyBinding Key="M" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="Scrcpy" />
-        <KeyBinding Key="F" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="FileExplorer" />
-        <KeyBinding Key="T" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="Terminal" />
         <KeyBinding Key="L" Modifiers="Control" Command="{Binding NavigateCommand}" CommandParameter="Logs" />
     </Window.InputBindings>
-
     <Window.Resources>
         <!-- Data Templates mapping ViewModels to Views -->
         <DataTemplate DataType="{x:Type vm:DashboardViewModel}">
@@ -76,10 +70,14 @@
         <DataTemplate DataType="{x:Type vm:AboutViewModel}">
             <views:AboutView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:BrandPlaceholderViewModel}">
+            <views:BrandPlaceholderView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -137,132 +135,45 @@
             </Grid>
         </Border>
 
-        <!-- Main Body Area -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="220" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+        <!-- Top Brand Menu Ribbon -->
+        <Border Grid.Row="1" Background="{DynamicResource SidebarBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="0,0,0,1" Padding="0">
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" PanningMode="HorizontalOnly">
+                <StackPanel Orientation="Horizontal" Margin="12,8">
+                    <!-- Brand Buttons -->
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Content="DASHBOARD" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Dashboard'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="AdbTools" Content="ADB" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='AdbTools'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="FastbootTools" Content="FASTBOOT" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='FastbootTools'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="FRP" Content="FRP" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='FRP'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Flash" Content="FLASH" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Flash'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="PhoneClone" Content="PHONE CLONE" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='PhoneClone'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="BackupRestore" Content="BACKUP" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='BackupRestore'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="FileExplorer" Content="FILE EXPLORER" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='FileExplorer'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Scrcpy" Content="SCREEN MIRROR" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Scrcpy'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="ApkInstall" Content="APK" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='ApkInstall'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="AdvancedTools" Content="TOOLS" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='AdvancedTools'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Qualcomm" Content="QUALCOMM" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Qualcomm'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="MTK" Content="MTK" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='MTK'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Samsung" Content="SAMSUNG" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Samsung'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Xiaomi" Content="XIAOMI" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Xiaomi'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="OPPO" Content="OPPO" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='OPPO'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="VIVO" Content="VIVO" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='VIVO'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Realme" Content="REALME" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Realme'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Huawei" Content="HUAWEI" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Huawei'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Apple" Content="APPLE" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Apple'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Tecno" Content="TECNO" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Tecno'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Infinix" Content="INFINIX" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Infinix'}" />
+                    
+                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="8,4" />
+                    
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Settings" Content="SETTINGS" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Settings'}" />
+                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Logs" Content="LOGS" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Logs'}" />
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
 
-            <!-- Sidebar Navigation Menu -->
-            <Border Grid.Column="0" Background="{DynamicResource SidebarBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="0,0,1,0">
-                <ScrollViewer VerticalScrollBarVisibility="Auto">
-                    <StackPanel Margin="0,12">
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="Dashboard">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconDashboard}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="Dashboard" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="DeviceDetection">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconDevice}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="Device Detection" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="ApkInstall">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconApkInstall}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="Install APK / Splits (Ctrl+I)" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="FileExplorer">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconApps}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="File Explorer (Ctrl+F)" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="PhoneClone">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconDevice}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="📲 Phone Clone (Smart Switch)" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="BackupRestore">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconLogs}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="Backup &amp; Restore" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="Scrcpy">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconDevice}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="Screen Mirror (Ctrl+M)" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="ScreenshotGallery">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconDevice}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="Screenshots Gallery" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="Terminal">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconTools}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="ADB Terminal (Ctrl+T)" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="FastbootTools">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconTools}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="Fastboot Tools" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="ApkTools">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconApkInstall}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="APK Tools Suite" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="AdvancedTools">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconSettings}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="Advanced &amp; Root" />
-                            </StackPanel>
-                        </Button>
-
-                        <Separator Background="{DynamicResource CardBorderBrush}" Margin="12,12" />
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="Settings">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconSettings}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="Settings" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="Logs">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconLogs}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="ADB Logs (Ctrl+L)" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button Style="{StaticResource SidebarNavButton}" Command="{Binding NavigateCommand}" CommandParameter="About">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconAbout}" Fill="{Binding Foreground, RelativeSource={RelativeSource AncestorType=Button}}" Width="16" Height="16" Stretch="Uniform" Margin="0,0,12,0" />
-                                <TextBlock Text="About" />
-                            </StackPanel>
-                        </Button>
-
-                    </StackPanel>
-                </ScrollViewer>
-            </Border>
-
-            <!-- Main Content Container -->
-            <Grid Grid.Column="1">
-                <ContentControl Content="{Binding CurrentViewModel}" Margin="20" />
+        <!-- Main Content Container -->
+        <Grid Grid.Row="2">
+            <ContentControl Content="{Binding CurrentViewModel}" Margin="20" />
 
                 <!-- Toast Notification Banner -->
                 <Border HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="24" Width="340"
@@ -281,7 +192,6 @@
                                 Content="✕" Padding="6,2" VerticalAlignment="Top" Background="Transparent" BorderThickness="0" />
                     </Grid>
                 </Border>
-            </Grid>
         </Grid>
     </Grid>
 </Window>

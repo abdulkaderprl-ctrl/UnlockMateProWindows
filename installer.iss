@@ -6,7 +6,7 @@ AppPublisher=Unlock Mate Pro Technologies
 AppPublisherURL=https://unlockmatepro.com
 AppSupportURL=https://unlockmatepro.com/support
 AppUpdatesURL=https://unlockmatepro.com/updates
-DefaultDirName={autopf}\UnlockMatePro
+DefaultDirName={autopf}\Unlock Mate Pro
 DefaultGroupName=Unlock Mate Pro
 AllowNoIcons=yes
 OutputDir=Release
@@ -25,9 +25,9 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\Unlock Mate Pro"; Filename: "{app}\UnlockMatePro.exe"
+Name: "{group}\Unlock Mate Pro"; Filename: "{app}\Unlock Mate Pro.exe"
 Name: "{group}\{cm:UninstallProgram,Unlock Mate Pro}"; Filename: "{uninstallexe}"
-Name: "{autodesktop}\Unlock Mate Pro"; Filename: "{app}\UnlockMatePro.exe"
+Name: "{autodesktop}\Unlock Mate Pro"; Filename: "{app}\Unlock Mate Pro.exe"
 
 [Run]
-Filename: "{app}\UnlockMatePro.exe"; Description: "{cm:LaunchProgram,Unlock Mate Pro}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Unlock Mate Pro.exe"; Description: "{cm:LaunchProgram,Unlock Mate Pro}"; Flags: nowait postinstall skipifsilent

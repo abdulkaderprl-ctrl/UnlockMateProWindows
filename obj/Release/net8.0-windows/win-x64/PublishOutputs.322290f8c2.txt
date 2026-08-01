@@ -1,8 +1,8 @@
-C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\UnlockMatePro.exe
-C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\UnlockMatePro.dll
-C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\UnlockMatePro.deps.json
-C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\UnlockMatePro.runtimeconfig.json
-C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\UnlockMatePro.pdb
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\Unlock Mate Pro.exe
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\Unlock Mate Pro.dll
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\Unlock Mate Pro.deps.json
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\Unlock Mate Pro.runtimeconfig.json
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\Unlock Mate Pro.pdb
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\Microsoft.CSharp.dll
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\Microsoft.VisualBasic.Core.dll
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\publish\Microsoft.Win32.Primitives.dll

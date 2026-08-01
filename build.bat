@@ -22,7 +22,7 @@ dotnet restore
 
 echo.
 echo Compiling solution in Release mode...
-dotnet build -c Release --no-restore
+dotnet build -c Release -r win-x64
 
 if %ERRORLEVEL% NEQ 0 (
     echo Build failed! Please check compiler errors above.
@@ -32,7 +32,7 @@ if %ERRORLEVEL% NEQ 0 (
 
 echo.
 echo Publishing framework-dependent Release binaries...
-dotnet publish -c Release -r win-x64 --no-build -o bin\Release\net8.0-windows\publish
+dotnet publish -c Release -r win-x64 --self-contained true -o bin\Release\net8.0-windows\publish
 
 echo.
 echo ========================================================

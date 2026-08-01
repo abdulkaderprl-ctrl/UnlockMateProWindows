@@ -65,7 +65,7 @@ namespace UnlockMatePro
 
             try
             {
-                string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "UnlockMatePro", "Logs");
+                string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Unlock Mate Pro", "Logs");
                 if (Directory.Exists(logDir))
                 {
                     var files = Directory.GetFiles(logDir, "*.txt");
@@ -97,7 +97,7 @@ namespace UnlockMatePro
             {
                 _isShowingCrashDialog = true;
                 LogCrash(e.Exception);
-                MessageBox.Show($"Unlock Mate Pro encountered an unexpected exception:\n{e.Exception.Message}\n\nA diagnostic crash dump has been saved to %APPDATA%\\UnlockMatePro\\Logs.", "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Unlock Mate Pro encountered an unexpected exception:\n{e.Exception.Message}\n\nA diagnostic crash dump has been saved to %APPDATA%\\Unlock Mate Pro\\Logs.", "Unhandled Exception", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
@@ -117,7 +117,7 @@ namespace UnlockMatePro
         {
             try
             {
-                string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "UnlockMatePro", "Logs");
+                string logDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Unlock Mate Pro", "Logs");
                 if (!Directory.Exists(logDir)) Directory.CreateDirectory(logDir);
 
                 string crashFile = Path.Combine(logDir, $"crash_{DateTime.Now:yyyyMMdd_HHmmss}.txt");

@@ -1,0 +1,127 @@
+<UserControl x:Class="UnlockMatePro.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel>
+            <TextBlock Text="Application Settings &amp; Tooling" Style="{StaticResource HeaderTextBlock}" />
+
+            <!-- Automated Tool Downloader Card -->
+            <Border Style="{StaticResource FluentCard}" Background="#22107C41">
+                <StackPanel>
+                    <TextBlock Text="📥 Automated Tool Downloader" Style="{StaticResource SubHeaderTextBlock}" />
+                    <TextBlock Text="Missing adb.exe or scrcpy.exe? One-click auto-download from official Google &amp; GitHub servers." Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,0,0,12" />
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <Button Style="{StaticResource PrimaryButton}" Command="{Binding DownloadAdbCommand}" Margin="0,0,12,0">
+                            <TextBlock Text="Download ADB (Platform Tools)" />
+                        </Button>
+                        <Button Style="{StaticResource PrimaryButton}" Command="{Binding DownloadScrcpyCommand}">
+                            <TextBlock Text="Download Scrcpy (Screen Mirroring)" />
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel Visibility="{Binding IsDownloading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <TextBlock Text="{Binding DownloadStatusText}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" Margin="0,0,0,4" />
+                        <ProgressBar Value="{Binding DownloadProgress}" Style="{StaticResource FluentProgressBar}" IsIndeterminate="False" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Executable Paths Card -->
+            <Border Style="{StaticResource FluentCard}">
+                <StackPanel>
+                    <TextBlock Text="ADB &amp; Scrcpy Executable Paths" Style="{StaticResource SubHeaderTextBlock}" />
+
+                    <TextBlock Text="ADB Executable Path (adb.exe):" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="13" Margin="0,0,0,4" />
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding CustomAdbPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FluentTextBox}" Margin="0,0,8,0" />
+                        <Button Grid.Column="1" Style="{StaticResource FluentButton}" Command="{Binding BrowseAdbPathCommand}" Margin="0,0,8,0">
+                            <TextBlock Text="Browse ADB..." />
+                        </Button>
+                        <Button Grid.Column="2" Style="{StaticResource FluentButton}" Command="{Binding AutoDetectSdkCommand}">
+                            <TextBlock Text="Auto Detect" />
+                        </Button>
+                    </Grid>
+
+                    <TextBlock Text="Scrcpy Executable Path (scrcpy.exe):" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="13" Margin="0,0,0,4" />
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" Text="{Binding CustomScrcpyPath, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FluentTextBox}" Margin="0,0,8,0" />
+                        <Button Grid.Column="1" Style="{StaticResource FluentButton}" Command="{Binding BrowseScrcpyPathCommand}">
+                            <TextBlock Text="Browse Scrcpy..." />
+                        </Button>
+                    </Grid>
+
+                    <CheckBox Content="Auto-detect adb.exe and scrcpy.exe on startup" IsChecked="{Binding AutoDetectAdb}" Foreground="{DynamicResource PrimaryTextBrush}" />
+                </StackPanel>
+            </Border>
+
+            <!-- Portable Mode & Language Preferences -->
+            <Border Style="{StaticResource FluentCard}">
+                <StackPanel>
+                    <TextBlock Text="Portable Mode &amp; Language Preferences" Style="{StaticResource SubHeaderTextBlock}" />
+
+                    <CheckBox Content="Portable Mode (Store settings.json alongside application executable)" IsChecked="{Binding IsPortableMode}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,12" FontWeight="SemiBold" />
+
+                    <Grid Margin="0,0,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160" />
+                            <ColumnDefinition Width="200" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Theme Mode:" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center" Margin="0,0,0,12" />
+                        <ComboBox Grid.Row="0" Grid.Column="1" SelectedValue="{Binding SelectedTheme, Mode=TwoWay}" SelectedValuePath="Content" Margin="0,0,0,12" Padding="8,4">
+                            <ComboBoxItem Content="Auto" />
+                            <ComboBoxItem Content="Dark" />
+                            <ComboBoxItem Content="Light" />
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Accent Color:" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center" Margin="0,0,0,12" />
+                        <ComboBox Grid.Row="1" Grid.Column="1" SelectedValue="{Binding AccentColor, Mode=TwoWay}" SelectedValuePath="Tag" Margin="0,0,0,12" Padding="8,4">
+                            <ComboBoxItem Content="Blue (Default)" Tag="#0078D4" />
+                            <ComboBoxItem Content="Red" Tag="#D13438" />
+                            <ComboBoxItem Content="Green" Tag="#107C41" />
+                            <ComboBoxItem Content="Purple" Tag="#881798" />
+                            <ComboBoxItem Content="Orange" Tag="#CA5010" />
+                            <ComboBoxItem Content="Teal" Tag="#038387" />
+                        </ComboBox>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Language / ভাষা:" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center" />
+                        <ComboBox Grid.Row="2" Grid.Column="1" SelectedValue="{Binding SelectedLanguage, Mode=TwoWay}" SelectedValuePath="Content" Padding="8,4">
+                            <ComboBoxItem Content="English" />
+                            <ComboBoxItem Content="Bangla (বাংলা)" />
+                            <ComboBoxItem Content="Spanish" />
+                            <ComboBoxItem Content="French" />
+                            <ComboBoxItem Content="German" />
+                        </ComboBox>
+                    </Grid>
+
+                    <Separator Background="{DynamicResource CardBorderBrush}" Margin="0,8,0,12" />
+
+                    <CheckBox Content="Automatically check for application updates from GitHub" IsChecked="{Binding AutoCheckUpdates}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,8" />
+                    <CheckBox Content="Default install option: Reinstall existing packages (-r)" IsChecked="{Binding ReinstallByDefault}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,8" />
+                    <CheckBox Content="Default install option: Auto-grant runtime permissions (-g)" IsChecked="{Binding GrantPermissionsByDefault}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,8" />
+                </StackPanel>
+            </Border>
+
+            <!-- Save Settings Button -->
+            <Button Style="{StaticResource PrimaryButton}" Command="{Binding SaveSettingsCommand}" HorizontalAlignment="Right" Padding="24,10">
+                <TextBlock Text="Save Settings" FontSize="14" />
+            </Button>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
+
