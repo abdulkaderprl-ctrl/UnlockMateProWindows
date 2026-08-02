@@ -70,8 +70,8 @@
         <DataTemplate DataType="{x:Type vm:AboutViewModel}">
             <views:AboutView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:BrandPlaceholderViewModel}">
-            <views:BrandPlaceholderView />
+        <DataTemplate DataType="{x:Type vm:FrpViewModel}">
+            <views:FrpView />
         </DataTemplate>
     </Window.Resources>
 

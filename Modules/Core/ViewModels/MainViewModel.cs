@@ -59,21 +59,21 @@ namespace UnlockMatePro.ViewModels
         public LogsViewModel LogsVM { get; }
         public AboutViewModel AboutVM { get; }
 
-        // Brand Placeholders
-        public BrandPlaceholderViewModel QualcommVM { get; } = new BrandPlaceholderViewModel("Qualcomm");
-        public BrandPlaceholderViewModel MtkVM { get; } = new BrandPlaceholderViewModel("MTK");
-        public BrandPlaceholderViewModel SamsungVM { get; } = new BrandPlaceholderViewModel("Samsung");
-        public BrandPlaceholderViewModel XiaomiVM { get; } = new BrandPlaceholderViewModel("Xiaomi");
-        public BrandPlaceholderViewModel OppoVM { get; } = new BrandPlaceholderViewModel("OPPO");
-        public BrandPlaceholderViewModel VivoVM { get; } = new BrandPlaceholderViewModel("VIVO");
-        public BrandPlaceholderViewModel RealmeVM { get; } = new BrandPlaceholderViewModel("Realme");
-        public BrandPlaceholderViewModel HuaweiVM { get; } = new BrandPlaceholderViewModel("Huawei");
-        public BrandPlaceholderViewModel HonorVM { get; } = new BrandPlaceholderViewModel("Honor");
-        public BrandPlaceholderViewModel MotorolaVM { get; } = new BrandPlaceholderViewModel("Motorola");
-        public BrandPlaceholderViewModel NokiaVM { get; } = new BrandPlaceholderViewModel("Nokia");
-        public BrandPlaceholderViewModel SpdVM { get; } = new BrandPlaceholderViewModel("SPD");
-        public BrandPlaceholderViewModel AppleVM { get; } = new BrandPlaceholderViewModel("Apple");
-        public BrandPlaceholderViewModel FrpVM { get; } = new BrandPlaceholderViewModel("FRP");
+        // Brand Modules (FRP & Tools)
+        public FrpViewModel QualcommVM { get; }
+        public FrpViewModel MtkVM { get; }
+        public FrpViewModel SamsungVM { get; }
+        public FrpViewModel XiaomiVM { get; }
+        public FrpViewModel OppoVM { get; }
+        public FrpViewModel VivoVM { get; }
+        public FrpViewModel RealmeVM { get; }
+        public FrpViewModel HuaweiVM { get; }
+        public FrpViewModel HonorVM { get; }
+        public FrpViewModel MotorolaVM { get; }
+        public FrpViewModel NokiaVM { get; }
+        public FrpViewModel SpdVM { get; }
+        public FrpViewModel AppleVM { get; }
+        public FrpViewModel FrpVM { get; }
 
         public ObservableCollection<AdbDevice> ConnectedDevices { get; } = new ObservableCollection<AdbDevice>();
         
@@ -195,6 +195,21 @@ namespace UnlockMatePro.ViewModels
             SettingsVM = new SettingsViewModel(_settingsService, _adbService, _scrcpyService, _toolDownloaderService, _logger, _notificationService);
             LogsVM = new LogsViewModel(_logger);
             AboutVM = new AboutViewModel(_updateService, _logger);
+
+            QualcommVM = new FrpViewModel("Qualcomm", _adbService, _fastbootService, _logger, _notificationService);
+            MtkVM = new FrpViewModel("MTK", _adbService, _fastbootService, _logger, _notificationService);
+            SamsungVM = new FrpViewModel("Samsung", _adbService, _fastbootService, _logger, _notificationService);
+            XiaomiVM = new FrpViewModel("Xiaomi", _adbService, _fastbootService, _logger, _notificationService);
+            OppoVM = new FrpViewModel("OPPO", _adbService, _fastbootService, _logger, _notificationService);
+            VivoVM = new FrpViewModel("VIVO", _adbService, _fastbootService, _logger, _notificationService);
+            RealmeVM = new FrpViewModel("Realme", _adbService, _fastbootService, _logger, _notificationService);
+            HuaweiVM = new FrpViewModel("Huawei", _adbService, _fastbootService, _logger, _notificationService);
+            HonorVM = new FrpViewModel("Honor", _adbService, _fastbootService, _logger, _notificationService);
+            MotorolaVM = new FrpViewModel("Motorola", _adbService, _fastbootService, _logger, _notificationService);
+            NokiaVM = new FrpViewModel("Nokia", _adbService, _fastbootService, _logger, _notificationService);
+            SpdVM = new FrpViewModel("SPD", _adbService, _fastbootService, _logger, _notificationService);
+            AppleVM = new FrpViewModel("Apple", _adbService, _fastbootService, _logger, _notificationService);
+            FrpVM = new FrpViewModel("FRP", _adbService, _fastbootService, _logger, _notificationService);
 
             _currentViewModel = DashboardVM;
 
