@@ -73,6 +73,9 @@
         <DataTemplate DataType="{x:Type vm:FrpViewModel}">
             <views:FrpView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SamsungViewModel}">
+            <views:SamsungView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
