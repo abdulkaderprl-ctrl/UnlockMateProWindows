@@ -67,7 +67,7 @@ namespace UnlockMatePro.ViewModels
         public OppoViewModel OppoVM { get; }
         public VivoViewModel VivoVM { get; }
         public RealmeViewModel RealmeVM { get; }
-        public FrpViewModel HuaweiVM { get; }
+        public HuaweiViewModel HuaweiVM { get; }
         public FrpViewModel HonorVM { get; }
         public FrpViewModel MotorolaVM { get; }
         public FrpViewModel NokiaVM { get; }
@@ -203,7 +203,7 @@ namespace UnlockMatePro.ViewModels
             OppoVM = new OppoViewModel(_adbService, _fastbootService, _logger, _notificationService);
             VivoVM = new VivoViewModel(_adbService, _fastbootService, _logger, _notificationService);
             RealmeVM = new RealmeViewModel(_adbService, _fastbootService, _logger, _notificationService);
-            HuaweiVM = new FrpViewModel("Huawei", _adbService, _fastbootService, _logger, _notificationService);
+            HuaweiVM = new HuaweiViewModel(_adbService, _fastbootService, _logger, _notificationService);
             HonorVM = new FrpViewModel("Honor", _adbService, _fastbootService, _logger, _notificationService);
             MotorolaVM = new FrpViewModel("Motorola", _adbService, _fastbootService, _logger, _notificationService);
             NokiaVM = new FrpViewModel("Nokia", _adbService, _fastbootService, _logger, _notificationService);
