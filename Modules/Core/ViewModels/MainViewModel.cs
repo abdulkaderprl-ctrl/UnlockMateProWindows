@@ -66,11 +66,12 @@ namespace UnlockMatePro.ViewModels
         public BrandPlaceholderViewModel VivoVM { get; } = new BrandPlaceholderViewModel("VIVO");
         public BrandPlaceholderViewModel RealmeVM { get; } = new BrandPlaceholderViewModel("Realme");
         public BrandPlaceholderViewModel HuaweiVM { get; } = new BrandPlaceholderViewModel("Huawei");
+        public BrandPlaceholderViewModel HonorVM { get; } = new BrandPlaceholderViewModel("Honor");
+        public BrandPlaceholderViewModel MotorolaVM { get; } = new BrandPlaceholderViewModel("Motorola");
+        public BrandPlaceholderViewModel NokiaVM { get; } = new BrandPlaceholderViewModel("Nokia");
+        public BrandPlaceholderViewModel SpdVM { get; } = new BrandPlaceholderViewModel("SPD");
         public BrandPlaceholderViewModel AppleVM { get; } = new BrandPlaceholderViewModel("Apple");
-        public BrandPlaceholderViewModel TecnoVM { get; } = new BrandPlaceholderViewModel("Tecno");
-        public BrandPlaceholderViewModel InfinixVM { get; } = new BrandPlaceholderViewModel("Infinix");
         public BrandPlaceholderViewModel FrpVM { get; } = new BrandPlaceholderViewModel("FRP");
-        public BrandPlaceholderViewModel FlashVM { get; } = new BrandPlaceholderViewModel("Flash");
 
         public ObservableCollection<AdbDevice> ConnectedDevices { get; } = new ObservableCollection<AdbDevice>();
 
@@ -278,11 +279,12 @@ namespace UnlockMatePro.ViewModels
                 "VIVO" => VivoVM,
                 "Realme" => RealmeVM,
                 "Huawei" => HuaweiVM,
+                "Honor" => HonorVM,
+                "Motorola" => MotorolaVM,
+                "Nokia" => NokiaVM,
+                "SPD" => SpdVM,
                 "Apple" => AppleVM,
-                "Tecno" => TecnoVM,
-                "Infinix" => InfinixVM,
                 "FRP" => FrpVM,
-                "Flash" => FlashVM,
                 _ => DashboardVM
             };
         }
