@@ -190,6 +190,20 @@ namespace UnlockMatePro.Services
             return (false, output);
         }
 
+        public async Task<(bool Success, string Message)> FlashAllPartitionsAsync(string? serialNumber)
+        {
+            _logger.LogInfo($"Flashing all partitions...");
+            var (success, output) = await ExecuteFastbootCommandAsync("flashall", serialNumber);
+
+            if (success)
+            {
+                _logger.LogSuccess($"Successfully flashed all partitions.");
+                return (true, "Flashed all partitions successfully!");
+            }
+
+            return (false, output);
+        }
+
         public async Task<(bool Success, string Message)> BootImageAsync(string imagePath, string? serialNumber)
         {
             if (!File.Exists(imagePath)) return (false, $"Image file not found: {imagePath}");

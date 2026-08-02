@@ -86,6 +86,9 @@ namespace UnlockMatePro.ViewModels
         public ICommand LockBootloaderCommand { get; }
         public ICommand RebootBootloaderCommand { get; }
         public ICommand RebootSystemCommand { get; }
+        public ICommand RebootRecoveryCommand { get; }
+        public ICommand RebootFastbootdCommand { get; }
+        public ICommand FlashAllPartitionsCommand { get; }
 
         public FastbootToolsViewModel(
             IFastbootService fastbootService,
@@ -107,6 +110,9 @@ namespace UnlockMatePro.ViewModels
             LockBootloaderCommand = new AsyncRelayCommand(LockBootloaderAsync, () => !IsBusy);
             RebootBootloaderCommand = new AsyncRelayCommand(() => RebootAsync("bootloader"));
             RebootSystemCommand = new AsyncRelayCommand(() => RebootAsync(""));
+            RebootRecoveryCommand = new AsyncRelayCommand(() => RebootAsync("recovery"));
+            RebootFastbootdCommand = new AsyncRelayCommand(() => RebootAsync("fastboot"));
+            FlashAllPartitionsCommand = new AsyncRelayCommand(FlashAllPartitionsAsync, () => !IsBusy);
 
             _ = RefreshDevicesAsync();
         }
@@ -149,6 +155,22 @@ namespace UnlockMatePro.ViewModels
             FastbootOutput += msg + "\n\n";
             if (success) _notificationService.ShowSuccess("Flash Complete", $"Successfully flashed {SelectedPartition} partition!");
             else _notificationService.ShowError("Flash Failed", msg);
+        }
+
+        private async Task FlashAllPartitionsAsync()
+        {
+            if (MessageBox.Show($"Are you sure you want to flash ALL partitions (requires images in current ADB folder)?", "Safety Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) != MessageBoxResult.Yes)
+                return;
+
+            IsBusy = true;
+            FastbootOutput += $"[FLASHING] Flashing ALL partitions...\n";
+
+            var (success, msg) = await _fastbootService.FlashAllPartitionsAsync(SelectedDevice?.SerialNumber);
+            IsBusy = false;
+
+            FastbootOutput += msg + "\n\n";
+            if (success) _notificationService.ShowSuccess("Flash All Complete", $"Successfully flashed all partitions!");
+            else _notificationService.ShowError("Flash All Failed", msg);
         }
 
         private async Task BootImageAsync()

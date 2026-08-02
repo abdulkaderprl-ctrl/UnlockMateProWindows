@@ -65,6 +65,9 @@
                         <Button Style="{StaticResource FluentButton}" Command="{Binding BootImageCommand}" Margin="0,0,8,0" Padding="14,6">
                             <TextBlock Text="Boot Image (Temp)" FontSize="12" />
                         </Button>
+                        <Button Style="{StaticResource PrimaryButton}" Command="{Binding FlashAllPartitionsCommand}" Margin="0,0,8,0" Padding="14,6">
+                            <TextBlock Text="Flash All Partitions" FontSize="12" />
+                        </Button>
                         <Button Style="{StaticResource PrimaryButton}" Command="{Binding FlashImageCommand}" Padding="20,6">
                             <TextBlock Text="Flash Image to Partition" FontSize="12" />
                         </Button>
@@ -86,6 +89,12 @@
                         </Button>
                         <Button Style="{StaticResource FluentButton}" Command="{Binding RebootBootloaderCommand}" Margin="0,0,10,8" Padding="14,6">
                             <TextBlock Text="Reboot Bootloader" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding RebootRecoveryCommand}" Margin="0,0,10,8" Padding="14,6">
+                            <TextBlock Text="Reboot Recovery" FontSize="12" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding RebootFastbootdCommand}" Margin="0,0,10,8" Padding="14,6">
+                            <TextBlock Text="Reboot FastbootD" FontSize="12" />
                         </Button>
                         <Button Style="{StaticResource PrimaryButton}" Command="{Binding RebootSystemCommand}" Margin="0,0,0,8" Padding="16,6">
                             <TextBlock Text="Reboot System" FontSize="12" />
