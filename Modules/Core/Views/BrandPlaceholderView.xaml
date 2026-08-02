@@ -5,10 +5,112 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
-    <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Coming Soon" FontSize="48" FontWeight="Bold" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Center" Margin="0,0,0,16" />
-            <TextBlock Text="{Binding BrandName, StringFormat='The {0} module is currently under development.'}" FontSize="16" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" />
-        </StackPanel>
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="350" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Panel: Categories & Search -->
+        <Border Grid.Column="0" Style="{StaticResource FluentCard}" Margin="0,0,12,0" Padding="12">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="{Binding BrandName, StringFormat='{}{0} Module'}" Style="{StaticResource HeaderTextBlock}" FontSize="20" />
+
+                <!-- Search Box -->
+                <TextBox Grid.Row="1" Style="{StaticResource FluentTextBox}" Margin="0,0,0,12" Text="Search models/tools..." Foreground="{DynamicResource MutedTextBrush}" />
+
+                <!-- Category Panel -->
+                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+                    <StackPanel>
+                        <Button Style="{StaticResource FluentButton}" Content="Security / FRP" Margin="0,0,0,8" HorizontalContentAlignment="Left" />
+                        <Button Style="{StaticResource FluentButton}" Content="Flash / Firmware" Margin="0,0,0,8" HorizontalContentAlignment="Left" />
+                        <Button Style="{StaticResource FluentButton}" Content="Network / IMEI" Margin="0,0,0,8" HorizontalContentAlignment="Left" />
+                        <Button Style="{StaticResource FluentButton}" Content="Diags / Test" Margin="0,0,0,8" HorizontalContentAlignment="Left" />
+                        <Button Style="{StaticResource FluentButton}" Content="App Manager" Margin="0,0,0,8" HorizontalContentAlignment="Left" />
+                        <Button Style="{StaticResource FluentButton}" Content="Advanced Tools" Margin="0,0,0,8" HorizontalContentAlignment="Left" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- Middle Panel: Tool Cards & Action Buttons -->
+        <Border Grid.Column="1" Style="{StaticResource FluentCard}" Margin="0,0,12,0" Padding="16">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,16">
+                    <TextBlock Text="Common Actions" Style="{StaticResource SubHeaderTextBlock}" VerticalAlignment="Center" />
+                </StackPanel>
+
+                <!-- Action Buttons -->
+                <WrapPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,16">
+                    <Button Style="{StaticResource FluentButton}" Content="Read Info" Width="110" Height="40" Margin="0,0,8,8" />
+                    <Button Style="{StaticResource FluentButton}" Content="Reboot System" Width="110" Height="40" Margin="0,0,8,8" />
+                    <Button Style="{StaticResource FluentButton}" Content="Reboot EDL" Width="110" Height="40" Margin="0,0,8,8" />
+                    <Button Style="{StaticResource DangerButton}" Content="Factory Reset" Width="110" Height="40" Margin="0,0,8,8" />
+                    <Button Style="{StaticResource PrimaryButton}" Content="Remove FRP" Width="110" Height="40" Margin="0,0,8,8" />
+                    <Button Style="{StaticResource FluentButton}" Content="Backup NV" Width="110" Height="40" Margin="0,0,8,8" />
+                </WrapPanel>
+
+                <TextBlock Grid.Row="2" Text="More tools will be automatically loaded here..." Foreground="{DynamicResource MutedTextBrush}" FontStyle="Italic" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            </Grid>
+        </Border>
+
+        <!-- Right Panel: Device Info & Live Logs -->
+        <Border Grid.Column="2" Style="{StaticResource FluentCard}" Padding="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!-- Module Status & Device -->
+                <StackPanel Grid.Row="0" Margin="12,12,12,8">
+                    <TextBlock Text="Module Status" Style="{StaticResource SubHeaderTextBlock}" />
+                    <Border Background="{DynamicResource ControlBackgroundBrush}" CornerRadius="4" Padding="8" Margin="0,4,0,0">
+                        <StackPanel>
+                            <TextBlock Text="Device: Not Detected" Foreground="{DynamicResource ErrorBrush}" FontWeight="SemiBold" />
+                            <TextBlock Text="Port: COM Auto" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,4,0,0" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Live Logs -->
+                <Border Grid.Row="1" Background="{DynamicResource ConsoleBackgroundBrush}" Margin="12,0,12,12" CornerRadius="4" Padding="8">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <TextBlock FontFamily="Consolas" Foreground="{DynamicResource ConsoleForegroundBrush}" FontSize="12">
+                            <Run Text="[10:00:00] Initializing " />
+                            <Run Text="{Binding BrandName}" />
+                            <Run Text=" module..." />
+                            <LineBreak />
+                            <Run Text="[10:00:01] Loading dependencies..." />
+                            <LineBreak />
+                            <Run Text="[10:00:01] Ready. Waiting for device." />
+                        </TextBlock>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- Progress Panel & Status Bar -->
+                <StackPanel Grid.Row="2" Margin="12,0,12,12">
+                    <Grid Margin="0,0,0,4">
+                        <TextBlock Text="Idle" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" HorizontalAlignment="Left" />
+                        <TextBlock Text="0%" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" HorizontalAlignment="Right" />
+                    </Grid>
+                    <ProgressBar Style="{StaticResource FluentProgressBar}" Value="0" Maximum="100" />
+                </StackPanel>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>

@@ -4,7 +4,7 @@
         xmlns:vm="clr-namespace:UnlockMatePro.ViewModels"
         xmlns:views="clr-namespace:UnlockMatePro.Views"
         xmlns:conv="clr-namespace:UnlockMatePro.Converters"
-        Title="Unlock Mate Pro - Professional Android Device Manager" Height="780" Width="1180"
+        Title="Unlock Mate Pro - Professional Android Device Manager" Height="900" Width="1400"
         WindowStartupLocation="CenterScreen"
         Background="{DynamicResource BackgroundBrush}">
 
@@ -136,36 +136,34 @@
         </Border>
 
         <!-- Top Brand Menu Ribbon -->
-        <Border Grid.Row="1" Background="{DynamicResource SidebarBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="0,0,0,1" Padding="0">
-            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" PanningMode="HorizontalOnly">
-                <StackPanel Orientation="Horizontal" Margin="12,8">
-                    <!-- Brand Buttons -->
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Dashboard" Content="DASHBOARD" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Dashboard'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="AdbTools" Content="ADB" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='AdbTools'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="FastbootTools" Content="FASTBOOT" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='FastbootTools'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="FRP" Content="FRP" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='FRP'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Samsung" Content="SAMSUNG" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Samsung'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Xiaomi" Content="XIAOMI" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Xiaomi'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="OPPO" Content="OPPO" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='OPPO'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="VIVO" Content="VIVO" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='VIVO'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Realme" Content="REALME" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Realme'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Huawei" Content="HUAWEI" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Huawei'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Honor" Content="HONOR" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Honor'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Motorola" Content="MOTOROLA" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Motorola'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Nokia" Content="NOKIA" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Nokia'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Qualcomm" Content="QUALCOMM" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Qualcomm'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="MTK" Content="MTK" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='MTK'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="SPD" Content="SPD" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='SPD'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Apple" Content="APPLE" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Apple'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="BackupRestore" Content="BACKUP" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='BackupRestore'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="PhoneClone" Content="PHONE CLONE" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='PhoneClone'}" />
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="FileExplorer" Content="FILE EXPLORER" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='FileExplorer'}" />
-                    
-                    <Separator Style="{StaticResource {x:Static ToolBar.SeparatorStyleKey}}" Margin="8,4" />
-                    
-                    <Button Style="{StaticResource BrandMenuButton}" Command="{Binding NavigateCommand}" CommandParameter="Settings" Content="SETTINGS" Tag="{Binding ActiveViewName, Converter={StaticResource EqualityConverter}, ConverterParameter='Settings'}" />
-                </StackPanel>
-            </ScrollViewer>
+        <Border Grid.Row="1" Background="{DynamicResource SidebarBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="0,0,0,1" Padding="8,6">
+            <ListBox x:Name="MenuList" ItemsSource="{Binding RibbonItems}" Background="Transparent" BorderThickness="0"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     AllowDrop="True" PreviewMouseLeftButtonDown="MenuList_PreviewMouseLeftButtonDown"
+                     PreviewMouseMove="MenuList_PreviewMouseMove" Drop="MenuList_Drop"
+                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                     ItemContainerStyle="{StaticResource RibbonListBoxItemStyle}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Button Style="{StaticResource BrandMenuButton}" 
+                                Command="{Binding DataContext.NavigateCommand, RelativeSource={RelativeSource AncestorType=Window}}" 
+                                CommandParameter="{Binding CommandParameter}" 
+                                Content="{Binding Content}">
+                            <Button.Tag>
+                                <MultiBinding Converter="{StaticResource EqualityMultiConverter}">
+                                    <Binding Path="DataContext.ActiveViewName" RelativeSource="{RelativeSource AncestorType=Window}" />
+                                    <Binding Path="CommandParameter" />
+                                </MultiBinding>
+                            </Button.Tag>
+                        </Button>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Border>
 
         <!-- Main Content Container -->

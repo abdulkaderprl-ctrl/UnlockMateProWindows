@@ -7,6 +7,8 @@ using System.Windows.Threading;
 using Microsoft.Win32;
 using UnlockMatePro.Models;
 using UnlockMatePro.Services;
+using System.Text.Json;
+using System.IO;
 
 namespace UnlockMatePro.ViewModels
 {
@@ -74,6 +76,8 @@ namespace UnlockMatePro.ViewModels
         public BrandPlaceholderViewModel FrpVM { get; } = new BrandPlaceholderViewModel("FRP");
 
         public ObservableCollection<AdbDevice> ConnectedDevices { get; } = new ObservableCollection<AdbDevice>();
+        
+        public ObservableCollection<RibbonMenuItem> RibbonItems { get; } = new ObservableCollection<RibbonMenuItem>();
 
         public ViewModelBase CurrentViewModel
         {
@@ -215,7 +219,82 @@ namespace UnlockMatePro.ViewModels
             _deviceMonitorTimer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(4) };
             _deviceMonitorTimer.Tick += async (s, e) => await PollDevicesAsync();
 
+            LoadRibbonOrder();
+
             _ = InitializeAsync();
+        }
+
+        private void LoadRibbonOrder()
+        {
+            string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AdbEasyInstaller");
+            Directory.CreateDirectory(folder);
+            string file = Path.Combine(folder, "RibbonOrder.json");
+
+            var defaultItems = new[]
+            {
+                new RibbonMenuItem("Dashboard", "DASHBOARD"),
+                new RibbonMenuItem("AdbTools", "ADB"),
+                new RibbonMenuItem("FastbootTools", "FASTBOOT"),
+                new RibbonMenuItem("FRP", "FRP"),
+                new RibbonMenuItem("Samsung", "SAMSUNG"),
+                new RibbonMenuItem("Xiaomi", "XIAOMI"),
+                new RibbonMenuItem("OPPO", "OPPO"),
+                new RibbonMenuItem("VIVO", "VIVO"),
+                new RibbonMenuItem("Realme", "REALME"),
+                new RibbonMenuItem("Huawei", "HUAWEI"),
+                new RibbonMenuItem("Honor", "HONOR"),
+                new RibbonMenuItem("Motorola", "MOTOROLA"),
+                new RibbonMenuItem("Nokia", "NOKIA"),
+                new RibbonMenuItem("Qualcomm", "QUALCOMM"),
+                new RibbonMenuItem("MTK", "MTK"),
+                new RibbonMenuItem("SPD", "SPD"),
+                new RibbonMenuItem("Apple", "APPLE"),
+                new RibbonMenuItem("BackupRestore", "BACKUP"),
+                new RibbonMenuItem("PhoneClone", "PHONE CLONE"),
+                new RibbonMenuItem("FileExplorer", "FILE EXPLORER"),
+                new RibbonMenuItem("Settings", "SETTINGS")
+            };
+
+            if (File.Exists(file))
+            {
+                try
+                {
+                    string json = File.ReadAllText(file);
+                    var loaded = JsonSerializer.Deserialize<RibbonMenuItem[]>(json);
+                    if (loaded != null && loaded.Length > 0)
+                    {
+                        foreach (var item in loaded)
+                            RibbonItems.Add(item);
+                            
+                        // Ensure any missing items are appended (if we add new menus in updates)
+                        foreach (var def in defaultItems)
+                        {
+                            if (!RibbonItems.Any(r => r.CommandParameter == def.CommandParameter))
+                                RibbonItems.Add(def);
+                        }
+                        return;
+                    }
+                }
+                catch { }
+            }
+
+            // Fallback to default
+            foreach (var item in defaultItems)
+                RibbonItems.Add(item);
+        }
+
+        public void SaveRibbonOrder()
+        {
+            try
+            {
+                string folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "AdbEasyInstaller");
+                Directory.CreateDirectory(folder);
+                string file = Path.Combine(folder, "RibbonOrder.json");
+                
+                string json = JsonSerializer.Serialize(RibbonItems.ToArray());
+                File.WriteAllText(file, json);
+            }
+            catch { }
         }
 
         private async Task InitializeAsync()
