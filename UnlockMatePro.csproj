@@ -21,4 +21,8 @@
     <Copyright>Copyright © 2026 Unlock Mate Pro Technologies</Copyright>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Management" Version="10.0.10" />
+  </ItemGroup>
+
 </Project>

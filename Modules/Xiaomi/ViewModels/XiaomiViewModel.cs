@@ -27,6 +27,7 @@ namespace UnlockMatePro.ViewModels
         private string _vbmetaPath = "";
         private string _superPath = "";
         private string _romPath = "";
+        private string _persistPath = "";
 
         public string LogText
         {
@@ -59,25 +60,31 @@ namespace UnlockMatePro.ViewModels
         public string VbmetaPath { get => _vbmetaPath; set => SetProperty(ref _vbmetaPath, value); }
         public string SuperPath { get => _superPath; set => SetProperty(ref _superPath, value); }
         public string RomPath { get => _romPath; set => SetProperty(ref _romPath, value); }
+        public string PersistPath { get => _persistPath; set => SetProperty(ref _persistPath, value); }
 
         public ICommand DetectDeviceCommand { get; }
         public ICommand ReadInfoCommand { get; }
         public ICommand RebootSystemCommand { get; }
         public ICommand RebootRecoveryCommand { get; }
         public ICommand RebootFastbootCommand { get; }
+        public ICommand RebootEdlCommand { get; }
         public ICommand WipeDataCommand { get; }
+        public ICommand UnlockBootloaderCommand { get; }
+        public ICommand RelockBootloaderCommand { get; }
         
         public ICommand FlashBootCommand { get; }
         public ICommand FlashRecoveryCommand { get; }
         public ICommand FlashVbmetaCommand { get; }
         public ICommand FlashSuperCommand { get; }
         public ICommand FlashRomCommand { get; }
+        public ICommand FlashPersistCommand { get; }
 
         public ICommand BrowseBootCommand { get; }
         public ICommand BrowseRecoveryCommand { get; }
         public ICommand BrowseVbmetaCommand { get; }
         public ICommand BrowseSuperCommand { get; }
         public ICommand BrowseRomCommand { get; }
+        public ICommand BrowsePersistCommand { get; }
 
         public XiaomiViewModel(IAdbService adbService, IFastbootService fastbootService, ILoggerService logger, INotificationService notificationService)
         {
@@ -91,19 +98,24 @@ namespace UnlockMatePro.ViewModels
             RebootSystemCommand = new AsyncRelayCommand(RebootSystemAsync, () => !IsBusy);
             RebootRecoveryCommand = new AsyncRelayCommand(RebootRecoveryAsync, () => !IsBusy);
             RebootFastbootCommand = new AsyncRelayCommand(RebootFastbootAsync, () => !IsBusy);
+            RebootEdlCommand = new AsyncRelayCommand(RebootEdlAsync, () => !IsBusy);
             WipeDataCommand = new AsyncRelayCommand(WipeDataAsync, () => !IsBusy);
+            UnlockBootloaderCommand = new AsyncRelayCommand(UnlockBootloaderAsync, () => !IsBusy);
+            RelockBootloaderCommand = new AsyncRelayCommand(RelockBootloaderAsync, () => !IsBusy);
 
             FlashBootCommand = new AsyncRelayCommand(FlashBootAsync, () => !IsBusy);
             FlashRecoveryCommand = new AsyncRelayCommand(FlashRecoveryAsync, () => !IsBusy);
             FlashVbmetaCommand = new AsyncRelayCommand(FlashVbmetaAsync, () => !IsBusy);
             FlashSuperCommand = new AsyncRelayCommand(FlashSuperAsync, () => !IsBusy);
             FlashRomCommand = new AsyncRelayCommand(FlashRomAsync, () => !IsBusy);
+            FlashPersistCommand = new AsyncRelayCommand(FlashPersistAsync, () => !IsBusy);
 
             BrowseBootCommand = new RelayCommand(() => BootPath = OpenFileDialog("Boot Image (*.img)|*.img"));
             BrowseRecoveryCommand = new RelayCommand(() => RecoveryPath = OpenFileDialog("Recovery Image (*.img)|*.img"));
             BrowseVbmetaCommand = new RelayCommand(() => VbmetaPath = OpenFileDialog("VBMeta Image (*.img)|*.img"));
             BrowseSuperCommand = new RelayCommand(() => SuperPath = OpenFileDialog("Super Image (*.img)|*.img"));
             BrowseRomCommand = new RelayCommand(() => RomPath = OpenFileDialog("Fastboot ROM (*.zip;*.tgz;*.sh;*.bat)|*.zip;*.tgz;*.sh;*.bat|All Files (*.*)|*.*"));
+            BrowsePersistCommand = new RelayCommand(() => PersistPath = OpenFileDialog("Persist Image (*.img)|*.img"));
 
             Log("Xiaomi Professional Module Initialized.");
         }
@@ -147,6 +159,11 @@ namespace UnlockMatePro.ViewModels
                     _detectedDeviceInfo = new DeviceInfo { Model = "Xiaomi Recovery", Mode = "Recovery Mode", Serial = adb.SerialNumber };
                     Log($"Found Recovery Device: {adb.SerialNumber}");
                 }
+                else if (adb.DeviceState == "sideload")
+                {
+                    _detectedDeviceInfo = new DeviceInfo { Model = "Xiaomi Sideload", Mode = "Sideload Mode", Serial = adb.SerialNumber };
+                    Log($"Found Sideload Device: {adb.SerialNumber}");
+                }
                 else
                 {
                     _detectedDeviceInfo = new DeviceInfo { Model = adb.Model, Mode = "ADB Mode", Serial = adb.SerialNumber };
@@ -155,8 +172,28 @@ namespace UnlockMatePro.ViewModels
             }
             else
             {
-                Log("No device found. Please connect your device.");
-                _detectedDeviceInfo = null;
+                try
+                {
+                    var searcher = new System.Management.ManagementObjectSearcher("SELECT * FROM Win32_PnPEntity WHERE Name LIKE '%QDLoader 9008%'");
+                    var items = searcher.Get();
+                    if (items.Count > 0)
+                    {
+                        var port = items.Cast<System.Management.ManagementObject>().First();
+                        string name = port["Name"]?.ToString() ?? "COM Port";
+                        _detectedDeviceInfo = new DeviceInfo { Model = "Qualcomm Device", Mode = "EDL Mode", Serial = name };
+                        Log($"Found EDL Device: {name}");
+                    }
+                    else
+                    {
+                        Log("No device found. Please connect your device.");
+                        _detectedDeviceInfo = null;
+                    }
+                }
+                catch
+                {
+                    Log("No device found. Please connect your device.");
+                    _detectedDeviceInfo = null;
+                }
             }
 
             OnPropertyChanged(nameof(DeviceStatusText));
@@ -197,11 +234,14 @@ namespace UnlockMatePro.ViewModels
                 var (s2, unlocked) = await _fastbootService.ExecuteFastbootCommandAsync("getvar unlocked", _detectedDeviceInfo.Serial);
                 var (s3, secure) = await _fastbootService.ExecuteFastbootCommandAsync("getvar secure", _detectedDeviceInfo.Serial);
                 var (s4, arb) = await _fastbootService.ExecuteFastbootCommandAsync("getvar anti", _detectedDeviceInfo.Serial);
+                var (s5, miAccount) = await _fastbootService.ExecuteFastbootCommandAsync("getvar is-mi-account-locked", _detectedDeviceInfo.Serial);
                 
                 Log($"Product: {ExtractGetVar(product)}");
                 Log($"Bootloader Unlocked: {ExtractGetVar(unlocked)}");
                 Log($"Secure Boot: {ExtractGetVar(secure)}");
                 Log($"Anti-Rollback (ARB): {ExtractGetVar(arb)}");
+                string miStatus = ExtractGetVar(miAccount);
+                Log($"Mi Account Status: {(string.IsNullOrEmpty(miStatus) ? "Unknown" : miStatus)}");
                 Progress = 100;
             }
             else
@@ -464,5 +504,118 @@ namespace UnlockMatePro.ViewModels
             Progress = 0;
             StatusText = "Idle";
         }
+
+        private async Task FlashPersistAsync()
+        {
+            await FlashImageAsync("persist", PersistPath);
+        }
+
+        private async Task RebootEdlAsync()
+        {
+            IsBusy = true;
+            StatusText = "Rebooting to EDL...";
+            Log("Rebooting device to EDL Mode...");
+
+            if (_detectedDeviceInfo?.Mode == "ADB Mode" || _detectedDeviceInfo?.Mode == "Recovery Mode")
+            {
+                await _adbService.RebootDeviceAsync(_detectedDeviceInfo.Serial, "edl");
+                Log("Sent ADB reboot edl command.");
+            }
+            else if (_detectedDeviceInfo?.Mode == "Fastboot Mode")
+            {
+                await _fastbootService.ExecuteFastbootCommandAsync("oem edl", _detectedDeviceInfo.Serial);
+                Log("Sent Fastboot oem edl command.");
+            }
+            else
+            {
+                Log("Please detect device first.");
+            }
+
+            IsBusy = false; StatusText = "Idle";
+        }
+
+        private async Task UnlockBootloaderAsync()
+        {
+            IsBusy = true;
+            StatusText = "Unlocking Bootloader...";
+            Log("Attempting to unlock bootloader...");
+
+            if (_detectedDeviceInfo?.Mode != "Fastboot Mode")
+            {
+                Log("Error: Device must be in Fastboot Mode to unlock bootloader.");
+                _notificationService.ShowError("Error", "Please put device in Fastboot Mode.");
+                IsBusy = false; StatusText = "Idle"; return;
+            }
+
+            Progress = 30;
+            var (success, msg) = await _fastbootService.ExecuteFastbootCommandAsync("flashing unlock", _detectedDeviceInfo.Serial);
+            if (!success || msg.Contains("FAILED"))
+            {
+                Log("flashing unlock failed, trying oem unlock...");
+                (success, msg) = await _fastbootService.ExecuteFastbootCommandAsync("oem unlock", _detectedDeviceInfo.Serial);
+            }
+
+            Progress = 90;
+            if (success && !msg.Contains("FAILED"))
+            {
+                Log("Bootloader unlocked successfully.");
+                _notificationService.ShowSuccess("Success", "Bootloader unlocked.");
+            }
+            else
+            {
+                Log($"Unlock failed: {msg}");
+                _notificationService.ShowError("Error", "Unlock bootloader failed.");
+            }
+
+            Progress = 100;
+            StatusText = "Complete";
+            IsBusy = false;
+            await Task.Delay(1000);
+            Progress = 0;
+            StatusText = "Idle";
+        }
+
+        private async Task RelockBootloaderAsync()
+        {
+            IsBusy = true;
+            StatusText = "Relocking Bootloader...";
+            Log("Attempting to relock bootloader...");
+
+            if (_detectedDeviceInfo?.Mode != "Fastboot Mode")
+            {
+                Log("Error: Device must be in Fastboot Mode to relock bootloader.");
+                _notificationService.ShowError("Error", "Please put device in Fastboot Mode.");
+                IsBusy = false; StatusText = "Idle"; return;
+            }
+
+            Progress = 30;
+            var (success, msg) = await _fastbootService.ExecuteFastbootCommandAsync("flashing lock", _detectedDeviceInfo.Serial);
+            if (!success || msg.Contains("FAILED"))
+            {
+                Log("flashing lock failed, trying oem lock...");
+                (success, msg) = await _fastbootService.ExecuteFastbootCommandAsync("oem lock", _detectedDeviceInfo.Serial);
+            }
+
+            Progress = 90;
+            if (success && !msg.Contains("FAILED"))
+            {
+                Log("Bootloader relocked successfully.");
+                _notificationService.ShowSuccess("Success", "Bootloader relocked.");
+            }
+            else
+            {
+                Log($"Relock failed: {msg}");
+                _notificationService.ShowError("Error", "Relock bootloader failed.");
+            }
+
+            Progress = 100;
+            StatusText = "Complete";
+            IsBusy = false;
+            await Task.Delay(1000);
+            Progress = 0;
+            StatusText = "Idle";
+        }
     }
 }
+
+

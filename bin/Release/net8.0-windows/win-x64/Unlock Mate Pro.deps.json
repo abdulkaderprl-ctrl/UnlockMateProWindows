@@ -9,6 +9,7 @@
     ".NETCoreApp,Version=v8.0/win-x64": {
       "Unlock Mate Pro/1.0.0": {
         "dependencies": {
+          "System.Management": "10.0.10",
           "runtimepack.Microsoft.NETCore.App.Runtime.win-x64": "8.0.29",
           "runtimepack.Microsoft.WindowsDesktop.App.Runtime.win-x64": "8.0.29"
         },
@@ -810,10 +811,6 @@
             "assemblyVersion": "8.0.0.0",
             "fileVersion": "8.0.2926.32504"
           },
-          "System.CodeDom.dll": {
-            "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.2926.32403"
-          },
           "System.Configuration.ConfigurationManager.dll": {
             "assemblyVersion": "8.0.0.0",
             "fileVersion": "8.0.2926.32403"
@@ -960,6 +957,25 @@
             "fileVersion": "8.0.2926.32504"
           }
         }
+      },
+      "System.CodeDom/10.0.10": {
+        "runtime": {
+          "lib/net8.0/System.CodeDom.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.1026.32716"
+          }
+        }
+      },
+      "System.Management/10.0.10": {
+        "dependencies": {
+          "System.CodeDom": "10.0.10"
+        },
+        "runtime": {
+          "runtimes/win/lib/net8.0/System.Management.dll": {
+            "assemblyVersion": "10.0.0.10",
+            "fileVersion": "10.0.1026.32716"
+          }
+        }
       }
     }
   },
@@ -978,6 +994,20 @@
       "type": "runtimepack",
       "serviceable": false,
       "sha512": ""
+    },
+    "System.CodeDom/10.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lru5igKxs4OgWKfMeOpMAYpfB1tNSSXHk2zyiSDO/h0u8RVAhN6KqW9d3ANybDB+ePIHg6HM/NlE8HlpOk4k5A==",
+      "path": "system.codedom/10.0.10",
+      "hashPath": "system.codedom.10.0.10.nupkg.sha512"
+    },
+    "System.Management/10.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-U13ksdXfQlF2WDdu3S4ZPVpikFs2HgV3dbJJZLeZpBIQ4z/xCmQnwEf6LsEEIC2zSamVVa1acA9RdVhZwnWKeA==",
+      "path": "system.management/10.0.10",
+      "hashPath": "system.management.10.0.10.nupkg.sha512"
     }
   },
   "runtimes": {
