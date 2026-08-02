@@ -91,3 +91,5 @@ C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyIn
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\Modules\Oppo\Views\OppoView.baml
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\Modules\Vivo\Views\VivoView.g.cs
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\Modules\Vivo\Views\VivoView.baml
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\Modules\Realme\Views\RealmeView.g.cs
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\Modules\Realme\Views\RealmeView.baml

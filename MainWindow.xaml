@@ -85,6 +85,9 @@
         <DataTemplate DataType="{x:Type vm:VivoViewModel}">
             <views:VivoView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:RealmeViewModel}">
+            <views:RealmeView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
