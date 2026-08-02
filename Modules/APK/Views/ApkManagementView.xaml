@@ -42,17 +42,26 @@
                     </DataGrid>
 
                     <!-- Action Bar -->
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
-                        <Button Style="{StaticResource FluentButton}" Command="{Binding BackupApkCommand}" Margin="0,0,8,0">
-                            <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconApkInstall}" Fill="White" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" />
-                                <TextBlock Text="Backup APK to PC" />
-                            </StackPanel>
+                    <WrapPanel HorizontalAlignment="Right" Margin="0,16,0,0">
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding EnableAppCommand}" Margin="0,0,8,8">
+                            <TextBlock Text="Enable" />
                         </Button>
-                        <Button Style="{StaticResource FluentButton}" Command="{Binding UninstallAppCommand}">
-                            <TextBlock Text="Uninstall Package" Foreground="{DynamicResource ErrorBrush}" />
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding DisableAppCommand}" Margin="0,0,8,8">
+                            <TextBlock Text="Disable" />
                         </Button>
-                    </StackPanel>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding ForceStopAppCommand}" Margin="0,0,8,8">
+                            <TextBlock Text="Force Stop" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding ClearDataCommand}" Margin="0,0,8,8">
+                            <TextBlock Text="Clear Data" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding BackupApkCommand}" Margin="0,0,8,8">
+                            <TextBlock Text="Backup APK" />
+                        </Button>
+                        <Button Style="{StaticResource FluentButton}" Command="{Binding UninstallAppCommand}" Margin="0,0,0,8">
+                            <TextBlock Text="Uninstall" Foreground="{DynamicResource ErrorBrush}" />
+                        </Button>
+                    </WrapPanel>
                 </StackPanel>
             </Border>
         </StackPanel>

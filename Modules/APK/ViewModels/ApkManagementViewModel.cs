@@ -77,6 +77,10 @@ namespace UnlockMatePro.ViewModels
         public ICommand RefreshAppsCommand { get; }
         public ICommand BackupApkCommand { get; }
         public ICommand UninstallAppCommand { get; }
+        public ICommand EnableAppCommand { get; }
+        public ICommand DisableAppCommand { get; }
+        public ICommand ForceStopAppCommand { get; }
+        public ICommand ClearDataCommand { get; }
 
         public ApkManagementViewModel(
             IAdbService adbService,
@@ -90,6 +94,10 @@ namespace UnlockMatePro.ViewModels
             RefreshAppsCommand = new AsyncRelayCommand(LoadAppsAsync);
             BackupApkCommand = new AsyncRelayCommand(BackupSelectedApkAsync, () => SelectedApp != null && !IsLoading);
             UninstallAppCommand = new AsyncRelayCommand(UninstallSelectedAppAsync, () => SelectedApp != null && !IsLoading);
+            EnableAppCommand = new AsyncRelayCommand(EnableSelectedAppAsync, () => SelectedApp != null && !IsLoading);
+            DisableAppCommand = new AsyncRelayCommand(DisableSelectedAppAsync, () => SelectedApp != null && !IsLoading);
+            ForceStopAppCommand = new AsyncRelayCommand(ForceStopSelectedAppAsync, () => SelectedApp != null && !IsLoading);
+            ClearDataCommand = new AsyncRelayCommand(ClearSelectedAppDataAsync, () => SelectedApp != null && !IsLoading);
         }
 
         public async Task LoadAppsAsync()
@@ -172,6 +180,46 @@ namespace UnlockMatePro.ViewModels
             {
                 _notificationService.ShowError("Uninstall Failed", msg);
             }
+        }
+
+        private async Task EnableSelectedAppAsync()
+        {
+            if (SelectedApp == null) return;
+            IsLoading = true;
+            var (success, msg) = await _adbService.EnableAppAsync(SelectedApp.PackageName, TargetSerialNumber);
+            IsLoading = false;
+            if (success) _notificationService.ShowSuccess("Enabled", $"Package {SelectedApp.PackageName} enabled.");
+            else _notificationService.ShowError("Enable Failed", msg);
+        }
+
+        private async Task DisableSelectedAppAsync()
+        {
+            if (SelectedApp == null) return;
+            IsLoading = true;
+            var (success, msg) = await _adbService.DisableAppAsync(SelectedApp.PackageName, TargetSerialNumber);
+            IsLoading = false;
+            if (success) _notificationService.ShowSuccess("Disabled", $"Package {SelectedApp.PackageName} disabled.");
+            else _notificationService.ShowError("Disable Failed", msg);
+        }
+
+        private async Task ForceStopSelectedAppAsync()
+        {
+            if (SelectedApp == null) return;
+            IsLoading = true;
+            var (success, msg) = await _adbService.ForceStopAppAsync(SelectedApp.PackageName, TargetSerialNumber);
+            IsLoading = false;
+            if (success) _notificationService.ShowSuccess("Force Stopped", $"Package {SelectedApp.PackageName} stopped.");
+            else _notificationService.ShowError("Force Stop Failed", msg);
+        }
+
+        private async Task ClearSelectedAppDataAsync()
+        {
+            if (SelectedApp == null) return;
+            IsLoading = true;
+            var (success, msg) = await _adbService.ClearAppDataAsync(SelectedApp.PackageName, TargetSerialNumber);
+            IsLoading = false;
+            if (success) _notificationService.ShowSuccess("Data Cleared", $"Package {SelectedApp.PackageName} data cleared.");
+            else _notificationService.ShowError("Clear Data Failed", msg);
         }
     }
 }

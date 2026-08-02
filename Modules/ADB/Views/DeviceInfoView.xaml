@@ -1,0 +1,63 @@
+<UserControl x:Class="UnlockMatePro.Views.DeviceInfoView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="10">
+            <Border Style="{StaticResource FluentCard}" Margin="0,0,0,10">
+                <StackPanel>
+                    <TextBlock Text="Device Specifications" Style="{StaticResource SubHeaderTextBlock}" />
+                    <TextBlock Text="Detailed hardware and software information." Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,0,0,12" />
+
+                    <Button Style="{StaticResource FluentButton}" Command="{Binding RefreshCommand}" HorizontalAlignment="Left" Margin="0,0,0,12">
+                        <TextBlock Text="Refresh Info" FontSize="12" />
+                    </Button>
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+
+                        <!-- Row 0 -->
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Brand:" FontWeight="SemiBold" Margin="0,4,8,4" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Stats.DeviceBrand}" Margin="0,4,16,4" />
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="Model:" FontWeight="SemiBold" Margin="0,4,8,4" />
+                        <TextBlock Grid.Row="0" Grid.Column="3" Text="{Binding Stats.DeviceModel}" Margin="0,4,0,4" />
+
+                        <!-- Row 1 -->
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Android Version:" FontWeight="SemiBold" Margin="0,4,8,4" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Stats.AndroidVersion}" Margin="0,4,16,4" />
+                        <TextBlock Grid.Row="1" Grid.Column="2" Text="API Level:" FontWeight="SemiBold" Margin="0,4,8,4" />
+                        <TextBlock Grid.Row="1" Grid.Column="3" Text="{Binding Stats.ApiLevel}" Margin="0,4,0,4" />
+
+                        <!-- Row 2 -->
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Battery Level:" FontWeight="SemiBold" Margin="0,4,8,4" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Stats.BatteryLevel, StringFormat={}{0}%}" Margin="0,4,16,4" />
+                        <TextBlock Grid.Row="2" Grid.Column="2" Text="Build Number:" FontWeight="SemiBold" Margin="0,4,8,4" />
+                        <TextBlock Grid.Row="2" Grid.Column="3" Text="{Binding Stats.BuildNumber}" Margin="0,4,0,4" />
+
+                        <!-- Row 3 -->
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="CPU ABI:" FontWeight="SemiBold" Margin="0,4,8,4" />
+                        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Stats.CpuAbi}" Margin="0,4,16,4" />
+                        <TextBlock Grid.Row="3" Grid.Column="2" Text="Security Patch:" FontWeight="SemiBold" Margin="0,4,8,4" />
+                        <TextBlock Grid.Row="3" Grid.Column="3" Text="{Binding Stats.SecurityPatch}" Margin="0,4,0,4" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

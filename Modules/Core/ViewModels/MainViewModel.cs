@@ -184,8 +184,8 @@ namespace UnlockMatePro.ViewModels
             ScreenshotGalleryVM = new ScreenshotGalleryViewModel(_adbService, _logger, _notificationService);
             ApkToolsVM = new ApkToolsViewModel(_adbService, _logger, _notificationService);
             AdvancedToolsVM = new AdvancedToolsViewModel(_adbService, _logger, _notificationService);
-            AdbToolsVM = new AdbToolsViewModel(_adbService, _logger, _notificationService);
             ApkManagementVM = new ApkManagementViewModel(_adbService, _logger, _notificationService);
+            AdbToolsVM = new AdbToolsViewModel(_adbService, _logger, _notificationService, ApkManagementVM, FileExplorerVM, TerminalVM);
             AuthVM = new AuthViewModel(_authService, _notificationService, _logger);
             UserProfileVM = new UserProfileViewModel(_authService, _notificationService);
             SettingsVM = new SettingsViewModel(_settingsService, _adbService, _scrcpyService, _toolDownloaderService, _logger, _notificationService);
