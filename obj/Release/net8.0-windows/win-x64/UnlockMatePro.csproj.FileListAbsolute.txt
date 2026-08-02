@@ -546,3 +546,5 @@ C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyIn
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\UnlockMatePro.csproj.AssemblyReference.cache
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\Modules\Oppo\Views\OppoView.g.cs
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\Modules\Oppo\Views\OppoView.baml
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\Modules\Vivo\Views\VivoView.g.cs
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\Modules\Vivo\Views\VivoView.baml

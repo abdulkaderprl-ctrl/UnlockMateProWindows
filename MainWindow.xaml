@@ -82,6 +82,9 @@
         <DataTemplate DataType="{x:Type vm:OppoViewModel}">
             <views:OppoView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:VivoViewModel}">
+            <views:VivoView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
