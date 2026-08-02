@@ -87,3 +87,5 @@ C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyIn
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\bin\Release\net8.0-windows\runtimes\win\lib\net8.0\System.Management.dll
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\UnlockMatePro.csproj.AssemblyReference.cache
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\UnlockMa.9E4250A3.Up2Date
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\Modules\Oppo\Views\OppoView.g.cs
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\Modules\Oppo\Views\OppoView.baml
