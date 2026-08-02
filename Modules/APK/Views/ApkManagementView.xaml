@@ -9,13 +9,32 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Package &amp; APK Management" Style="{StaticResource HeaderTextBlock}" VerticalAlignment="Center" Margin="0" />
-                <Button Grid.Column="1" Style="{StaticResource PrimaryButton}" Command="{Binding RefreshAppsCommand}">
-                    <StackPanel Orientation="Horizontal">
-                        <Path Data="{StaticResource IconRefresh}" Fill="White" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" />
-                        <TextBlock Text="Refresh Packages" />
-                    </StackPanel>
-                </Button>
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Style="{StaticResource PrimaryButton}" Command="{Binding InstallApkCommand}" Margin="0,0,8,0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Install APK" />
+                        </StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource PrimaryButton}" Command="{Binding RefreshAppsCommand}">
+                        <StackPanel Orientation="Horizontal">
+                            <Path Data="{StaticResource IconRefresh}" Fill="White" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" />
+                            <TextBlock Text="Refresh Packages" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
             </Grid>
+            <TextBlock Text="{Binding InstallProgressText}" Foreground="{DynamicResource SuccessBrush}" Margin="0,0,0,10">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Visible" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding InstallProgressText}" Value="">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
 
             <!-- Search & Filters Toolbar -->
             <Border Style="{StaticResource FluentCard}">

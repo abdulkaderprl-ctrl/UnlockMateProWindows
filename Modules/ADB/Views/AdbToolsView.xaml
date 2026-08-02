@@ -111,6 +111,12 @@
                                     <Button Style="{StaticResource PrimaryButton}" Command="{Binding TakeScreenshotCommand}" Margin="0,0,8,0">
                                         <TextBlock Text="Take Screenshot" FontSize="12" />
                                     </Button>
+                                    <Button Style="{StaticResource FluentButton}" Command="{Binding StartScreenRecordingCommand}" Margin="0,0,8,0">
+                                        <TextBlock Text="Start Recording" FontSize="12" />
+                                    </Button>
+                                    <Button Style="{StaticResource FluentButton}" Command="{Binding StopScreenRecordingCommand}">
+                                        <TextBlock Text="Stop Recording" FontSize="12" Foreground="{DynamicResource ErrorBrush}" />
+                                    </Button>
                                 </StackPanel>
                             </StackPanel>
                         </Border>

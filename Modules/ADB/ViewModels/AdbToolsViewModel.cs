@@ -45,6 +45,17 @@ namespace UnlockMatePro.ViewModels
         public ICommand RebootBootloaderCommand { get; }
         public ICommand RebootEdlCommand { get; }
         public ICommand TakeScreenshotCommand { get; }
+        public ICommand StartScreenRecordingCommand { get; }
+        public ICommand StopScreenRecordingCommand { get; }
+        
+        private bool _isRecording = false;
+        public bool IsRecording
+        {
+            get => _isRecording;
+            set => SetProperty(ref _isRecording, value);
+        }
+        
+        private System.Threading.CancellationTokenSource? _recordingCts;
         
         // Wireless ADB
         private string _ipAddress = "192.168.1.100";
@@ -82,6 +93,8 @@ namespace UnlockMatePro.ViewModels
             RebootBootloaderCommand = new AsyncRelayCommand(() => RebootAsync("bootloader"));
             RebootEdlCommand = new AsyncRelayCommand(() => RebootAsync("edl"));
             TakeScreenshotCommand = new AsyncRelayCommand(TakeScreenshotAsync);
+            StartScreenRecordingCommand = new AsyncRelayCommand(StartScreenRecordingAsync, () => !IsRecording);
+            StopScreenRecordingCommand = new RelayCommand(StopScreenRecording, () => IsRecording);
         }
 
         private async Task EnableWirelessAdbAsync()
@@ -126,6 +139,54 @@ namespace UnlockMatePro.ViewModels
                 try { System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{filePath}\""); } catch { }
             }
             else _notificationService.ShowError("Screenshot Error", filePath);
+        }
+
+        private async Task StartScreenRecordingAsync()
+        {
+            IsRecording = true;
+            _recordingCts = new System.Threading.CancellationTokenSource();
+            _notificationService.ShowSuccess("Recording", "Screen recording started (max 3 minutes or until stopped).");
+
+            string remotePath = $"/sdcard/screen_record_{DateTime.Now:yyyyMMdd_HHmmss}.mp4";
+
+            try
+            {
+                // This command blocks until max duration or killed
+                await _adbService.ExecuteCommandAsync($"shell screenrecord {remotePath}", TargetSerialNumber, _recordingCts.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected when user stops recording
+            }
+            finally
+            {
+                IsRecording = false;
+                _notificationService.ShowSuccess("Recording Stopped", "Pulling video to PC...");
+
+                string localFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "ADB Screen Records");
+                Directory.CreateDirectory(localFolder);
+                string localFile = Path.Combine(localFolder, Path.GetFileName(remotePath));
+
+                var (success, msg) = await _adbService.ExecuteCommandAsync($"pull {remotePath} \"{localFile}\"", TargetSerialNumber);
+                if (success || File.Exists(localFile))
+                {
+                    _notificationService.ShowSuccess("Recording Saved", $"Saved to: {localFile}");
+                    try { System.Diagnostics.Process.Start("explorer.exe", $"/select,\"{localFile}\""); } catch { }
+                    await _adbService.ExecuteCommandAsync($"shell rm {remotePath}", TargetSerialNumber);
+                }
+                else
+                {
+                    _notificationService.ShowError("Pull Error", "Failed to retrieve the recording.");
+                }
+            }
+        }
+
+        private void StopScreenRecording()
+        {
+            if (_recordingCts != null && !_recordingCts.IsCancellationRequested)
+            {
+                _recordingCts.Cancel();
+            }
         }
     }
 }

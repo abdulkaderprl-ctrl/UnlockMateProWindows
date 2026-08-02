@@ -21,6 +21,7 @@ namespace UnlockMatePro.ViewModels
         private bool _includeSystemApps = false;
         private bool _isLoading = false;
         private AppInfo? _selectedApp;
+        private string _installProgressText = string.Empty;
 
         private ObservableCollection<AppInfo> _allApps = new ObservableCollection<AppInfo>();
 
@@ -74,7 +75,14 @@ namespace UnlockMatePro.ViewModels
             set => SetProperty(ref _selectedApp, value);
         }
 
+        public string InstallProgressText
+        {
+            get => _installProgressText;
+            set => SetProperty(ref _installProgressText, value);
+        }
+
         public ICommand RefreshAppsCommand { get; }
+        public ICommand InstallApkCommand { get; }
         public ICommand BackupApkCommand { get; }
         public ICommand UninstallAppCommand { get; }
         public ICommand EnableAppCommand { get; }
@@ -92,6 +100,7 @@ namespace UnlockMatePro.ViewModels
             _notificationService = notificationService;
 
             RefreshAppsCommand = new AsyncRelayCommand(LoadAppsAsync);
+            InstallApkCommand = new AsyncRelayCommand(InstallApkAsync, () => !IsLoading);
             BackupApkCommand = new AsyncRelayCommand(BackupSelectedApkAsync, () => SelectedApp != null && !IsLoading);
             UninstallAppCommand = new AsyncRelayCommand(UninstallSelectedAppAsync, () => SelectedApp != null && !IsLoading);
             EnableAppCommand = new AsyncRelayCommand(EnableSelectedAppAsync, () => SelectedApp != null && !IsLoading);
@@ -138,6 +147,46 @@ namespace UnlockMatePro.ViewModels
             foreach (var app in matches)
             {
                 FilteredApps.Add(app);
+            }
+        }
+
+        private async Task InstallApkAsync()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "APK Files (*.apk)|*.apk|All Files (*.*)|*.*",
+                Title = "Select APK to Install"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                IsLoading = true;
+                InstallProgressText = "Installing...";
+
+                var progress = new Progress<string>(s => InstallProgressText = s);
+                
+                var (success, msg, detailedLog) = await _adbService.InstallApkAsync(
+                    openFileDialog.FileName, 
+                    TargetSerialNumber,
+                    reinstall: true,
+                    grantPermissions: true,
+                    allowDowngrade: true,
+                    autoUninstallOnConflict: false,
+                    logProgress: progress
+                );
+
+                InstallProgressText = string.Empty;
+                IsLoading = false;
+
+                if (success)
+                {
+                    _notificationService.ShowSuccess("Install Success", "APK installed successfully.");
+                    await LoadAppsAsync();
+                }
+                else
+                {
+                    _notificationService.ShowError("Install Failed", msg);
+                }
             }
         }
 
