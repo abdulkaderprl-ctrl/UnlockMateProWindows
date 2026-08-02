@@ -63,7 +63,7 @@ namespace UnlockMatePro.ViewModels
         public FrpViewModel QualcommVM { get; }
         public FrpViewModel MtkVM { get; }
         public SamsungViewModel SamsungVM { get; }
-        public FrpViewModel XiaomiVM { get; }
+        public XiaomiViewModel XiaomiVM { get; }
         public FrpViewModel OppoVM { get; }
         public FrpViewModel VivoVM { get; }
         public FrpViewModel RealmeVM { get; }
@@ -199,7 +199,7 @@ namespace UnlockMatePro.ViewModels
             QualcommVM = new FrpViewModel("Qualcomm", _adbService, _fastbootService, _logger, _notificationService);
             MtkVM = new FrpViewModel("MTK", _adbService, _fastbootService, _logger, _notificationService);
             SamsungVM = new SamsungViewModel(_adbService, _fastbootService, _logger, _notificationService);
-            XiaomiVM = new FrpViewModel("Xiaomi", _adbService, _fastbootService, _logger, _notificationService);
+            XiaomiVM = new XiaomiViewModel(_adbService, _fastbootService, _logger, _notificationService);
             OppoVM = new FrpViewModel("OPPO", _adbService, _fastbootService, _logger, _notificationService);
             VivoVM = new FrpViewModel("VIVO", _adbService, _fastbootService, _logger, _notificationService);
             RealmeVM = new FrpViewModel("Realme", _adbService, _fastbootService, _logger, _notificationService);
