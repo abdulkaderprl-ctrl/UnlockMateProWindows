@@ -97,6 +97,10 @@
         <DataTemplate DataType="{x:Type vm:MotorolaViewModel}">
             <views:MotorolaView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:NokiaViewModel}">
+            <views:NokiaView />
+        </DataTemplate>
+
     </Window.Resources>
 
     <Grid>
