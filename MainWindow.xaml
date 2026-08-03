@@ -91,6 +91,9 @@
         <DataTemplate DataType="{x:Type vm:HuaweiViewModel}">
             <views:HuaweiView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:HonorViewModel}">
+            <views:HonorView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
