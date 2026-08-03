@@ -72,7 +72,7 @@ namespace UnlockMatePro.ViewModels
         public MotorolaViewModel MotorolaVM { get; }
         public NokiaViewModel NokiaVM { get; }
         public FrpViewModel SpdVM { get; }
-        public FrpViewModel AppleVM { get; }
+        public AppleViewModel AppleVM { get; }
         public FrpViewModel FrpVM { get; }
 
         public ObservableCollection<AdbDevice> ConnectedDevices { get; } = new ObservableCollection<AdbDevice>();
@@ -153,6 +153,7 @@ namespace UnlockMatePro.ViewModels
         public MainViewModel(
             IAdbService adbService,
             IFastbootService fastbootService,
+            IAppleService appleService,
             IScrcpyService scrcpyService,
             IToolDownloaderService toolDownloaderService,
             ISettingsService settingsService,
@@ -208,7 +209,7 @@ namespace UnlockMatePro.ViewModels
             MotorolaVM = new MotorolaViewModel(_adbService, _fastbootService, _logger, _notificationService);
             NokiaVM = new NokiaViewModel(_adbService, _fastbootService, _logger, _notificationService);
             SpdVM = new FrpViewModel("SPD", _adbService, _fastbootService, _logger, _notificationService);
-            AppleVM = new FrpViewModel("Apple", _adbService, _fastbootService, _logger, _notificationService);
+            AppleVM = new AppleViewModel(appleService, _logger, _notificationService);
             FrpVM = new FrpViewModel("FRP", _adbService, _fastbootService, _logger, _notificationService);
 
             _currentViewModel = DashboardVM;

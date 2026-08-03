@@ -34,10 +34,12 @@ namespace UnlockMatePro
             var navigationService = new NavigationService();
             var notificationService = new NotificationService();
             var updateService = new UpdateService(logger);
+            var appleService = new AppleService(logger);
 
             var mainVm = new MainViewModel(
                 adbService,
                 fastbootService,
+                appleService,
                 scrcpyService,
                 toolDownloaderService,
                 settingsService,
