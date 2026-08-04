@@ -115,6 +115,9 @@
         <DataTemplate DataType="{x:Type vm:LenovoViewModel}">
             <views:LenovoView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:SonyViewModel}">
+            <views:SonyView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
