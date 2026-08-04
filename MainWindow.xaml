@@ -109,6 +109,9 @@
         <DataTemplate DataType="{x:Type vm:LgViewModel}">
             <views:LgView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:AsusViewModel}">
+            <views:AsusView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
