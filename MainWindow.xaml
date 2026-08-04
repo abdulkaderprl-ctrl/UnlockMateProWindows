@@ -112,6 +112,9 @@
         <DataTemplate DataType="{x:Type vm:AsusViewModel}">
             <views:AsusView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LenovoViewModel}">
+            <views:LenovoView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>
