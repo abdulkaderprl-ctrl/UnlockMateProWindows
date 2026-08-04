@@ -562,3 +562,5 @@ C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyIn
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\Modules\Apple\Views\AppleView.baml
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\Modules\OnePlus\Views\OnePlusView.g.cs
 C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\Modules\OnePlus\Views\OnePlusView.baml
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\Modules\LG\Views\LgView.g.cs
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\win-x64\Modules\LG\Views\LgView.baml

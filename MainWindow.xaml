@@ -106,6 +106,9 @@
         <DataTemplate DataType="{x:Type vm:OnePlusViewModel}">
             <views:OnePlusView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:LgViewModel}">
+            <views:LgView />
+        </DataTemplate>
     </Window.Resources>
 
     <Grid>

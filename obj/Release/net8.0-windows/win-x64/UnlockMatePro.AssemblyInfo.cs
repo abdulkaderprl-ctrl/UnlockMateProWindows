@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyDescriptionAttribute("Professional Android Device Management, ADB/Fastboot Suite & Screen Control Platf" +
     "orm")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eee018dd68b2cb9dc1101cb1476e1a1edd3263b0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+68c9be15169f367bd252e9bdc32b614bf385d204")]
 [assembly: System.Reflection.AssemblyProductAttribute("Unlock Mate Pro")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Unlock Mate Pro")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
