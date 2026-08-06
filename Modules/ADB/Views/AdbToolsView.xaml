@@ -15,7 +15,7 @@
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
-        <TabControl Style="{StaticResource FluentTabControl}">
+        <TabControl>
             <!-- 1. Multi Device / Info -->
             <TabItem Header="Device Info">
                 <Grid>

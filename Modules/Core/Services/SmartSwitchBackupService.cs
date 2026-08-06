@@ -86,30 +86,37 @@ namespace UnlockMatePro.Services
                         var contacts = await _adbService.ExportContactsAsync(serialNumber);
                         manifest.ContactCount = contacts.Count;
 
-                        string contactsDir = Path.Combine(backupDir, "Contacts");
-                        Directory.CreateDirectory(contactsDir);
-
-                        // JSON
-                        string json = JsonSerializer.Serialize(contacts, new JsonSerializerOptions { WriteIndented = true });
-                        await File.WriteAllTextAsync(Path.Combine(contactsDir, "contacts.json"), json, cancellationToken);
-
-                        // CSV
-                        var csvBuilder = new StringBuilder("Id,DisplayName,PhoneNumber,Email\n");
-                        foreach (var c in contacts) csvBuilder.AppendLine($"\"{c.Id}\",\"{c.DisplayName}\",\"{c.PhoneNumber}\",\"{c.Email}\"");
-                        await File.WriteAllTextAsync(Path.Combine(contactsDir, "contacts.csv"), csvBuilder.ToString(), cancellationToken);
-
-                        // VCF
-                        var vcfBuilder = new StringBuilder();
-                        foreach (var c in contacts)
+                        if (contacts.Count > 0)
                         {
-                            vcfBuilder.AppendLine("BEGIN:VCARD\nVERSION:3.0");
-                            vcfBuilder.AppendLine($"FN:{c.DisplayName}");
-                            vcfBuilder.AppendLine($"TEL:{c.PhoneNumber}");
-                            vcfBuilder.AppendLine("END:VCARD");
-                        }
-                        await File.WriteAllTextAsync(Path.Combine(contactsDir, "contacts.vcf"), vcfBuilder.ToString(), cancellationToken);
+                            string contactsDir = Path.Combine(backupDir, "Contacts");
+                            Directory.CreateDirectory(contactsDir);
 
-                        reportBuilder.AppendLine($"[SUCCESS] Contacts: {contacts.Count} records saved to Backup/Contacts/");
+                            // JSON
+                            string json = JsonSerializer.Serialize(contacts, new JsonSerializerOptions { WriteIndented = true });
+                            await File.WriteAllTextAsync(Path.Combine(contactsDir, "contacts.json"), json, cancellationToken);
+
+                            // CSV
+                            var csvBuilder = new StringBuilder("Id,DisplayName,PhoneNumber,Email\n");
+                            foreach (var c in contacts) csvBuilder.AppendLine($"\"{c.Id}\",\"{c.DisplayName}\",\"{c.PhoneNumber}\",\"{c.Email}\"");
+                            await File.WriteAllTextAsync(Path.Combine(contactsDir, "contacts.csv"), csvBuilder.ToString(), cancellationToken);
+
+                            // VCF
+                            var vcfBuilder = new StringBuilder();
+                            foreach (var c in contacts)
+                            {
+                                vcfBuilder.AppendLine("BEGIN:VCARD\nVERSION:3.0");
+                                vcfBuilder.AppendLine($"FN:{c.DisplayName}");
+                                vcfBuilder.AppendLine($"TEL:{c.PhoneNumber}");
+                                vcfBuilder.AppendLine("END:VCARD");
+                            }
+                            await File.WriteAllTextAsync(Path.Combine(contactsDir, "contacts.vcf"), vcfBuilder.ToString(), cancellationToken);
+
+                            reportBuilder.AppendLine($"[SUCCESS] Contacts: {contacts.Count} records saved to Backup/Contacts/");
+                        }
+                        else
+                        {
+                            reportBuilder.AppendLine($"[INFO] Contacts Backup: 0 records found. No files created.");
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -130,20 +137,27 @@ namespace UnlockMatePro.Services
                         var smsList = await _adbService.ExportSmsAsync(serialNumber);
                         manifest.SmsCount = smsList.Count;
 
-                        string smsDir = Path.Combine(backupDir, "SMS");
-                        Directory.CreateDirectory(smsDir);
+                        if (smsList.Count > 0)
+                        {
+                            string smsDir = Path.Combine(backupDir, "SMS");
+                            Directory.CreateDirectory(smsDir);
 
-                        // JSON
-                        string json = JsonSerializer.Serialize(smsList, new JsonSerializerOptions { WriteIndented = true });
-                        await File.WriteAllTextAsync(Path.Combine(smsDir, "sms.json"), json, cancellationToken);
+                            // JSON
+                            string json = JsonSerializer.Serialize(smsList, new JsonSerializerOptions { WriteIndented = true });
+                            await File.WriteAllTextAsync(Path.Combine(smsDir, "sms.json"), json, cancellationToken);
 
-                        // XML
-                        var xmlBuilder = new StringBuilder("<smses>\n");
-                        foreach (var s in smsList) xmlBuilder.AppendLine($"  <sms address=\"{s.Address}\" body=\"{s.Body}\" date=\"{s.Date}\" type=\"{s.Type}\" />");
-                        xmlBuilder.AppendLine("</smses>");
-                        await File.WriteAllTextAsync(Path.Combine(smsDir, "sms.xml"), xmlBuilder.ToString(), cancellationToken);
+                            // XML
+                            var xmlBuilder = new StringBuilder("<smses>\n");
+                            foreach (var s in smsList) xmlBuilder.AppendLine($"  <sms address=\"{s.Address}\" body=\"{s.Body.Replace("\"", "&quot;").Replace("<", "&lt;").Replace(">", "&gt;")}\" date=\"{s.Date}\" type=\"{s.Type}\" />");
+                            xmlBuilder.AppendLine("</smses>");
+                            await File.WriteAllTextAsync(Path.Combine(smsDir, "sms.xml"), xmlBuilder.ToString(), cancellationToken);
 
-                        reportBuilder.AppendLine($"[SUCCESS] SMS: {smsList.Count} messages saved to Backup/SMS/");
+                            reportBuilder.AppendLine($"[SUCCESS] SMS: {smsList.Count} messages saved to Backup/SMS/");
+                        }
+                        else
+                        {
+                            reportBuilder.AppendLine($"[INFO] SMS Backup: 0 messages found. No files created.");
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -164,19 +178,26 @@ namespace UnlockMatePro.Services
                         var callLogs = await _adbService.ExportCallLogsAsync(serialNumber);
                         manifest.CallLogCount = callLogs.Count;
 
-                        string clDir = Path.Combine(backupDir, "CallLogs");
-                        Directory.CreateDirectory(clDir);
+                        if (callLogs.Count > 0)
+                        {
+                            string clDir = Path.Combine(backupDir, "CallLogs");
+                            Directory.CreateDirectory(clDir);
 
-                        // JSON
-                        string json = JsonSerializer.Serialize(callLogs, new JsonSerializerOptions { WriteIndented = true });
-                        await File.WriteAllTextAsync(Path.Combine(clDir, "calllogs.json"), json, cancellationToken);
+                            // JSON
+                            string json = JsonSerializer.Serialize(callLogs, new JsonSerializerOptions { WriteIndented = true });
+                            await File.WriteAllTextAsync(Path.Combine(clDir, "calllogs.json"), json, cancellationToken);
 
-                        // CSV
-                        var csvBuilder = new StringBuilder("Number,Date,Duration,Type\n");
-                        foreach (var cl in callLogs) csvBuilder.AppendLine($"\"{cl.Number}\",\"{cl.Date}\",\"{cl.DurationSeconds}\",\"{cl.Type}\"");
-                        await File.WriteAllTextAsync(Path.Combine(clDir, "calllogs.csv"), csvBuilder.ToString(), cancellationToken);
+                            // CSV
+                            var csvBuilder = new StringBuilder("Number,Date,Duration,Type\n");
+                            foreach (var cl in callLogs) csvBuilder.AppendLine($"\"{cl.Number}\",\"{cl.Date}\",\"{cl.DurationSeconds}\",\"{cl.Type}\"");
+                            await File.WriteAllTextAsync(Path.Combine(clDir, "calllogs.csv"), csvBuilder.ToString(), cancellationToken);
 
-                        reportBuilder.AppendLine($"[SUCCESS] Call Logs: {callLogs.Count} records saved to Backup/CallLogs/");
+                            reportBuilder.AppendLine($"[SUCCESS] Call Logs: {callLogs.Count} records saved to Backup/CallLogs/");
+                        }
+                        else
+                        {
+                            reportBuilder.AppendLine($"[INFO] Call Logs Backup: 0 records found. No files created.");
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -444,20 +465,19 @@ namespace UnlockMatePro.Services
                 }
 
                 // 1. Restore Contacts
-                string contactsJson = Path.Combine(workDir, "Contacts", "contacts.json");
-                if (File.Exists(contactsJson) && !cancellationToken.IsCancellationRequested)
+                string contactsVcf = Path.Combine(workDir, "Contacts", "contacts.vcf");
+                if (File.Exists(contactsVcf) && !cancellationToken.IsCancellationRequested)
                 {
                     progressInfo.StatusText = "Restoring Contacts to Device...";
-                    progressInfo.CurrentItemName = "Injecting Contacts database...";
+                    progressInfo.CurrentItemName = "Injecting Contacts (VCF)...";
                     progressInfo.OverallProgress = 20;
                     progress?.Report(progressInfo);
 
-                    string text = await File.ReadAllTextAsync(contactsJson, cancellationToken);
-                    var contacts = JsonSerializer.Deserialize<List<ContactItem>>(text);
-                    if (contacts != null && contacts.Count > 0)
-                    {
-                        await _adbService.RestoreContactsAsync(contacts, serialNumber);
-                    }
+                    string remoteVcfPath = "/sdcard/RestoreContacts.vcf";
+                    await _adbService.PushFileAsync(contactsVcf, remoteVcfPath, serialNumber);
+                    await _adbService.ExecuteCommandAsync($"shell am start -t \"text/x-vcard\" -d \"file://{remoteVcfPath}\" -a android.intent.action.VIEW com.android.contacts", serialNumber);
+                    
+                    _logger.LogSuccess("Sent VCF import intent to device. Please confirm on the device screen.");
                 }
 
                 // 2. Restore SMS

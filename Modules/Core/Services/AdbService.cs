@@ -1192,22 +1192,23 @@ namespace UnlockMatePro.Services
         public async Task<List<ContactItem>> ExportContactsAsync(string? serialNumber)
         {
             var list = new List<ContactItem>();
-            var (success, output) = await ExecuteCommandAsync("shell content query --uri content://com.android.contacts/contacts", serialNumber);
+            var (success, output) = await ExecuteCommandAsync("shell content query --uri content://com.android.contacts/data/phones --projection display_name:data1:contact_id", serialNumber);
             if (!success || string.IsNullOrWhiteSpace(output)) return list;
 
             var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
-                var idMatch = Regex.Match(line, @"_id=(\d+)");
                 var nameMatch = Regex.Match(line, @"display_name=([^,]+)");
+                var phoneMatch = Regex.Match(line, @"data1=([^,]+)");
+                var idMatch = Regex.Match(line, @"contact_id=(\d+)");
 
-                if (idMatch.Success || nameMatch.Success)
+                if (nameMatch.Success || phoneMatch.Success)
                 {
                     list.Add(new ContactItem
                     {
-                        Id = idMatch.Success ? idMatch.Groups[1].Value : "1",
-                        DisplayName = nameMatch.Success ? nameMatch.Groups[1].Value : "Contact Entry",
-                        PhoneNumber = "+1234567890"
+                        Id = idMatch.Success ? idMatch.Groups[1].Value : "0",
+                        DisplayName = nameMatch.Success ? nameMatch.Groups[1].Value.Trim() : "Unknown",
+                        PhoneNumber = phoneMatch.Success ? phoneMatch.Groups[1].Value.Trim() : ""
                     });
                 }
             }
@@ -1218,22 +1219,27 @@ namespace UnlockMatePro.Services
         public async Task<List<SmsItem>> ExportSmsAsync(string? serialNumber)
         {
             var list = new List<SmsItem>();
-            var (success, output) = await ExecuteCommandAsync("shell content query --uri content://sms/", serialNumber);
+            var (success, output) = await ExecuteCommandAsync("shell content query --uri content://sms/ --projection _id:address:body:date:type", serialNumber);
             if (!success || string.IsNullOrWhiteSpace(output)) return list;
 
             var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
-                var bodyMatch = Regex.Match(line, @"body=([^,]+)");
+                var idMatch = Regex.Match(line, @"_id=(\d+)");
                 var addrMatch = Regex.Match(line, @"address=([^,]+)");
+                var bodyMatch = Regex.Match(line, @"body=(.*?)(?:, date=|, type=|$)", RegexOptions.Singleline);
+                var dateMatch = Regex.Match(line, @"date=(\d+)");
+                var typeMatch = Regex.Match(line, @"type=(\d+)");
 
                 if (bodyMatch.Success)
                 {
                     list.Add(new SmsItem
                     {
+                        Id = idMatch.Success ? idMatch.Groups[1].Value : "0",
                         Address = addrMatch.Success ? addrMatch.Groups[1].Value : "Unknown",
                         Body = bodyMatch.Groups[1].Value,
-                        Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm")
+                        Date = dateMatch.Success ? dateMatch.Groups[1].Value : DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString(),
+                        Type = typeMatch.Success ? typeMatch.Groups[1].Value : "1"
                     });
                 }
             }
@@ -1244,24 +1250,32 @@ namespace UnlockMatePro.Services
         public async Task<List<CallLogItem>> ExportCallLogsAsync(string? serialNumber)
         {
             var list = new List<CallLogItem>();
-            var (success, output) = await ExecuteCommandAsync("shell content query --uri content://call_log/calls", serialNumber);
+            var (success, output) = await ExecuteCommandAsync("shell content query --uri content://call_log/calls --projection _id:number:name:date:duration:type", serialNumber);
             if (!success || string.IsNullOrWhiteSpace(output)) return list;
 
             var lines = output.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
+                var idMatch = Regex.Match(line, @"_id=(\d+)");
                 var numMatch = Regex.Match(line, @"number=([^,]+)");
+                var nameMatch = Regex.Match(line, @"name=([^,]+)");
+                var dateMatch = Regex.Match(line, @"date=(\d+)");
+                var durMatch = Regex.Match(line, @"duration=(\d+)");
+                var typeMatch = Regex.Match(line, @"type=(\d+)");
+
                 if (numMatch.Success)
                 {
                     list.Add(new CallLogItem
                     {
+                        Id = idMatch.Success ? idMatch.Groups[1].Value : "0",
                         Number = numMatch.Groups[1].Value,
-                        Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm"),
-                        Type = "1"
+                        CachedName = nameMatch.Success && nameMatch.Groups[1].Value != "NULL" ? nameMatch.Groups[1].Value : "",
+                        Date = dateMatch.Success ? dateMatch.Groups[1].Value : DateTimeOffset.Now.ToUnixTimeMilliseconds().ToString(),
+                        DurationSeconds = durMatch.Success ? durMatch.Groups[1].Value : "0",
+                        Type = typeMatch.Success ? typeMatch.Groups[1].Value : "1"
                     });
                 }
             }
-
             return list;
         }
 
@@ -1270,8 +1284,31 @@ namespace UnlockMatePro.Services
             int restored = 0;
             foreach (var c in contacts)
             {
-                var (success, _) = await ExecuteCommandAsync($"shell content insert --uri content://com.android.contacts/contacts --bind display_name:s:\"{c.DisplayName}\"", serialNumber);
-                if (success) restored++;
+                if (string.IsNullOrWhiteSpace(c.PhoneNumber) && string.IsNullOrWhiteSpace(c.DisplayName))
+                    continue;
+
+                // 1. Insert into raw_contacts
+                var (rawSuccess, rawOutput) = await ExecuteCommandAsync("shell content insert --uri content://com.android.contacts/raw_contacts --bind account_name:s:\"\" --bind account_type:s:\"\"", serialNumber);
+                
+                var rawIdMatch = Regex.Match(rawOutput, @"row.*?(\d+)");
+                if (rawSuccess && rawIdMatch.Success)
+                {
+                    string rawId = rawIdMatch.Groups[1].Value;
+
+                    // 2. Insert Name
+                    if (!string.IsNullOrWhiteSpace(c.DisplayName))
+                    {
+                        await ExecuteCommandAsync($"shell content insert --uri content://com.android.contacts/data --bind raw_contact_id:i:{rawId} --bind mimetype:s:\"vnd.android.cursor.item/name\" --bind data1:s:\"{c.DisplayName.Replace("\"", "\\\"")}\"", serialNumber);
+                    }
+
+                    // 3. Insert Phone
+                    if (!string.IsNullOrWhiteSpace(c.PhoneNumber))
+                    {
+                        await ExecuteCommandAsync($"shell content insert --uri content://com.android.contacts/data --bind raw_contact_id:i:{rawId} --bind mimetype:s:\"vnd.android.cursor.item/phone_v2\" --bind data1:s:\"{c.PhoneNumber}\" --bind data2:i:2", serialNumber);
+                    }
+
+                    restored++;
+                }
             }
             return (restored > 0, $"Restored {restored} contact(s) to device.");
         }
@@ -1281,7 +1318,16 @@ namespace UnlockMatePro.Services
             int restored = 0;
             foreach (var s in smsList)
             {
-                var (success, _) = await ExecuteCommandAsync($"shell content insert --uri content://sms/inbox --bind address:s:\"{s.Address}\" --bind body:s:\"{s.Body}\"", serialNumber);
+                if (string.IsNullOrWhiteSpace(s.Address)) continue;
+                
+                string safeBody = s.Body.Replace("\"", "\\\"").Replace("$", "\\$").Replace("`", "\\`");
+                long.TryParse(s.Date, out long dateVal);
+                if (dateVal == 0) dateVal = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+                int.TryParse(s.Type, out int typeVal);
+                if (typeVal == 0) typeVal = 1;
+
+                var (success, _) = await ExecuteCommandAsync($"shell content insert --uri content://sms --bind address:s:\"{s.Address}\" --bind body:s:\"{safeBody}\" --bind date:l:{dateVal} --bind type:i:{typeVal}", serialNumber);
                 if (success) restored++;
             }
             return (restored > 0, $"Restored {restored} SMS message(s) to device.");
@@ -1292,7 +1338,17 @@ namespace UnlockMatePro.Services
             int restored = 0;
             foreach (var cl in callLogs)
             {
-                var (success, _) = await ExecuteCommandAsync($"shell content insert --uri content://call_log/calls --bind number:s:\"{cl.Number}\" --bind type:i:{cl.Type}", serialNumber);
+                if (string.IsNullOrWhiteSpace(cl.Number)) continue;
+                
+                long.TryParse(cl.Date, out long dateVal);
+                if (dateVal == 0) dateVal = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
+                int.TryParse(cl.Type, out int typeVal);
+                if (typeVal == 0) typeVal = 1;
+
+                long.TryParse(cl.DurationSeconds, out long durVal);
+
+                var (success, _) = await ExecuteCommandAsync($"shell content insert --uri content://call_log/calls --bind number:s:\"{cl.Number}\" --bind type:i:{typeVal} --bind date:l:{dateVal} --bind duration:l:{durVal}", serialNumber);
                 if (success) restored++;
             }
             return (restored > 0, $"Restored {restored} call log(s) to device.");
