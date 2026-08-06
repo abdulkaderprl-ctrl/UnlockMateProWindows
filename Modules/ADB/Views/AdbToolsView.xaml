@@ -13,6 +13,15 @@
         <DataTemplate DataType="{x:Type vm:LogcatViewModel}">
             <views:LogcatView />
         </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ApkManagementViewModel}">
+            <views:ApkManagementView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:FileExplorerViewModel}">
+            <views:FileExplorerView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:TerminalViewModel}">
+            <views:TerminalView />
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <TabControl>
