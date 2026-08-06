@@ -262,6 +262,7 @@ namespace UnlockMatePro.ViewModels
             {
                 new RibbonMenuItem("Dashboard", "DASHBOARD"),
                 new RibbonMenuItem("AdbTools", "ADB"),
+                new RibbonMenuItem("Scrcpy", "SCREEN MIRROR"),
                 new RibbonMenuItem("FastbootTools", "FASTBOOT"),
                 new RibbonMenuItem("FRP", "FRP"),
                 new RibbonMenuItem("Samsung", "SAMSUNG"),
