@@ -64,6 +64,7 @@ namespace UnlockMatePro.ViewModels
         public FrpViewModel MtkVM { get; }
         public SamsungViewModel SamsungVM { get; }
         public XiaomiViewModel XiaomiVM { get; }
+        public GooglePixelViewModel GooglePixelVM { get; }
         public OppoViewModel OppoVM { get; }
         public VivoViewModel VivoVM { get; }
         public RealmeViewModel RealmeVM { get; }
@@ -206,6 +207,7 @@ namespace UnlockMatePro.ViewModels
             MtkVM = new FrpViewModel("MTK", _adbService, _fastbootService, _logger, _notificationService);
             SamsungVM = new SamsungViewModel(_adbService, _fastbootService, _logger, _notificationService);
             XiaomiVM = new XiaomiViewModel(_adbService, _fastbootService, _logger, _notificationService);
+            GooglePixelVM = new GooglePixelViewModel(_adbService, _fastbootService, _logger, _notificationService);
             OppoVM = new OppoViewModel(_adbService, _fastbootService, _logger, _notificationService);
             VivoVM = new VivoViewModel(_adbService, _fastbootService, _logger, _notificationService);
             RealmeVM = new RealmeViewModel(_adbService, _fastbootService, _logger, _notificationService);
@@ -264,6 +266,7 @@ namespace UnlockMatePro.ViewModels
                 new RibbonMenuItem("FRP", "FRP"),
                 new RibbonMenuItem("Samsung", "SAMSUNG"),
                 new RibbonMenuItem("Xiaomi", "XIAOMI"),
+                new RibbonMenuItem("GooglePixel", "GOOGLE PIXEL"),
                 new RibbonMenuItem("OPPO", "OPPO"),
                 new RibbonMenuItem("VIVO", "VIVO"),
                 new RibbonMenuItem("Realme", "REALME"),
@@ -385,6 +388,7 @@ namespace UnlockMatePro.ViewModels
                 "MTK" => MtkVM,
                 "Samsung" => SamsungVM,
                 "Xiaomi" => XiaomiVM,
+                "GooglePixel" => GooglePixelVM,
                 "OPPO" => OppoVM,
                 "VIVO" => VivoVM,
                 "Realme" => RealmeVM,
