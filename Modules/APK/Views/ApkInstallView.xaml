@@ -7,7 +7,7 @@
             <TextBlock Text="Universal APK &amp; Split Bundle Installer" Style="{StaticResource HeaderTextBlock}" />
 
             <!-- Drag & Drop Zone Card -->
-            <Border BorderBrush="{DynamicResource AccentBrush}" BorderThickness="2" CornerRadius="12" Background="#1E0078D4" Padding="28" Margin="0,0,0,16">
+            <Border BorderBrush="{DynamicResource AccentBrush}" BorderThickness="2" CornerRadius="12" Background="{DynamicResource CardBackgroundBrush}" Padding="28" Margin="0,0,0,16">
                 <StackPanel HorizontalAlignment="Center">
                     <Path Data="{DynamicResource IconApkInstall}" Fill="{DynamicResource AccentBrush}" Width="48" Height="48" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,12" />
                     <TextBlock Text="Drag &amp; Drop APK or Split Archives Here" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" />
@@ -91,4 +91,5 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+
 

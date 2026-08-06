@@ -6,7 +6,7 @@
             <TextBlock Text="Application Settings &amp; Tooling" Style="{StaticResource HeaderTextBlock}" />
 
             <!-- Automated Tool Downloader Card -->
-            <Border Style="{StaticResource FluentCard}" Background="#22107C41">
+            <Border Style="{StaticResource FluentCard}" Background="{DynamicResource CardBackgroundBrush}">
                 <StackPanel>
                     <TextBlock Text="📥 Automated Tool Downloader" Style="{StaticResource SubHeaderTextBlock}" />
                     <TextBlock Text="Missing adb.exe or scrcpy.exe? One-click auto-download from official Google &amp; GitHub servers." Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" Margin="0,0,0,12" />
@@ -124,4 +124,5 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+
 

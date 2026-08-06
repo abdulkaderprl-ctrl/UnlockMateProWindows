@@ -40,6 +40,7 @@
     <SolidColorBrush x:Key="DataGridGridLinesBrush" Color="#333333" />
 
     <!-- Accent Brushes -->
+    <SolidColorBrush x:Key="AccentTextBrush" Color="#FFFFFF" />
     <SolidColorBrush x:Key="AccentBrush" Color="#0078D4" />
     <SolidColorBrush x:Key="AccentHoverBrush" Color="#1086E8" />
     <SolidColorBrush x:Key="AccentPressedBrush" Color="#005A9E" />
@@ -55,3 +56,4 @@
     <SolidColorBrush x:Key="ConsoleForegroundBrush" Color="#60CDFF" />
 
 </ResourceDictionary>
+

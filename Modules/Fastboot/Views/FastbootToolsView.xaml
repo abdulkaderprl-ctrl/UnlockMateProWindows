@@ -16,7 +16,7 @@
                     <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="Fastboot Devices: " Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,8,0" />
                         <ComboBox Width="200" ItemsSource="{Binding FastbootDevices}" SelectedItem="{Binding SelectedDevice}" DisplayMemberPath="DisplayName" Padding="6,4" />
-                        <Border Background="#260078D4" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" CornerRadius="10" Padding="8,4" Margin="16,0,0,0">
+                        <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource AccentBrush}" BorderThickness="1" CornerRadius="10" Padding="8,4" Margin="16,0,0,0">
                             <TextBlock Text="{Binding FrpStatusText, StringFormat='FRP Status: {0}'}" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="12" />
                         </Border>
                     </StackPanel>
@@ -112,4 +112,5 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+
 

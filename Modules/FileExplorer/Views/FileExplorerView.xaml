@@ -28,7 +28,7 @@
                     <Grid Margin="0,0,0,4">
                         <TextBlock Text="{Binding StorageInfo.SummaryText, Mode=OneWay}" FontSize="12" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Left" />
                     </Grid>
-                    <ProgressBar Value="{Binding StorageInfo.PercentageUsed, Mode=OneWay}" Style="{StaticResource FluentProgressBar}" Height="6" Background="#30808080" />
+                    <ProgressBar Value="{Binding StorageInfo.PercentageUsed, Mode=OneWay}" Style="{StaticResource FluentProgressBar}" Height="6" Background="{DynamicResource CardBackgroundBrush}" />
                 </StackPanel>
 
                 <CheckBox Grid.Column="2" Content="☑ Show Hidden Files" IsChecked="{Binding ShowHiddenFiles}" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center" FontSize="12" />
@@ -230,4 +230,5 @@
         </Border>
     </Grid>
 </UserControl>
+
 

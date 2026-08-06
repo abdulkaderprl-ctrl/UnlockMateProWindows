@@ -15,7 +15,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="#260078D4" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="{DynamicResource CardBackgroundBrush}" Margin="0,0,16,0" VerticalAlignment="Center">
                             <Path Data="{DynamicResource IconTools}" Fill="{DynamicResource AccentBrush}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -32,7 +32,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="#26107C41" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="{DynamicResource CardBackgroundBrush}" Margin="0,0,16,0" VerticalAlignment="Center">
                             <Path Data="{DynamicResource IconDevice}" Fill="{DynamicResource SuccessBrush}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -49,7 +49,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="#26D83B01" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="{DynamicResource CardBackgroundBrush}" Margin="0,0,16,0" VerticalAlignment="Center">
                             <Path Data="{DynamicResource IconApps}" Fill="{DynamicResource WarningBrush}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -66,7 +66,7 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="#260078D4" Margin="0,0,16,0" VerticalAlignment="Center">
+                        <Border Grid.Column="0" Width="48" Height="48" CornerRadius="8" Background="{DynamicResource CardBackgroundBrush}" Margin="0,0,16,0" VerticalAlignment="Center">
                             <Path Data="{DynamicResource IconBattery}" Fill="{DynamicResource AccentBrush}" Width="24" Height="24" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
@@ -149,4 +149,5 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+
 

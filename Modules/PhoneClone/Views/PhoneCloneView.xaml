@@ -94,7 +94,7 @@
                     </StackPanel.Style>
 
                     <!-- Warning Message -->
-                    <Border Background="#33FF9900" BorderBrush="#FFFF9900" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,16">
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="12" Margin="0,0,0,16">
                         <Border.Style>
                             <Style TargetType="Border">
                                 <Setter Property="Visibility" Value="Visible" />
@@ -107,7 +107,7 @@
                         </Border.Style>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="⚠️" FontSize="16" Margin="0,0,8,0"/>
-                            <TextBlock Text="{Binding ConnectionWarningMessage}" Foreground="#FFFF9900" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding ConnectionWarningMessage}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="SemiBold" VerticalAlignment="Center"/>
                         </StackPanel>
                     </Border>
 
@@ -271,7 +271,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <Border Grid.Row="0" Background="#152619" BorderBrush="{DynamicResource SuccessBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,12">
+                <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource SuccessBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,0,12">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                         <TextBlock Text="🎉 " FontSize="20" />
                         <TextBlock Text="Phone-to-Phone Clone Completed Successfully!" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource SuccessBrush}" VerticalAlignment="Center" />
@@ -335,4 +335,5 @@
         </Border>
     </Grid>
 </UserControl>
+
 

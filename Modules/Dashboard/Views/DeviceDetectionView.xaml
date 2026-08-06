@@ -72,7 +72,7 @@
                                                     <TextBlock Text="{Binding Stats.IsRooted, StringFormat='Root: {0}'}" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="12" />
                                                 </StackPanel>
                                             </StackPanel>
-                                            <Border Grid.Column="2" Background="#26107C41" BorderBrush="{DynamicResource SuccessBrush}" BorderThickness="1" CornerRadius="10" Padding="10,4" VerticalAlignment="Center">
+                                            <Border Grid.Column="2" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource SuccessBrush}" BorderThickness="1" CornerRadius="10" Padding="10,4" VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding DeviceState}" Foreground="{DynamicResource SuccessBrush}" FontSize="12" FontWeight="Bold" Typography.Capitals="AllSmallCaps" />
                                             </Border>
                                         </Grid>
@@ -96,4 +96,5 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+
 

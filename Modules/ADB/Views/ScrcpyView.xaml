@@ -6,7 +6,7 @@
             <TextBlock Text="Screen Mirroring &amp; Remote Control (Scrcpy)" Style="{StaticResource HeaderTextBlock}" />
 
             <!-- Launch Mirroring Banner Card -->
-            <Border Style="{StaticResource FluentCard}" Background="#220078D4">
+            <Border Style="{StaticResource FluentCard}" Background="{DynamicResource CardBackgroundBrush}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -91,4 +91,5 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+
 
