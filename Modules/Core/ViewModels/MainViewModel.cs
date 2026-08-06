@@ -79,6 +79,7 @@ namespace UnlockMatePro.ViewModels
         public AsusViewModel AsusVM { get; }
         public LenovoViewModel LenovoVM { get; }
         public SonyViewModel SonyVM { get; }
+        public NothingViewModel NothingVM { get; }
         public FrpViewModel FrpVM { get; }
 
         public ObservableCollection<AdbDevice> ConnectedDevices { get; } = new ObservableCollection<AdbDevice>();
@@ -222,6 +223,7 @@ namespace UnlockMatePro.ViewModels
             AsusVM = new AsusViewModel(_adbService, _fastbootService, _logger, _notificationService);
             LenovoVM = new LenovoViewModel(_adbService, _fastbootService, _logger, _notificationService);
             SonyVM = new SonyViewModel(_adbService, _fastbootService, _logger, _notificationService);
+            NothingVM = new NothingViewModel(new NothingService(_adbService, _fastbootService), _logger, _notificationService);
             FrpVM = new FrpViewModel("FRP", _adbService, _fastbootService, _logger, _notificationService);
 
             _currentViewModel = DashboardVM;
@@ -284,6 +286,7 @@ namespace UnlockMatePro.ViewModels
                 new RibbonMenuItem("Asus", "ASUS"),
                 new RibbonMenuItem("Lenovo", "LENOVO"),
                 new RibbonMenuItem("Sony", "SONY"),
+                new RibbonMenuItem("Nothing", "NOTHING"),
                 new RibbonMenuItem("BackupRestore", "BACKUP"),
                 new RibbonMenuItem("PhoneClone", "PHONE CLONE"),
                 new RibbonMenuItem("FileExplorer", "FILE EXPLORER"),
@@ -404,6 +407,7 @@ namespace UnlockMatePro.ViewModels
                 "Asus" => AsusVM,
                 "Lenovo" => LenovoVM,
                 "Sony" => SonyVM,
+                "Nothing" => NothingVM,
                 "FRP" => FrpVM,
                 _ => DashboardVM
             };

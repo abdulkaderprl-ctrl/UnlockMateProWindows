@@ -24,7 +24,7 @@
 
                 <!-- Brand List -->
                 <ListBox Grid.Row="1" ItemsSource="{Binding SupportedBrands}" SelectedItem="{Binding BrandName}" 
-                         Style="{StaticResource FluentListBox}" ItemContainerStyle="{StaticResource FluentListBoxItemStyle}">
+                         Background="Transparent" BorderThickness="0">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding}" FontSize="14" Margin="4" />
@@ -59,13 +59,13 @@
 
                         <TextBlock Text="ADB Mode Operations" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,0,0,8"/>
                         <WrapPanel Orientation="Horizontal" Margin="0,0,0,16">
-                            <Button Style="{StaticResource DangerButton}" Content="Bypass FRP (ADB)" Width="170" Height="40" Margin="0,0,8,8" Command="{Binding BypassAdbCommand}" />
+                            <Button Style="{StaticResource FluentButton}" Foreground="{DynamicResource ErrorBrush}" Content="Bypass FRP (ADB)" Width="170" Height="40" Margin="0,0,8,8" Command="{Binding BypassAdbCommand}" />
                             <Button Style="{StaticResource FluentButton}" Content="Factory Reset (ADB)" Width="170" Height="40" Margin="0,0,8,8" />
                         </WrapPanel>
 
                         <TextBlock Text="Fastboot Mode Operations" FontWeight="SemiBold" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,0,0,8"/>
                         <WrapPanel Orientation="Horizontal" Margin="0,0,0,16">
-                            <Button Style="{StaticResource DangerButton}" Content="Erase FRP (Fastboot)" Width="170" Height="40" Margin="0,0,8,8" Command="{Binding EraseFastbootCommand}" />
+                            <Button Style="{StaticResource FluentButton}" Foreground="{DynamicResource ErrorBrush}" Content="Erase FRP (Fastboot)" Width="170" Height="40" Margin="0,0,8,8" Command="{Binding EraseFastbootCommand}" />
                             <Button Style="{StaticResource FluentButton}" Content="Factory Reset (Fastboot)" Width="170" Height="40" Margin="0,0,8,8" />
                         </WrapPanel>
 

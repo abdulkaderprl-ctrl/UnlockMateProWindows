@@ -1,0 +1,20 @@
+﻿Unlock Mate Pro
+1.0.0.0
+
+winexe
+C#
+.cs
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\obj\Release\net8.0-windows\
+UnlockMatePro
+none
+false
+TRACE;RELEASE;NET;NET8_0;NETCOREAPP
+C:\Users\Abdul Kader\Desktop\Project Working All\Windows\Fast projects\AdbEasyInstaller\App.xaml
+491602937101
+
+1422114561376
+199572089228
+MainWindow.xaml;Modules\ADB\Views\AdbToolsView.xaml;Modules\ADB\Views\DeviceInfoView.xaml;Modules\ADB\Views\DeviceMonitorView.xaml;Modules\ADB\Views\LogcatView.xaml;Modules\ADB\Views\LogsView.xaml;Modules\ADB\Views\ScrcpyView.xaml;Modules\ADB\Views\ScreenshotGalleryView.xaml;Modules\ADB\Views\TerminalView.xaml;Modules\APK\Views\ApkInstallView.xaml;Modules\APK\Views\ApkManagementView.xaml;Modules\APK\Views\ApkToolsView.xaml;Modules\Apple\Views\AppleView.xaml;Modules\Asus\Views\AsusView.xaml;Modules\Backup\Views\BackupRestoreView.xaml;Modules\Core\Views\BrandPlaceholderView.xaml;Modules\Dashboard\Views\DashboardView.xaml;Modules\Dashboard\Views\DeviceDetectionView.xaml;Modules\Fastboot\Views\AdvancedToolsView.xaml;Modules\Fastboot\Views\FastbootToolsView.xaml;Modules\FileExplorer\Views\FileExplorerView.xaml;Modules\FileExplorer\Views\FilePropertiesWindow.xaml;Modules\FRP\Views\FrpView.xaml;Modules\GooglePixel\Views\GooglePixelView.xaml;Modules\Honor\Views\HonorView.xaml;Modules\Huawei\Views\HuaweiView.xaml;Modules\Lenovo\Views\LenovoView.xaml;Modules\LG\Views\LgView.xaml;Modules\Motorola\Views\MotorolaView.xaml;Modules\Nokia\Views\NokiaView.xaml;Modules\Nothing\Views\NothingView.xaml;Modules\OnePlus\Views\OnePlusView.xaml;Modules\Oppo\Views\OppoView.xaml;Modules\PhoneClone\Views\PhoneCloneView.xaml;Modules\Realme\Views\RealmeView.xaml;Modules\Samsung\Views\SamsungView.xaml;Modules\Settings\Views\AboutView.xaml;Modules\Settings\Views\AuthView.xaml;Modules\Settings\Views\SettingsView.xaml;Modules\Settings\Views\SplashScreenWindow.xaml;Modules\Settings\Views\UserProfileView.xaml;Modules\Sony\Views\SonyView.xaml;Modules\Vivo\Views\VivoView.xaml;Modules\Xiaomi\Views\XiaomiView.xaml;Styles\Colors.xaml;Styles\Controls.xaml;Styles\Icons.xaml;Styles\Themes\DarkTheme.xaml;Styles\Themes\LightTheme.xaml;
+
+False
+

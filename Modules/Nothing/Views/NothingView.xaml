@@ -1,0 +1,240 @@
+<UserControl x:Class="UnlockMatePro.Views.NothingView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:UnlockMatePro.Views"
+             xmlns:vm="clr-namespace:UnlockMatePro.ViewModels"
+             mc:Ignorable="d" 
+             d:DesignHeight="700" d:DesignWidth="1100"
+             Background="{DynamicResource BackgroundBrush}">
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0">
+                    <TextBlock Text="Nothing Professional Manager" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                    <TextBlock Text="Manage Nothing devices (Phone 1/2/2a/CMF) in ADB and Fastboot modes" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2,0,0"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Device State:" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                    <Border Background="{DynamicResource SuccessBrush}" CornerRadius="4" Padding="10,5">
+                        <TextBlock Text="{Binding CurrentMode}" Foreground="White" FontWeight="Bold"/>
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentMode}" Value="Disconnected">
+                                        <Setter Property="Background" Value="{DynamicResource ErrorBrush}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content (2 Columns) -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Column -->
+            <ScrollViewer Grid.Column="0" Margin="0,0,5,0" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    
+                    <!-- Device Info Card -->
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="Device Information" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,10"/>
+                            
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Model:" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2"/>
+                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Model}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="SemiBold" Margin="0,2"/>
+
+                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Product:" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2"/>
+                                <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Product}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="SemiBold" Margin="0,2"/>
+
+                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Serial Number:" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2"/>
+                                <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding SerialNumber}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="SemiBold" Margin="0,2"/>
+
+                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Android Version:" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2"/>
+                                <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding AndroidVersion}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="SemiBold" Margin="0,2"/>
+                                
+                                <TextBlock Grid.Row="4" Grid.Column="0" Text="Bootloader:" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2"/>
+                                <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding BootloaderState}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="SemiBold" Margin="0,2"/>
+
+                                <TextBlock Grid.Row="5" Grid.Column="0" Text="Current Slot:" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2"/>
+                                <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Slot}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="SemiBold" Margin="0,2"/>
+
+                                <TextBlock Grid.Row="6" Grid.Column="0" Text="Battery:" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,2"/>
+                                <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding BatteryLevel}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="SemiBold" Margin="0,2"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Reboot Tools -->
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="Reboot Operations" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,10"/>
+                            <WrapPanel>
+                                <Button Style="{StaticResource FluentButton}" Content="System" Command="{Binding RebootSystemCommand}" Width="110" Margin="0,0,10,10"/>
+                                <Button Style="{StaticResource FluentButton}" Content="Recovery" Command="{Binding RebootRecoveryCommand}" Width="110" Margin="0,0,10,10"/>
+                                <Button Style="{StaticResource FluentButton}" Content="Bootloader" Command="{Binding RebootBootloaderCommand}" Width="110" Margin="0,0,10,10"/>
+                                <Button Style="{StaticResource FluentButton}" Content="FastbootD" Command="{Binding RebootFastbootDCommand}" Width="110" Margin="0,0,10,10"/>
+                                <Button Style="{StaticResource FluentButton}" Content="EDL" Command="{Binding RebootEdlCommand}" Width="110" Margin="0,0,10,10"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Bootloader & FRP Tools -->
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="Bootloader / FRP Tools" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,10"/>
+                            <TextBlock Text="⚠️ Bootloader tools will erase user data." Foreground="{DynamicResource WarningBrush}" Margin="0,0,0,10"/>
+                            <WrapPanel>
+                                <Button Style="{StaticResource FluentButton}" Content="Unlock Bootloader" Command="{Binding UnlockBootloaderCommand}" Width="200" Margin="0,0,10,10"/>
+                                <Button Style="{StaticResource FluentButton}" Content="Relock Bootloader" Command="{Binding RelockBootloaderCommand}" Width="200" Margin="0,0,10,10"/>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                    
+                </StackPanel>
+            </ScrollViewer>
+
+            <!-- Right Column -->
+            <ScrollViewer Grid.Column="1" Margin="5,0,0,0" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    
+                    <!-- Firmware Flasher -->
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="Firmware Flasher" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,15"/>
+                            
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Firmware Folder:" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource FluentTextBox}" Text="{Binding FirmwarePath, UpdateSourceTrigger=PropertyChanged}"/>
+                            </Grid>
+
+                            <Button Style="{StaticResource PrimaryButton}" Content="Flash Full Firmware" Command="{Binding FlashFirmwareCommand}" Height="36" Margin="0,0,0,20"/>
+                            
+                            <TextBlock Text="Individual Partitions" FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,10"/>
+                            
+                            <!-- Boot -->
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="boot:" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource FluentTextBox}" Text="{Binding BootPath, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
+                                <Button Grid.Column="2" Style="{StaticResource FluentButton}" Content="Flash" Command="{Binding FlashBootCommand}"/>
+                            </Grid>
+                            
+                            <!-- Init Boot -->
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="init_boot:" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource FluentTextBox}" Text="{Binding InitBootPath, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
+                                <Button Grid.Column="2" Style="{StaticResource FluentButton}" Content="Flash" Command="{Binding FlashInitBootCommand}"/>
+                            </Grid>
+
+                            <!-- Vendor Boot -->
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="vendor_boot:" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource FluentTextBox}" Text="{Binding VendorBootPath, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
+                                <Button Grid.Column="2" Style="{StaticResource FluentButton}" Content="Flash" Command="{Binding FlashVendorBootCommand}"/>
+                            </Grid>
+
+                            <!-- Vbmeta -->
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="vbmeta:" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource FluentTextBox}" Text="{Binding VbmetaPath, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
+                                <Button Grid.Column="2" Style="{StaticResource FluentButton}" Content="Flash" Command="{Binding FlashVbmetaCommand}"/>
+                            </Grid>
+                            
+                            <!-- Super -->
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="80"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="super:" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource FluentTextBox}" Text="{Binding SuperPath, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
+                                <Button Grid.Column="2" Style="{StaticResource FluentButton}" Content="Flash" Command="{Binding FlashSuperCommand}"/>
+                            </Grid>
+
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- Logs Section -->
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="200"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Text="Operation Log" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,10"/>
+                            
+                            <TextBlock Grid.Row="1" Text="{Binding StatusText}" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <ProgressBar Grid.Row="2" Value="{Binding Progress}" Height="4" Margin="0,0,0,10" Background="{DynamicResource CardBorderBrush}" Foreground="{DynamicResource AccentBrush}" BorderThickness="0"/>
+                            
+                            <TextBox Grid.Row="3" Text="{Binding LogText}" Style="{DynamicResource FluentTextBox}" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}" BorderThickness="0"/>
+                        </Grid>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

@@ -9,8 +9,13 @@
              d:DesignHeight="700" d:DesignWidth="1100"
              Background="{DynamicResource BackgroundBrush}">
     
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+    </UserControl.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
@@ -35,37 +40,126 @@
             </Grid>
         </Border>
 
-        <!-- Main Content Grid -->
-        <Grid Grid.Row="1">
+        <!-- Sub Menu -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <ItemsControl ItemsSource="{Binding SubMenuItems}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Content="{Binding}" 
+                                Command="{Binding DataContext.SwitchSubMenuCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                                CommandParameter="{Binding}"
+                                Margin="0,0,10,10" Padding="15,8"
+                                Background="Transparent" BorderThickness="0" Foreground="{DynamicResource SecondaryTextBrush}" FontWeight="SemiBold" Cursor="Hand">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Content}" Value="{Binding DataContext.ActiveSubMenu, RelativeSource={RelativeSource AncestorType=UserControl}}">
+                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+                                        </DataTrigger>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+
+        <!-- FUNCTIONS Tab Content -->
+        <Grid Grid.Row="2">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ActiveSubMenu}" Value="FUNCTIONS">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="4*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- Tools Section -->
+            <!-- Tools Section (Left) -->
             <ScrollViewer Grid.Column="0" VerticalScrollBarVisibility="Auto" Margin="0,0,10,0">
                 <StackPanel>
+                    <StackPanel.Resources>
+                        <Style x:Key="FuncButton" TargetType="Button" BasedOn="{StaticResource FluentButton}">
+                            <Setter Property="Height" Value="40"/>
+                            <Setter Property="Margin" Value="0,0,0,5"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="Padding" Value="15,0"/>
+                            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+                            <Setter Property="Background" Value="{DynamicResource CardBackgroundBrush}"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="BorderBrush" Value="{DynamicResource CardBorderBrush}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource HoverBrush}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </StackPanel.Resources>
+
+                    <!-- The Buttons -->
+                    <Button Style="{StaticResource FuncButton}" Content="🍎 READ HW INFO" Command="{Binding ReadHwInfoCommand}"/>
+                    <Button Style="{StaticResource FuncButton}" Content="⚠️ DISABLE FACTORY RESET" Command="{Binding DisableFactoryResetCommand}" Margin="0,15,0,5"/>
+                    <Button Style="{StaticResource FuncButton}" Content="▶️ RESTORE FACTORY RESET" Command="{Binding RestoreFactoryResetCommand}"/>
                     
-                    <!-- General Tools -->
-                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                    <Button Style="{StaticResource FuncButton}" Content="✖️ DISABLE OTA UPDATES + FACTORY RESET [NO JB - IOS 12 - 26]" Command="{Binding DisableOtaUpdatesFactoryResetCommand}" Margin="0,15,0,5"/>
+                    <Button Style="{StaticResource FuncButton}" Content="✖️ DISABLE OTA UPDATES" Command="{Binding DisableOtaUpdatesCommand}"/>
+                    <Button Style="{StaticResource FuncButton}" Content="🔄 RESTORE OTA UPDATES" Command="{Binding RestoreOtaUpdatesCommand}"/>
+
+                    <Button Style="{StaticResource FuncButton}" Content="📇 UNLOCK SIM (ICCD)" Command="{Binding UnlockSimCommand}" Margin="0,15,0,5"/>
+                    <Button Style="{StaticResource FuncButton}" Content="👤 BYPASS MDM [NO JB]" Command="{Binding BypassMdmCommand}"/>
+                    <Button Style="{StaticResource FuncButton}" Content="💲 FIX BANK APPS" Command="{Binding FixBankAppsCommand}"/>
+
+                    <Button Style="{StaticResource FuncButton}" Content="➡️ ENTER RECOVERY" Command="{Binding EnterRecoveryCommand}" Margin="0,15,0,5"/>
+                    <Button Style="{StaticResource FuncButton}" Content="⬅️ EXIT RECOVERY" Command="{Binding ExitRecoveryCommand}"/>
+
+                    <!-- FAKE iOS VERSION Group -->
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,20,0,10">
                         <StackPanel>
-                            <TextBlock Text="General Tools" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,10"/>
-                            
-                            <WrapPanel>
-                                <Button Style="{StaticResource FluentButton}" Content="Read Info" Command="{Binding ReadInfoCommand}" Width="130" Height="36" Margin="0,0,10,10"/>
-                                <Button Style="{StaticResource FluentButton}" Content="Check Activation" Command="{Binding CheckActivationCommand}" Width="160" Height="36" Margin="0,0,10,10"/>
-                                <Button Style="{StaticResource FluentButton}" Content="Find My iPhone Check" Command="{Binding CheckFindMyIphoneCommand}" Width="180" Height="36" Margin="0,0,10,10"/>
-                            </WrapPanel>
-                            
-                            <TextBlock Text="Reboot Options" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,5,0,5"/>
-                            <WrapPanel>
-                                <Button Style="{StaticResource FluentButton}" Content="Reboot Device" Command="{Binding RebootDeviceCommand}" Width="130" Height="32" Margin="0,0,10,10"/>
-                                <Button Style="{StaticResource FluentButton}" Content="Enter Recovery" Command="{Binding EnterRecoveryCommand}" Width="130" Height="32" Margin="0,0,10,10"/>
-                                <Button Style="{StaticResource FluentButton}" Content="Exit Recovery" Command="{Binding ExitRecoveryCommand}" Width="130" Height="32" Margin="0,0,10,10"/>
-                            </WrapPanel>
+                            <TextBlock Text="FAKE iOS VERSION" FontSize="14" FontWeight="Bold" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,0,0,10"/>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Version" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                <TextBox Grid.Column="1" Style="{StaticResource FluentTextBox}" Text="{Binding FakeIosVersionText, UpdateSourceTrigger=PropertyChanged}" Background="{DynamicResource BackgroundBrush}"/>
+                                <CheckBox Grid.Column="2" Content="Auto" IsChecked="{Binding IsAutoFakeVersion}" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                            </Grid>
+                            <Button Style="{StaticResource FuncButton}" Content="⏸ FAKE iOS VERSION" Command="{Binding FakeIosVersionCommand}"/>
+                            <Button Style="{StaticResource FuncButton}" Content="⏸ RESTORE iOS VERSION" Command="{Binding RestoreIosVersionCommand}" Margin="0,0,0,0"/>
                         </StackPanel>
                     </Border>
+                </StackPanel>
+            </ScrollViewer>
 
+            <!-- Right Column Tools (Scrollable) -->
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto">
+                <StackPanel>
+                    
                     <!-- Firmware Flasher -->
                     <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
                         <StackPanel>
@@ -74,43 +168,214 @@
                             <!-- IPSW Path -->
                             <Grid Margin="0,0,0,15">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="IPSW File:" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"/>
+                                <TextBlock Grid.Column="0" Text="IPSW:" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}"/>
                                 <TextBox Grid.Column="1" Style="{StaticResource FluentTextBox}" Text="{Binding IpswPath, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,10,0"/>
                                 <Button Grid.Column="2" Style="{StaticResource FluentButton}" Content="..." Command="{Binding BrowseIpswCommand}" Width="40" Height="30"/>
                             </Grid>
 
                             <WrapPanel>
-                                <Button Style="{StaticResource SuccessButton}" Content="Flash Firmware (Update)" Command="{Binding FlashIpswCommand}" Width="180" Height="36" Margin="0,0,10,0"/>
-                                <Button Style="{StaticResource DangerButton}" Content="Restore Firmware (Erase)" Command="{Binding RestoreFirmwareCommand}" Width="180" Height="36"/>
+                                <Button Style="{StaticResource PrimaryButton}" Background="{DynamicResource SuccessBrush}" Content="Flash Firmware (Update)" Command="{Binding FlashIpswCommand}" Width="200" Height="36" Margin="0,0,10,10"/>
+                                <Button Style="{StaticResource PrimaryButton}" Background="{DynamicResource ErrorBrush}" Content="Restore Firmware (Erase)" Command="{Binding RestoreFirmwareCommand}" Width="200" Height="36"/>
                             </WrapPanel>
-
                         </StackPanel>
+                    </Border>
+
+                    <!-- Jailbreak -->
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                        <StackPanel>
+                            <TextBlock Text="Jailbreak" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,15"/>
+                            <Button Style="{StaticResource FluentButton}" Content="Jailbreak iPhone" Command="{Binding JailbreakCommand}" Height="36"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- DFU Helper Section -->
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="15" Margin="0,0,0,10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Text="DFU Mode Helper" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,5"/>
+                            <TextBlock Grid.Row="1" Text="Follow instructions precisely to enter Device Firmware Update (DFU) mode." TextWrapping="Wrap" Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,0,0,15"/>
+                            
+                            <TextBlock Grid.Row="2" Text="Select your device model:" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,5"/>
+                            <ComboBox Grid.Row="3" ItemsSource="{Binding SupportedDfuModels}" SelectedItem="{Binding SelectedDfuModel}" IsEnabled="{Binding IsNotDfuWizardActive}" Background="{DynamicResource ComboBoxBackgroundBrush}" Foreground="{DynamicResource ComboBoxForegroundBrush}" Padding="8,6" Margin="0,0,0,20"/>
+                            
+                            <Button Grid.Row="4" Style="{StaticResource PrimaryButton}" Content="Start DFU Wizard" Command="{Binding StartDfuWizardCommand}" IsEnabled="{Binding IsNotDfuWizardActive}" Height="45" FontSize="16" Margin="0,0,0,20"/>
+                            
+                            <Border Grid.Row="5" Background="{DynamicResource BackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="20">
+                                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding DfuStep, StringFormat='Step {0}'}" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource AccentBrush}" HorizontalAlignment="Center" Margin="0,0,0,10">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DfuStep}" Value="0">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                    
+                                    <TextBlock Text="{Binding DfuCountdown}" FontSize="72" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" Margin="0,0,0,10">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding DfuCountdown}" Value="0">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                    <TextBlock Text="{Binding DfuInstructionText}" FontSize="20" FontWeight="Medium" Foreground="{DynamicResource PrimaryTextBrush}" TextWrapping="Wrap" TextAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,20"/>
+
+                                    <Button Content="Cancel Wizard" Command="{Binding CancelDfuWizardCommand}" Foreground="{DynamicResource ErrorBrush}" HorizontalAlignment="Center" Width="150" Height="36">
+                                        <Button.Style>
+                                            <Style TargetType="Button" BasedOn="{StaticResource FluentButton}">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsDfuWizardActive}" Value="False">
+                                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Logs Section -->
+                    <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="10">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="200"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Grid.Row="0" Text="Operation Log" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,10"/>
+                            
+                            <TextBlock Grid.Row="1" Text="{Binding StatusText}" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                            <ProgressBar Grid.Row="2" Value="{Binding Progress}" Height="4" Margin="0,0,0,10" Background="{DynamicResource CardBorderBrush}" Foreground="{DynamicResource AccentBrush}" BorderThickness="0"/>
+                            
+                            <TextBox Grid.Row="3" Text="{Binding LogText}" Style="{DynamicResource FluentTextBox}" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}" BorderThickness="0"/>
+                        </Grid>
                     </Border>
 
                 </StackPanel>
             </ScrollViewer>
+        </Grid>
 
-            <!-- Logs Section -->
-            <Border Grid.Column="1" Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="10">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
+        <!-- Placeholders for other tabs -->
+        <Grid Grid.Row="2">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ActiveSubMenu}" Value="PASSCODE">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="30">
+                <TextBlock Text="Passcode module coming soon..." FontSize="24" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </Grid>
 
-                    <TextBlock Grid.Row="0" Text="Operation Log" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,10"/>
-                    
-                    <TextBlock Grid.Row="1" Text="{Binding StatusText}" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <ProgressBar Grid.Row="2" Value="{Binding Progress}" Height="4" Margin="0,0,0,10" Background="{DynamicResource CardBorderBrush}" Foreground="{DynamicResource AccentBrush}" BorderThickness="0"/>
-                    
-                    <TextBox Grid.Row="3" Text="{Binding LogText}" Style="{DynamicResource FluentTextBox}" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}" BorderThickness="0"/>
-                </Grid>
+        <Grid Grid.Row="2">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ActiveSubMenu}" Value="HELLO SCREEN">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="30">
+                <TextBlock Text="Hello Screen module coming soon..." FontSize="24" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ActiveSubMenu}" Value="DIAG [PURPLE]">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="30">
+                <TextBlock Text="Diag Mode [PURPLE] module coming soon..." FontSize="24" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ActiveSubMenu}" Value="PROXY">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="30">
+                <TextBlock Text="Proxy features coming soon..." FontSize="24" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ActiveSubMenu}" Value="RAMDISK (A9)">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="30">
+                <TextBlock Text="Ramdisk (A9) features coming soon..." FontSize="24" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="2">
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ActiveSubMenu}" Value="RAMDISK (A12-13)">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            <Border Background="{DynamicResource CardBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="30">
+                <TextBlock Text="Ramdisk (A12-13) features coming soon..." FontSize="24" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
             </Border>
         </Grid>
     </Grid>

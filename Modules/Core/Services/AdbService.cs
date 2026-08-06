@@ -1363,26 +1363,37 @@ namespace UnlockMatePro.Services
             if (!string.IsNullOrWhiteSpace(memOut))
             {
                 var totalMatch = Regex.Match(memOut, @"MemTotal:\s*(\d+)");
-                var freeMatch = Regex.Match(memOut, @"MemAvailable:\s*(\d+)");
+                var availableMatch = Regex.Match(memOut, @"MemAvailable:\s*(\d+)");
+                var freeMatch = Regex.Match(memOut, @"MemFree:\s*(\d+)");
+                var buffersMatch = Regex.Match(memOut, @"Buffers:\s*(\d+)");
+                var cachedMatch = Regex.Match(memOut, @"Cached:\s*(\d+)");
 
-                if (totalMatch.Success && freeMatch.Success)
+                if (totalMatch.Success)
                 {
                     double totalKb = double.Parse(totalMatch.Groups[1].Value);
-                    double freeKb = double.Parse(freeMatch.Groups[1].Value);
+                    double availableKb = 0;
+
+                    if (availableMatch.Success)
+                    {
+                        availableKb = double.Parse(availableMatch.Groups[1].Value);
+                    }
+                    else if (freeMatch.Success)
+                    {
+                        availableKb = double.Parse(freeMatch.Groups[1].Value);
+                        if (buffersMatch.Success) availableKb += double.Parse(buffersMatch.Groups[1].Value);
+                        if (cachedMatch.Success) availableKb += double.Parse(cachedMatch.Groups[1].Value);
+                    }
+
                     stats.RamTotalMb = totalKb / 1024.0;
-                    stats.RamUsedMb = (totalKb - freeKb) / 1024.0;
+                    stats.RamUsedMb = (totalKb - availableKb) / 1024.0;
                 }
             }
 
-            var (_, dfOut) = await ExecuteCommandAsync("shell df -h /sdcard", serialNumber);
-            if (!string.IsNullOrWhiteSpace(dfOut))
+            var storage = await GetStorageInfoAsync(serialNumber);
+            if (storage.TotalBytes > 0)
             {
-                var match = Regex.Match(dfOut, @"/sdcard\s+(\S+)\s+(\S+)");
-                if (match.Success)
-                {
-                    stats.StorageTotalGb = 64.0;
-                    stats.StorageUsedGb = 24.5;
-                }
+                stats.StorageTotalGb = storage.TotalBytes / (1024.0 * 1024.0 * 1024.0);
+                stats.StorageUsedGb = storage.UsedBytes / (1024.0 * 1024.0 * 1024.0);
             }
 
             var (_, secOut) = await ExecuteCommandAsync("shell getprop ro.build.version.security_patch", serialNumber);
