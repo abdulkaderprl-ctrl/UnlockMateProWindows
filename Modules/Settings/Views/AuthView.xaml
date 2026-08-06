@@ -7,7 +7,7 @@
                 <StackPanel>
                     <!-- Brand Header -->
                     <StackPanel HorizontalAlignment="Center" Margin="0,0,0,24">
-                        <Path Data="{StaticResource IconApkInstall}" Fill="{DynamicResource AccentBrush}" Width="48" Height="48" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,12" />
+                        <Path Data="{DynamicResource IconApkInstall}" Fill="{DynamicResource AccentBrush}" Width="48" Height="48" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,12" />
                         <TextBlock Text="Unlock Mate Pro" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" />
                         <TextBlock Text="Sign in to sync license and device tools" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" HorizontalAlignment="Center" Margin="0,4,0,0" />
                     </StackPanel>

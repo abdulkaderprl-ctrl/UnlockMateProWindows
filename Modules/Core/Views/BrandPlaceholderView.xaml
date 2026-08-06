@@ -24,7 +24,7 @@
                 <TextBlock Grid.Row="0" Text="{Binding BrandName, StringFormat='{}{0} Module'}" Style="{StaticResource HeaderTextBlock}" FontSize="20" />
 
                 <!-- Search Box -->
-                <TextBox Grid.Row="1" Style="{StaticResource FluentTextBox}" Margin="0,0,0,12" Text="Search models/tools..." Foreground="{DynamicResource MutedTextBrush}" />
+                <TextBox Grid.Row="1" Style="{DynamicResource FluentTextBox}" Margin="0,0,0,12" Text="Search models/tools..." Foreground="{DynamicResource MutedTextBrush}" />
 
                 <!-- Category Panel -->
                 <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">

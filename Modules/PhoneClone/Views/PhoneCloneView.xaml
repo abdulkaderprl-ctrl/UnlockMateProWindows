@@ -45,7 +45,7 @@
                 <!-- Step 1 Indicator -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Border Width="24" Height="24" CornerRadius="12" Background="{DynamicResource AccentBrush}" Margin="0,0,8,0">
-                        <TextBlock Text="1" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                        <TextBlock Text="1" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
                     </Border>
                     <TextBlock Text="1. Devices" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
                 </StackPanel>
@@ -53,7 +53,7 @@
                 <!-- Step 2 Indicator -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Border Width="24" Height="24" CornerRadius="12" Background="{DynamicResource AccentBrush}" Margin="0,0,8,0">
-                        <TextBlock Text="2" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                        <TextBlock Text="2" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
                     </Border>
                     <TextBlock Text="2. Select Content" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
                 </StackPanel>
@@ -61,7 +61,7 @@
                 <!-- Step 3 Indicator -->
                 <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Border Width="24" Height="24" CornerRadius="12" Background="{DynamicResource AccentBrush}" Margin="0,0,8,0">
-                        <TextBlock Text="3" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                        <TextBlock Text="3" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
                     </Border>
                     <TextBlock Text="3. Transferring" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
                 </StackPanel>
@@ -69,7 +69,7 @@
                 <!-- Step 4 Indicator -->
                 <StackPanel Grid.Column="3" Orientation="Horizontal" HorizontalAlignment="Center">
                     <Border Width="24" Height="24" CornerRadius="12" Background="{DynamicResource AccentBrush}" Margin="0,0,8,0">
-                        <TextBlock Text="4" Foreground="White" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
+                        <TextBlock Text="4" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="12"/>
                     </Border>
                     <TextBlock Text="4. Complete" FontWeight="SemiBold" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
                 </StackPanel>
@@ -242,7 +242,7 @@
                 </Border>
 
                 <!-- Live Log Console -->
-                <Border Grid.Row="1" Background="#1E1E1E" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="12">
+                <Border Grid.Row="1" Background="{DynamicResource ControlBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="8" Padding="12">
                     <ListBox ItemsSource="{Binding LogConsole}" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource SuccessBrush}" FontFamily="Consolas" FontSize="12">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">

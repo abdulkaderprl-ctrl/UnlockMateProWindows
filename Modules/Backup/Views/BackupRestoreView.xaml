@@ -40,7 +40,7 @@
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
                         <Button Style="{StaticResource FluentButton}" Command="{Binding FullRestoreCommand}" Margin="0,0,12,0" Padding="20,10">
                             <StackPanel Orientation="Horizontal">
-                                <Path Data="{StaticResource IconRefresh}" Fill="{DynamicResource PrimaryTextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" />
+                                <Path Data="{DynamicResource IconRefresh}" Fill="{DynamicResource PrimaryTextBrush}" Width="14" Height="14" Stretch="Uniform" Margin="0,0,8,0" />
                                 <TextBlock Text="One-Click Full Restore (Folder or ZIP)..." />
                             </StackPanel>
                         </Button>

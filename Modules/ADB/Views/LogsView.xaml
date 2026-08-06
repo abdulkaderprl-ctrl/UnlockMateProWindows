@@ -40,7 +40,7 @@
         </Border>
 
         <!-- Log Stream Output Window -->
-        <Border Grid.Row="2" Style="{StaticResource FluentCard}" Background="{DynamicResource ConsoleBackgroundBrush}" Padding="8">
+        <Border Grid.Row="2" Style="{DynamicResource FluentCard}" Background="{DynamicResource ConsoleBackgroundBrush}" Padding="8">
             <TextBox Text="{Binding LogOutput}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap"
                      FontFamily="Consolas" FontSize="11" Foreground="{DynamicResource ConsoleForegroundBrush}"
                      Background="Transparent" BorderThickness="0" VerticalScrollBarVisibility="Auto" />

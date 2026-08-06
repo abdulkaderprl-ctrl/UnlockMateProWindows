@@ -109,7 +109,7 @@
                     <TextBlock Grid.Row="1" Text="{Binding StatusText}" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" Margin="0,0,0,5"/>
                     <ProgressBar Grid.Row="2" Value="{Binding Progress}" Height="4" Margin="0,0,0,10" Background="{DynamicResource CardBorderBrush}" Foreground="{DynamicResource AccentBrush}" BorderThickness="0"/>
                     
-                    <TextBox Grid.Row="3" Text="{Binding LogText}" Style="{StaticResource FluentTextBox}" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}" BorderThickness="0"/>
+                    <TextBox Grid.Row="3" Text="{Binding LogText}" Style="{DynamicResource FluentTextBox}" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Background="{DynamicResource BackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}" BorderThickness="0"/>
                 </Grid>
             </Border>
         </Grid>

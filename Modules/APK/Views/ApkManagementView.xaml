@@ -44,7 +44,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource FluentTextBox}" Tag="Search installed packages..." Margin="0,0,16,0" />
-                    <CheckBox Grid.Column="1" Content="Include System Apps" IsChecked="{Binding IncludeSystemApps}" Foreground="White" VerticalAlignment="Center" />
+                    <CheckBox Grid.Column="1" Content="Include System Apps" IsChecked="{Binding IncludeSystemApps}" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center" />
                 </Grid>
             </Border>
 

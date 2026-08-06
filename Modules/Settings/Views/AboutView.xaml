@@ -8,7 +8,7 @@
             <Border Style="{StaticResource FluentCard}" Padding="30" Margin="0,0,0,16">
                 <StackPanel HorizontalAlignment="Center">
                     <Border Width="80" Height="80" CornerRadius="40" Background="{DynamicResource AccentBrush}" HorizontalAlignment="Center" Margin="0,0,0,16">
-                        <TextBlock Text="⚡" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White" />
+                        <TextBlock Text="⚡" FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{DynamicResource PrimaryTextBrush}" />
                     </Border>
                     <TextBlock Text="Unlock Mate Pro" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" Margin="0,0,0,4" />
                     <TextBlock Text="Professional Universal Android Utility &amp; Flashing Suite" FontSize="14" Foreground="{DynamicResource SecondaryTextBrush}" HorizontalAlignment="Center" />

@@ -33,7 +33,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="Active ADB Executable:" Foreground="{DynamicResource SecondaryTextBrush}" VerticalAlignment="Center" Margin="0,0,12,0" />
-                    <TextBlock Grid.Column="1" Text="{Binding AdbPathText}" Foreground="White" FontWeight="SemiBold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Grid.Column="1" Text="{Binding AdbPathText}" Foreground="{DynamicResource PrimaryTextBrush}" FontWeight="SemiBold" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
                 </Grid>
             </Border>
 
@@ -44,10 +44,10 @@
 
                     <!-- Empty State -->
                     <Border Visibility="{Binding HasDevices, ConverterParameter=Invert, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            Padding="32" Background="#222222" CornerRadius="6" Margin="0,8,0,0">
+                            Padding="32" Background="{DynamicResource ControlBackgroundBrush}" CornerRadius="6" Margin="0,8,0,0">
                         <StackPanel HorizontalAlignment="Center">
-                            <Path Data="{StaticResource IconDevice}" Fill="{DynamicResource SecondaryTextBrush}" Width="48" Height="48" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,12" />
-                            <TextBlock Text="No Device Connected" FontSize="18" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" />
+                            <Path Data="{DynamicResource IconDevice}" Fill="{DynamicResource SecondaryTextBrush}" Width="48" Height="48" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,12" />
+                            <TextBlock Text="No Device Connected" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" />
                             <TextBlock Text="Plug in your Android phone via USB and enable USB Debugging." Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" HorizontalAlignment="Center" Margin="0,4,0,0" />
                         </StackPanel>
                     </Border>
@@ -56,14 +56,14 @@
                     <ItemsControl ItemsSource="{Binding Devices}" Visibility="{Binding HasDevices, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Background="#252525" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,4">
+                                <Border Background="{DynamicResource ControlBackgroundBrush}" BorderBrush="{DynamicResource CardBorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12" Margin="0,4">
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="Auto" />
                                             </Grid.ColumnDefinitions>
-                                            <Path Grid.Column="0" Data="{StaticResource IconDevice}" Fill="{DynamicResource AccentBrush}" Width="32" Height="32" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,12,0" />
+                                            <Path Grid.Column="0" Data="{DynamicResource IconDevice}" Fill="{DynamicResource AccentBrush}" Width="32" Height="32" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,12,0" />
                                             <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                                 <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" FontSize="15" />
                                                 <StackPanel Orientation="Horizontal" Margin="0,4,0,0">

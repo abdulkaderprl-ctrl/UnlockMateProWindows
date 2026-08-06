@@ -9,7 +9,7 @@
             <!-- Drag & Drop Zone Card -->
             <Border BorderBrush="{DynamicResource AccentBrush}" BorderThickness="2" CornerRadius="12" Background="#1E0078D4" Padding="28" Margin="0,0,0,16">
                 <StackPanel HorizontalAlignment="Center">
-                    <Path Data="{StaticResource IconApkInstall}" Fill="{DynamicResource AccentBrush}" Width="48" Height="48" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,12" />
+                    <Path Data="{DynamicResource IconApkInstall}" Fill="{DynamicResource AccentBrush}" Width="48" Height="48" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,12" />
                     <TextBlock Text="Drag &amp; Drop APK or Split Archives Here" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" />
                     <TextBlock Text="Supports single .apk files and Split APK bundles (.apks, .xapk, .apkm)" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" HorizontalAlignment="Center" Margin="0,4,0,16" />
                     <Button Style="{StaticResource PrimaryButton}" Command="{Binding BrowseApkCommand}" HorizontalAlignment="Center" Padding="20,10">

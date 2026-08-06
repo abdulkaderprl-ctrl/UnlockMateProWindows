@@ -39,7 +39,7 @@
         </Border>
 
         <!-- Terminal Console Output Window -->
-        <Border Grid.Row="2" Style="{StaticResource FluentCard}" Padding="8" Margin="0,0,0,12" Background="{DynamicResource ConsoleBackgroundBrush}">
+        <Border Grid.Row="2" Style="{DynamicResource FluentCard}" Padding="8" Margin="0,0,0,12" Background="{DynamicResource ConsoleBackgroundBrush}">
             <TextBox Text="{Binding TerminalOutput}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap"
                      FontFamily="Consolas" FontSize="12" Foreground="{DynamicResource ConsoleForegroundBrush}"
                      Background="Transparent" BorderThickness="0" VerticalScrollBarVisibility="Auto" />

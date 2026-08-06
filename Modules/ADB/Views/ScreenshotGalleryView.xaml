@@ -24,7 +24,7 @@
 
             <!-- Active Image Preview Container -->
             <Border Style="{StaticResource FluentCard}">
-                <Grid Height="340" Background="#161616">
+                <Grid Height="340" Background="{DynamicResource ControlBackgroundBrush}">
                     <Image Source="{Binding SelectedImagePath}" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
                 </Grid>
             </Border>
@@ -42,8 +42,8 @@
                         </ListBox.ItemsPanel>
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <Border Margin="4" Padding="4" Background="#262626" CornerRadius="4">
-                                    <TextBlock Text="{Binding}" Width="160" TextTrimming="CharacterEllipsis" FontSize="11" Foreground="White" />
+                                <Border Margin="4" Padding="4" Background="{DynamicResource ControlBackgroundBrush}" CornerRadius="4">
+                                    <TextBlock Text="{Binding}" Width="160" TextTrimming="CharacterEllipsis" FontSize="11" Foreground="{DynamicResource PrimaryTextBrush}" />
                                 </Border>
                             </DataTemplate>
                         </ListBox.ItemTemplate>

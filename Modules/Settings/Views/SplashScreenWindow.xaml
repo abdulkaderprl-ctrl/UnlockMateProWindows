@@ -5,7 +5,7 @@
         WindowStartupLocation="CenterScreen" WindowStyle="None"
         AllowsTransparency="True" Background="Transparent">
 
-    <Border Background="#1A1A1A" BorderBrush="#333333" BorderThickness="1" CornerRadius="12" Padding="32">
+    <Border Background="{DynamicResource BackgroundBrush}" BorderBrush="#333333" BorderThickness="1" CornerRadius="12" Padding="32">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
@@ -15,9 +15,9 @@
 
             <!-- Brand Header -->
             <StackPanel Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Path Data="{StaticResource IconApkInstall}" Fill="{DynamicResource AccentBrush}"
+                <Path Data="{DynamicResource IconApkInstall}" Fill="{DynamicResource AccentBrush}"
                       Width="56" Height="56" Stretch="Uniform" HorizontalAlignment="Center" Margin="0,0,0,16" />
-                <TextBlock Text="Unlock Mate Pro" FontSize="28" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" />
+                <TextBlock Text="Unlock Mate Pro" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" />
                 <TextBlock Text="Professional Android Device Management Platform" FontSize="14" Foreground="#999999" HorizontalAlignment="Center" Margin="0,4,0,0" />
             </StackPanel>
 

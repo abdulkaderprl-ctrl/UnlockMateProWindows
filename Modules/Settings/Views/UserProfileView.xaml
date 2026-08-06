@@ -16,7 +16,7 @@
 
                     <!-- Avatar Badge -->
                     <Border Grid.Column="0" Width="64" Height="64" CornerRadius="32" Background="{DynamicResource AccentBrush}" Margin="0,0,20,0" VerticalAlignment="Center">
-                        <TextBlock Text="{Binding CurrentUser.InitialLetter}" FontSize="26" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <TextBlock Text="{Binding CurrentUser.InitialLetter}" FontSize="26" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
 
                     <StackPanel Grid.Column="1" VerticalAlignment="Center">

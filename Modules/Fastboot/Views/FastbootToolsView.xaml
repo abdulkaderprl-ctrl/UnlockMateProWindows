@@ -104,7 +104,7 @@
             </Border>
 
             <!-- Output Log Console -->
-            <Border Style="{StaticResource FluentCard}" Background="{DynamicResource ConsoleBackgroundBrush}" Padding="8">
+            <Border Style="{DynamicResource FluentCard}" Background="{DynamicResource ConsoleBackgroundBrush}" Padding="8">
                 <TextBox Text="{Binding FastbootOutput}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" Height="140"
                          FontFamily="Consolas" FontSize="11" Foreground="{DynamicResource ConsoleForegroundBrush}"
                          Background="Transparent" BorderThickness="0" VerticalScrollBarVisibility="Auto" />

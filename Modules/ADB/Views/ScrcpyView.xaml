@@ -13,7 +13,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0">
-                        <TextBlock Text="🖥️ Live Screen Mirroring" FontSize="18" FontWeight="Bold" Foreground="White" />
+                        <TextBlock Text="🖥️ Live Screen Mirroring" FontSize="18" FontWeight="Bold" Foreground="{DynamicResource PrimaryTextBrush}" />
                         <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource SecondaryTextBrush}" FontSize="13" Margin="0,4,0,0" />
                     </StackPanel>
 
@@ -37,10 +37,10 @@
                     <TextBlock Text="Remote Control &amp; Display Preferences" Style="{StaticResource SubHeaderTextBlock}" />
 
                     <WrapPanel Margin="0,8,0,12">
-                        <CheckBox Content="Enable Mouse &amp; Keyboard Input Control" IsChecked="{Binding IsControlEnabled}" Foreground="White" Margin="0,0,24,10" FontWeight="SemiBold" />
-                        <CheckBox Content="Stay Awake (Keep device screen awake)" IsChecked="{Binding IsStayAwake}" Foreground="White" Margin="0,0,24,10" />
-                        <CheckBox Content="Turn Device Screen Off while Mirroring" IsChecked="{Binding IsTurnScreenOff}" Foreground="White" Margin="0,0,24,10" />
-                        <CheckBox Content="Show Physical Touch Dots on Display" IsChecked="{Binding IsShowTouches}" Foreground="White" Margin="0,0,0,10" />
+                        <CheckBox Content="Enable Mouse &amp; Keyboard Input Control" IsChecked="{Binding IsControlEnabled}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,24,10" FontWeight="SemiBold" />
+                        <CheckBox Content="Stay Awake (Keep device screen awake)" IsChecked="{Binding IsStayAwake}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,24,10" />
+                        <CheckBox Content="Turn Device Screen Off while Mirroring" IsChecked="{Binding IsTurnScreenOff}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,24,10" />
+                        <CheckBox Content="Show Physical Touch Dots on Display" IsChecked="{Binding IsShowTouches}" Foreground="{DynamicResource PrimaryTextBrush}" Margin="0,0,0,10" />
                     </WrapPanel>
 
                     <Separator Background="{DynamicResource CardBorderBrush}" Margin="0,0,0,12" />
@@ -54,16 +54,16 @@
                             <ColumnDefinition Width="180" />
                         </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0" Text="Max Frame Rate:" Foreground="White" VerticalAlignment="Center" />
-                        <ComboBox Grid.Column="1" SelectedValue="{Binding MaxFps, Mode=TwoWay}" SelectedValuePath="Tag" Background="#262626" Foreground="White" Padding="8,4">
+                        <TextBlock Grid.Column="0" Text="Max Frame Rate:" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center" />
+                        <ComboBox Grid.Column="1" SelectedValue="{Binding MaxFps, Mode=TwoWay}" SelectedValuePath="Tag" Background="{DynamicResource ControlBackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}" Padding="8,4">
                             <ComboBoxItem Content="30 FPS" Tag="30" />
                             <ComboBoxItem Content="60 FPS (Default)" Tag="60" />
                             <ComboBoxItem Content="90 FPS (High Smoothness)" Tag="90" />
                             <ComboBoxItem Content="120 FPS" Tag="120" />
                         </ComboBox>
 
-                        <TextBlock Grid.Column="3" Text="Video Bitrate:" Foreground="White" VerticalAlignment="Center" />
-                        <ComboBox Grid.Column="4" SelectedValue="{Binding Bitrate, Mode=TwoWay}" SelectedValuePath="Tag" Background="#262626" Foreground="White" Padding="8,4">
+                        <TextBlock Grid.Column="3" Text="Video Bitrate:" Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center" />
+                        <ComboBox Grid.Column="4" SelectedValue="{Binding Bitrate, Mode=TwoWay}" SelectedValuePath="Tag" Background="{DynamicResource ControlBackgroundBrush}" Foreground="{DynamicResource PrimaryTextBrush}" Padding="8,4">
                             <ComboBoxItem Content="4 Mbps (Low Bandwidth)" Tag="4M" />
                             <ComboBoxItem Content="8 Mbps (Balanced)" Tag="8M" />
                             <ComboBoxItem Content="16 Mbps (High Quality)" Tag="16M" />

@@ -21,6 +21,7 @@ namespace UnlockMatePro
             var logger = new LoggerService();
             var settingsService = new SettingsService();
             await settingsService.LoadSettingsAsync();
+            UnlockMatePro.Core.Services.ThemeManager.InitializeTheme(settingsService);
 
             var apiService = new ApiService(settingsService, logger);
             var authService = new AuthenticationService(apiService, logger);

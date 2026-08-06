@@ -485,10 +485,7 @@ namespace UnlockMatePro.ViewModels
 
         private void ToggleTheme()
         {
-            string newTheme = _settingsService.Settings.Theme == "Dark" ? "Light" : "Dark";
-            _settingsService.Settings.Theme = newTheme;
-            _ = _settingsService.SaveSettingsAsync();
-            ApplyTheme(newTheme);
+            UnlockMatePro.Core.Services.ThemeManager.ToggleTheme(_settingsService);
             ApplyAccentColor(_settingsService.Settings.AccentColor);
         }
 
